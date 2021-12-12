@@ -46,7 +46,6 @@ func Scan() *cli.Command {
 				if len(result.Vulnerabilities) > 0 {
 					fmt.Println(result.Target)
 					for _, cve := range result.Vulnerabilities {
-						fmt.Println(cve.VulnerabilityID)
 						issue.Open(&cve)
 					}
 				}
