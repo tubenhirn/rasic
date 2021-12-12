@@ -13,7 +13,7 @@ func main() {
 	app := &cli.App{
 		Name:        "cve2issue",
 		Usage:       "create issues from known cve's",
-		Description: "a simple app to create issues (on gitlab.com or jira) from known cve's",
+		Description: "a simple app to create issues (on gitlab.com) from known cve's",
 		Version:     "v0.1.0",
 		Compiled:    time.Now(),
 		Authors: []*cli.Author{
