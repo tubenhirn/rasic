@@ -2,7 +2,6 @@ package issue
 
 import (
 	"fmt"
-	// "os"
 	"os/exec"
 
 	"tubenhirn.com/cve2issue/types"
