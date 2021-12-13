@@ -1,13 +1,12 @@
 package commands
 
 import (
-	"encoding/json"
 	"fmt"
-	"os/exec"
 
 	"github.com/urfave/cli/v2"
 
-	"tubenhirn.com/cve2issue/issue"
+	"tubenhirn.com/cve2issue/api"
+	"tubenhirn.com/cve2issue/scan"
 	"tubenhirn.com/cve2issue/types"
 )
 
@@ -31,35 +30,39 @@ func Scan() *cli.Command {
 				Destination: new(string),
 				HasBeenSet:  false,
 			},
+			&cli.StringFlag{
+				Name:        "token",
+				Aliases:     []string{},
+				Usage:       "a oauth token",
+				EnvVars:     []string{"GITLAB_TOKEN"},
+				FilePath:    "",
+				Required:    true,
+				Hidden:      false,
+				TakesFile:   false,
+				Value:       "",
+				DefaultText: "",
+				Destination: new(string),
+				HasBeenSet:  false,
+			},
 		},
 		Action: func(c *cli.Context) error {
 			project := c.String("project")
+			token := c.String("token")
 			fmt.Println("scan for cve's")
 
-			app := "trivy"
-			arg0 := "-q"
-			arg1 := "repo"
-			arg2 := "--format=json"
-			arg3 := project
-			cmd := exec.Command(app, arg0, arg1, arg2, arg3)
-			stdout, err := cmd.Output()
-			if err != nil {
-				fmt.Println(err.Error())
-				return err
-			}
-			var report types.CVEReport
-			unmarshalerr := json.Unmarshal(stdout, &report)
-			if unmarshalerr != nil {
-				return unmarshalerr
-			}
-			for _, result := range report.Results {
-				if len(result.Vulnerabilities) > 0 {
-					fmt.Println(result.Target)
-					for _, cve := range result.Vulnerabilities {
-						issue.Open("", &cve, result.Target, result.Type)
-					}
+			var projects types.Projects
+			projects, _ = api.GetProjectList(project, token)
+			for _, pro := range projects {
+				// get all issues for current project
+				var issues types.Issues
+				issues, _ = api.GetIssueList(project, token)
+				fmt.Println("scan:" + pro.WebURL)
+				err := scan.Scanner(pro.WebURL, issues)
+				if err != nil {
+					fmt.Println(err)
 				}
 			}
+
 			return nil
 		},
 	}

@@ -85,7 +85,7 @@ type Projects []struct {
 	LastActivityAt                            time.Time                 `json:"last_activity_at"`
 	Namespace                                 Namespace                 `json:"namespace"`
 	ContainerRegistryImagePrefix              string                    `json:"container_registry_image_prefix"`
-	Links                                     Links                     `json:"_links"`
+	Links                                     LinksMergeRequest         `json:"_links"`
 	PackagesEnabled                           bool                      `json:"packages_enabled"`
 	EmptyRepo                                 bool                      `json:"empty_repo"`
 	Archived                                  bool                      `json:"archived"`
@@ -166,7 +166,7 @@ type Namespace struct {
 	AvatarURL string `json:"avatar_url"`
 	WebURL    string `json:"web_url"`
 }
-type Links struct {
+type LinksMergeRequest struct {
 	Self          string `json:"self"`
 	Issues        string `json:"issues"`
 	MergeRequests string `json:"merge_requests"`
@@ -183,4 +183,72 @@ type ContainerExpirationPolicy struct {
 	NameRegex     string      `json:"name_regex"`
 	NameRegexKeep interface{} `json:"name_regex_keep"`
 	NextRunAt     time.Time   `json:"next_run_at"`
+}
+
+type Issues []struct {
+	ID                   int                  `json:"id"`
+	Iid                  int                  `json:"iid"`
+	ProjectID            int                  `json:"project_id"`
+	Title                string               `json:"title"`
+	Description          string               `json:"description"`
+	State                string               `json:"state"`
+	CreatedAt            time.Time            `json:"created_at"`
+	UpdatedAt            time.Time            `json:"updated_at"`
+	ClosedAt             interface{}          `json:"closed_at"`
+	ClosedBy             interface{}          `json:"closed_by"`
+	Labels               []string             `json:"labels"`
+	Milestone            interface{}          `json:"milestone"`
+	Assignees            []interface{}        `json:"assignees"`
+	Author               Author               `json:"author"`
+	Type                 string               `json:"type"`
+	Assignee             interface{}          `json:"assignee"`
+	UserNotesCount       int                  `json:"user_notes_count"`
+	MergeRequestsCount   int                  `json:"merge_requests_count"`
+	Upvotes              int                  `json:"upvotes"`
+	Downvotes            int                  `json:"downvotes"`
+	DueDate              interface{}          `json:"due_date"`
+	Confidential         bool                 `json:"confidential"`
+	DiscussionLocked     interface{}          `json:"discussion_locked"`
+	IssueType            string               `json:"issue_type"`
+	WebURL               string               `json:"web_url"`
+	TimeStats            TimeStats            `json:"time_stats"`
+	TaskCompletionStatus TaskCompletionStatus `json:"task_completion_status"`
+	Weight               interface{}          `json:"weight"`
+	BlockingIssuesCount  int                  `json:"blocking_issues_count"`
+	HasTasks             bool                 `json:"has_tasks"`
+	Links                Links                `json:"_links"`
+	References           References           `json:"references"`
+	MovedToID            interface{}          `json:"moved_to_id"`
+	ServiceDeskReplyTo   interface{}          `json:"service_desk_reply_to"`
+	EpicIid              interface{}          `json:"epic_iid"`
+	Epic                 interface{}          `json:"epic"`
+}
+type Author struct {
+	ID        int    `json:"id"`
+	Username  string `json:"username"`
+	Name      string `json:"name"`
+	State     string `json:"state"`
+	AvatarURL string `json:"avatar_url"`
+	WebURL    string `json:"web_url"`
+}
+type TimeStats struct {
+	TimeEstimate        int         `json:"time_estimate"`
+	TotalTimeSpent      int         `json:"total_time_spent"`
+	HumanTimeEstimate   interface{} `json:"human_time_estimate"`
+	HumanTotalTimeSpent interface{} `json:"human_total_time_spent"`
+}
+type TaskCompletionStatus struct {
+	Count          int `json:"count"`
+	CompletedCount int `json:"completed_count"`
+}
+type Links struct {
+	Self       string `json:"self"`
+	Notes      string `json:"notes"`
+	AwardEmoji string `json:"award_emoji"`
+	Project    string `json:"project"`
+}
+type References struct {
+	Short    string `json:"short"`
+	Relative string `json:"relative"`
+	Full     string `json:"full"`
 }
