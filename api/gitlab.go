@@ -11,7 +11,7 @@ import (
 )
 
 func GetProjectList(group string, token string) (types.Projects, error) {
-	url := "https://gitlab.com/api/v4/groups/" + group + "/projects?per_page=100&include_subgroups=true"
+	url := "https://gitlab.com/api/v4/groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 	client := http.Client{}
 	req, reqerr := http.NewRequest("GET", url, nil)
 	if reqerr != nil {
