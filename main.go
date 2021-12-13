@@ -26,6 +26,7 @@ func main() {
 	}
 
 	app.Commands = append(app.Commands, commands.Scan())
+	app.Commands = append(app.Commands, commands.List())
 
 	app.Action = func(c *cli.Context) error {
 		cli.ShowAppHelp(c)
