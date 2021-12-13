@@ -3,7 +3,6 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"os/exec"
 
 	"github.com/urfave/cli/v2"
@@ -18,19 +17,30 @@ func Scan() *cli.Command {
 		Aliases: []string{"s"},
 		Usage:   "scan project for cve's",
 		Flags: []cli.Flag{
-			&cli.StringFlag{Name: "quiet", Usage: "silence std.out", Required: false},
+			&cli.StringFlag{
+				Name:        "project",
+				Aliases:     []string{},
+				Usage:       "a project url to scan",
+				EnvVars:     []string{},
+				FilePath:    "",
+				Required:    true,
+				Hidden:      false,
+				TakesFile:   false,
+				Value:       "",
+				DefaultText: "",
+				Destination: new(string),
+				HasBeenSet:  false,
+			},
 		},
 		Action: func(c *cli.Context) error {
-			quiet := c.Bool("quiet")
-			if !quiet {
-				fmt.Println("scan for cve's")
-			}
+			project := c.String("project")
+			fmt.Println("scan for cve's")
 
 			app := "trivy"
 			arg0 := "-q"
-			arg1 := "fs"
+			arg1 := "repo"
 			arg2 := "--format=json"
-			arg3, _ := os.Getwd()
+			arg3 := project
 			cmd := exec.Command(app, arg0, arg1, arg2, arg3)
 			stdout, err := cmd.Output()
 			if err != nil {
@@ -46,7 +56,7 @@ func Scan() *cli.Command {
 				if len(result.Vulnerabilities) > 0 {
 					fmt.Println(result.Target)
 					for _, cve := range result.Vulnerabilities {
-						issue.Open(&cve, result.Target, result.Type)
+						issue.Open("", &cve, result.Target, result.Type)
 					}
 				}
 			}

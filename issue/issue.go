@@ -7,13 +7,14 @@ import (
 	"tubenhirn.com/cve2issue/types"
 )
 
-func Open(issue *types.Vulnerabilities, packagetarget string, packagetype string) error {
+func Open(project string, issue *types.Vulnerabilities, packagetarget string, packagetype string) error {
 	app := "glab"
 	arg0 := "issue"
 	arg1 := "create"
 	arg2 := "-l cve"
 	arg3 := "-t " + issue.VulnerabilityID
 	arg4 := "-d " + generateMarkdown(issue, packagetarget, packagetype)
+	// arg5 := "-R " + project
 	cmd := exec.Command(app, arg0, arg1, arg2, arg3, arg4)
 	stdout, err := cmd.Output()
 	if err != nil {
