@@ -44,15 +44,17 @@ func Scanner(project string, issues types.Issues) error {
 				exists := false
 				for i := range issues {
 					if issues[i].Title == cve.VulnerabilityID {
-						exists = true
-						break
+						// TODO: allow to control State
+						if issues[i].State == "opened" {
+							fmt.Println("open issue exists for " + cve.VulnerabilityID)
+							exists = true
+							break
+						}
 					}
 				}
 				if !exists {
 					// open issue if new
-					fmt.Println(cve.VulnerabilityID + " issue created")
 					issue.Open(project, &cve, result.Target, result.Type)
-
 				}
 
 			}

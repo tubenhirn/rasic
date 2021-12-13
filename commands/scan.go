@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/urfave/cli/v2"
 
@@ -18,8 +19,8 @@ func Scan() *cli.Command {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "project",
-				Aliases:     []string{},
-				Usage:       "a project url to scan",
+				Aliases:     []string{"group"},
+				Usage:       "a project or group id to scan",
 				EnvVars:     []string{},
 				FilePath:    "",
 				Required:    true,
@@ -52,11 +53,25 @@ func Scan() *cli.Command {
 
 			var projects types.Projects
 			projects, _ = api.GetProjectList(project, token)
+			if len(projects) < 1 {
+				fmt.Println("no projects found in group " + project + "(maybe it is project?)")
+				singleProject, _ := api.GetProject(project, token)
+				var issues types.Issues
+				issues, _ = api.GetIssueList(strconv.Itoa(singleProject.ID), token)
+				fmt.Println("scan: " + singleProject.WebURL)
+				err := scan.Scanner(singleProject.WebURL, issues)
+				if err != nil {
+					fmt.Println(err)
+				}
+
+				return nil
+			}
+
 			for _, pro := range projects {
 				// get all issues for current project
 				var issues types.Issues
-				issues, _ = api.GetIssueList(project, token)
-				fmt.Println("scan:" + pro.WebURL)
+				issues, _ = api.GetIssueList(strconv.Itoa(pro.ID), token)
+				fmt.Println("scan: " + pro.WebURL)
 				err := scan.Scanner(pro.WebURL, issues)
 				if err != nil {
 					fmt.Println(err)
