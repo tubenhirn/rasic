@@ -37,8 +37,6 @@ func Scanner(project string, issues types.Issues) error {
 
 	for _, result := range report.Results {
 		if len(result.Vulnerabilities) > 0 {
-			fmt.Println(result.Target)
-
 			for _, cve := range result.Vulnerabilities {
 				// check for open issues
 				exists := false
