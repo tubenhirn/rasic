@@ -1,10 +1,10 @@
 package main
 
 import (
-	"log"
 	"os"
 	"time"
 
+	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
 	"tubenhirn.com/cve2issue/commands"
@@ -15,7 +15,7 @@ func main() {
 		Name:        "cve2issue",
 		Usage:       "create issues from known cve's",
 		Description: "a simple app to create issues (on gitlab.com) from known cve's",
-		Version:     "v0.1.0",
+		Version:     "v0.1.1",
 		Compiled:    time.Now(),
 		Authors: []*cli.Author{
 			{
@@ -36,6 +36,6 @@ func main() {
 
 	err := app.Run(os.Args)
 	if err != nil {
-		log.Fatal(err)
+		pterm.Error.Println(err)
 	}
 }

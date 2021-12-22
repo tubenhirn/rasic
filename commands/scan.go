@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"fmt"
 	"strconv"
 
+	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
 	"tubenhirn.com/cve2issue/api"
@@ -49,20 +49,19 @@ func Scan() *cli.Command {
 		Action: func(c *cli.Context) error {
 			projectId := c.String("project")
 			authToken := c.String("token")
-			fmt.Println("scan for cve's")
-
+			pterm.Info.Println("scan for cve's")
 			var projects types.Projects
 			projects, _ = api.GetProjectList(projectId, authToken)
 			if len(projects) < 1 {
-				fmt.Println("no projects found in group " + projectId + "(maybe it is a project?)")
+				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 				// try to get the project
 				singleProject, _ := api.GetProject(projectId, authToken)
 				var issues types.Issues
 				issues, _ = api.GetIssueList(strconv.Itoa(singleProject.ID), authToken)
-				fmt.Println("scan: " + singleProject.WebURL)
+				pterm.Info.Printfln("scan: " + singleProject.WebURL)
 				err := scan.Scanner(singleProject.WebURL, issues)
 				if err != nil {
-					fmt.Println(err)
+					pterm.Error.Println(err)
 				}
 
 				return nil
@@ -72,10 +71,10 @@ func Scan() *cli.Command {
 				// get all issues for current project
 				var issues types.Issues
 				issues, _ = api.GetIssueList(strconv.Itoa(project.ID), authToken)
-				fmt.Println("scan: " + project.WebURL)
+				pterm.Info.Println("scan: " + project.WebURL)
 				err := scan.Scanner(project.WebURL, issues)
 				if err != nil {
-					fmt.Println(err)
+					pterm.Error.Println(err)
 				}
 			}
 

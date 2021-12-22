@@ -3,9 +3,9 @@ package api
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 
+	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 	"tubenhirn.com/cve2issue/types"
 )
@@ -18,7 +18,7 @@ func GetProjectList(group string, token string) (types.Projects, error) {
 	client := http.Client{}
 	req, reqerr := http.NewRequest("GET", url, nil)
 	if reqerr != nil {
-		log.Fatalln(reqerr)
+		pterm.Error.Println(reqerr)
 		return nil, cli.NewExitError("request error", 1)
 	}
 
@@ -26,7 +26,7 @@ func GetProjectList(group string, token string) (types.Projects, error) {
 
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		log.Fatalln(reserr)
+		pterm.Error.Println(reserr)
 		return nil, cli.NewExitError("request error", 1)
 	}
 
@@ -41,7 +41,7 @@ func GetProjectList(group string, token string) (types.Projects, error) {
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			log.Fatal(err)
+			pterm.Error.Println(err)
 			return nil, cli.NewExitError("read error", 3)
 		}
 		return nil, cli.NewExitError(string(res.Status), 2)
@@ -54,7 +54,7 @@ func GetProject(project string, token string) (*types.Project, error) {
 	client := http.Client{}
 	req, reqerr := http.NewRequest("GET", url, nil)
 	if reqerr != nil {
-		log.Fatalln(reqerr)
+		pterm.Error.Println(reqerr)
 		return nil, cli.NewExitError("request error", 1)
 	}
 
@@ -62,7 +62,7 @@ func GetProject(project string, token string) (*types.Project, error) {
 
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		log.Fatalln(reserr)
+		pterm.Error.Println(reserr)
 		return nil, cli.NewExitError("request error", 1)
 	}
 
@@ -77,7 +77,7 @@ func GetProject(project string, token string) (*types.Project, error) {
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			log.Fatal(err)
+			pterm.Error.Println(err)
 			return nil, cli.NewExitError("read error", 3)
 		}
 		return nil, cli.NewExitError(string(res.Status), 2)
@@ -90,7 +90,7 @@ func GetIssueList(project string, token string) (types.Issues, error) {
 	client := http.Client{}
 	req, reqerr := http.NewRequest("GET", url, nil)
 	if reqerr != nil {
-		log.Fatalln(reqerr)
+		pterm.Error.Println(reqerr)
 		return nil, cli.NewExitError("request error", 1)
 	}
 
@@ -98,7 +98,7 @@ func GetIssueList(project string, token string) (types.Issues, error) {
 
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		log.Fatalln(reserr)
+		pterm.Error.Println(reserr)
 		return nil, cli.NewExitError("request error", 1)
 	}
 
@@ -113,7 +113,7 @@ func GetIssueList(project string, token string) (types.Issues, error) {
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			log.Fatal(err)
+			pterm.Error.Println(err)
 			return nil, cli.NewExitError("read error", 3)
 		}
 		return nil, cli.NewExitError(string(res.Status), 2)

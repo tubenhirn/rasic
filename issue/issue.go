@@ -1,9 +1,9 @@
 package issue
 
 import (
-	"fmt"
 	"os/exec"
 
+	"github.com/pterm/pterm"
 	"tubenhirn.com/cve2issue/types"
 )
 
@@ -21,10 +21,10 @@ func Open(project string, issue *types.Vulnerabilities, packagetarget string, pa
 		cmd := exec.Command(app, arg0, arg1, arg2, arg3, arg4, arg5)
 		stdout, err := cmd.Output()
 		if err != nil {
-			fmt.Println(err.Error())
+			pterm.Error.Println(err.Error())
 			return err
 		}
-		fmt.Println(string(stdout))
+		pterm.Info.Println(string(stdout))
 	}
 
 	return nil

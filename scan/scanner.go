@@ -2,7 +2,7 @@ package scan
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/pterm/pterm"
 	"io/ioutil"
 	"os/exec"
 
@@ -24,13 +24,13 @@ func Scanner(project string, issues types.Issues) error {
 	cmd := exec.Command(app, arg0, arg1, arg2, arg3, arg4)
 	_, err := cmd.Output()
 	if err != nil {
-		fmt.Println(err.Error())
+		pterm.Error.Printfln(err.Error())
 		return err
 	}
 
 	result, err := ioutil.ReadFile("result.json")
 	if err != nil {
-		fmt.Printf("Status: %s\n", "file read error")
+		pterm.Error.Printf("Status: %s\n", "file read error")
 	}
 
 	var report types.CVEReport
@@ -49,7 +49,7 @@ func Scanner(project string, issues types.Issues) error {
 						// TODO: allow to control State
 						// maybe check for label "wont-fix" on the closed issue - otherwise reopen it
 						if issues[i].State == "opened" {
-							fmt.Println("open issue exists for " + cve.VulnerabilityID)
+							pterm.Info.Println("open issue exists for " + cve.VulnerabilityID)
 							exists = true
 							break
 						}

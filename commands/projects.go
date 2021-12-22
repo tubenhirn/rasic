@@ -2,8 +2,8 @@ package commands
 
 import (
 	"encoding/json"
-	"fmt"
 
+	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
 	"tubenhirn.com/cve2issue/api"
@@ -50,9 +50,9 @@ func List() *cli.Command {
 			projects, _ := api.GetProjectList(group, token)
 			bytes, marshalerror := json.Marshal(projects)
 			if marshalerror != nil {
-				fmt.Println(marshalerror)
+				pterm.Error.Println(marshalerror)
 			}
-			fmt.Println(string(bytes))
+			pterm.Info.Println(string(bytes))
 			return nil
 		},
 	}
