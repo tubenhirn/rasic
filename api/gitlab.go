@@ -10,8 +10,11 @@ import (
 	"tubenhirn.com/cve2issue/types"
 )
 
+var baseUrl = "https://gitlab.com"
+var apiPath = "/api/v4/"
+
 func GetProjectList(group string, token string) (types.Projects, error) {
-	url := "https://gitlab.com/api/v4/groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
+	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 	client := http.Client{}
 	req, reqerr := http.NewRequest("GET", url, nil)
 	if reqerr != nil {
@@ -47,7 +50,7 @@ func GetProjectList(group string, token string) (types.Projects, error) {
 }
 
 func GetProject(project string, token string) (*types.Project, error) {
-	url := "https://gitlab.com/api/v4/projects/" + project
+	url := baseUrl + apiPath + "projects/" + project
 	client := http.Client{}
 	req, reqerr := http.NewRequest("GET", url, nil)
 	if reqerr != nil {
@@ -83,7 +86,7 @@ func GetProject(project string, token string) (*types.Project, error) {
 }
 
 func GetIssueList(project string, token string) (types.Issues, error) {
-	url := "https://gitlab.com/api/v4/projects/" + project + "/issues?per_page=100"
+	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 	client := http.Client{}
 	req, reqerr := http.NewRequest("GET", url, nil)
 	if reqerr != nil {

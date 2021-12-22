@@ -9,12 +9,15 @@ type CVEReport struct {
 	Metadata      Metadata  `json:"Metadata"`
 	Results       []Results `json:"Results"`
 }
+
 type Rootfs struct {
 	Type    string      `json:"type"`
 	DiffIds interface{} `json:"diff_ids"`
 }
+
 type Config struct {
 }
+
 type ImageConfig struct {
 	Architecture string    `json:"architecture"`
 	Created      time.Time `json:"created"`
@@ -22,25 +25,30 @@ type ImageConfig struct {
 	Rootfs       Rootfs    `json:"rootfs"`
 	Config       Config    `json:"config"`
 }
+
 type Metadata struct {
 	ImageConfig ImageConfig `json:"ImageConfig"`
 }
 type Layer struct {
 }
+
 type Nvd struct {
 	V2Vector string  `json:"V2Vector"`
 	V3Vector string  `json:"V3Vector"`
 	V2Score  float64 `json:"V2Score"`
 	V3Score  float64 `json:"V3Score"`
 }
+
 type Redhat struct {
 	V3Vector string  `json:"V3Vector"`
 	V3Score  float64 `json:"V3Score"`
 }
+
 type Cvss struct {
 	Nvd    Nvd    `json:"nvd"`
 	Redhat Redhat `json:"redhat"`
 }
+
 type Vulnerabilities struct {
 	VulnerabilityID  string    `json:"VulnerabilityID"`
 	PkgName          string    `json:"PkgName"`
@@ -57,6 +65,7 @@ type Vulnerabilities struct {
 	PublishedDate    time.Time `json:"PublishedDate"`
 	LastModifiedDate time.Time `json:"LastModifiedDate"`
 }
+
 type Results struct {
 	Target          string            `json:"Target"`
 	Class           string            `json:"Class"`
@@ -156,6 +165,7 @@ type Projects []struct {
 	MergePipelinesEnabled                     bool                      `json:"merge_pipelines_enabled"`
 	MergeTrainsEnabled                        bool                      `json:"merge_trains_enabled"`
 }
+
 type Namespace struct {
 	ID        int    `json:"id"`
 	Name      string `json:"name"`
@@ -166,6 +176,7 @@ type Namespace struct {
 	AvatarURL string `json:"avatar_url"`
 	WebURL    string `json:"web_url"`
 }
+
 type LinksMergeRequest struct {
 	Self          string `json:"self"`
 	Issues        string `json:"issues"`
@@ -175,6 +186,7 @@ type LinksMergeRequest struct {
 	Events        string `json:"events"`
 	Members       string `json:"members"`
 }
+
 type ContainerExpirationPolicy struct {
 	Cadence       string      `json:"cadence"`
 	Enabled       bool        `json:"enabled"`
@@ -223,6 +235,7 @@ type Issues []struct {
 	EpicIid              interface{}          `json:"epic_iid"`
 	Epic                 interface{}          `json:"epic"`
 }
+
 type Author struct {
 	ID        int    `json:"id"`
 	Username  string `json:"username"`
@@ -231,22 +244,26 @@ type Author struct {
 	AvatarURL string `json:"avatar_url"`
 	WebURL    string `json:"web_url"`
 }
+
 type TimeStats struct {
 	TimeEstimate        int         `json:"time_estimate"`
 	TotalTimeSpent      int         `json:"total_time_spent"`
 	HumanTimeEstimate   interface{} `json:"human_time_estimate"`
 	HumanTotalTimeSpent interface{} `json:"human_total_time_spent"`
 }
+
 type TaskCompletionStatus struct {
 	Count          int `json:"count"`
 	CompletedCount int `json:"completed_count"`
 }
+
 type Links struct {
 	Self       string `json:"self"`
 	Notes      string `json:"notes"`
 	AwardEmoji string `json:"award_emoji"`
 	Project    string `json:"project"`
 }
+
 type References struct {
 	Short    string `json:"short"`
 	Relative string `json:"relative"`
