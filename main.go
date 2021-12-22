@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
 	"log"
 	"os"
 	"time"
+
+	"github.com/urfave/cli/v2"
 
 	"tubenhirn.com/cve2issue/commands"
 )
