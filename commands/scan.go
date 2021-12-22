@@ -13,38 +13,20 @@ import (
 
 func Scan() *cli.Command {
 	return &cli.Command{
-		Name:    "scan",
-		Aliases: []string{"s"},
-		Usage:   "scan project for cve's",
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:        "project",
-				Aliases:     []string{"group"},
-				Usage:       "a project or group id to scan",
-				EnvVars:     []string{},
-				FilePath:    "",
-				Required:    true,
-				Hidden:      false,
-				TakesFile:   false,
-				Value:       "",
-				DefaultText: "",
-				Destination: new(string),
-				HasBeenSet:  false,
-			},
-			&cli.StringFlag{
-				Name:        "token",
-				Aliases:     []string{},
-				Usage:       "a oauth token",
-				EnvVars:     []string{"GITLAB_TOKEN"},
-				FilePath:    "",
-				Required:    true,
-				Hidden:      false,
-				TakesFile:   false,
-				Value:       "",
-				DefaultText: "",
-				Destination: new(string),
-				HasBeenSet:  false,
-			},
+		Name:        "scan",
+		Aliases:     []string{"s"},
+		Usage:       "scan project for cve's",
+		UsageText:   "",
+		Description: "",
+		ArgsUsage:   "",
+		Category:    "",
+		BashComplete: func(*cli.Context) {
+		},
+		Before: func(*cli.Context) error {
+			return nil
+		},
+		After: func(*cli.Context) error {
+			return nil
 		},
 		Action: func(c *cli.Context) error {
 			projectId := c.String("project")
@@ -54,7 +36,6 @@ func Scan() *cli.Command {
 			projects, _ = api.GetProjectList(projectId, authToken)
 			if len(projects) < 1 {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
-				// try to get the project
 				singleProject, _ := api.GetProject(projectId, authToken)
 				var issues types.Issues
 				issues, _ = api.GetIssueList(strconv.Itoa(singleProject.ID), authToken)
@@ -63,12 +44,9 @@ func Scan() *cli.Command {
 				if err != nil {
 					pterm.Error.Println(err)
 				}
-
 				return nil
 			}
-
 			for _, project := range projects {
-				// get all issues for current project
 				var issues types.Issues
 				issues, _ = api.GetIssueList(strconv.Itoa(project.ID), authToken)
 				pterm.Info.Println("scan: " + project.WebURL)
@@ -77,9 +55,20 @@ func Scan() *cli.Command {
 					pterm.Error.Println(err)
 				}
 			}
-
 			return nil
 		},
+		OnUsageError: func(context *cli.Context, err error, isSubcommand bool) error {
+			return nil
+		},
+		Subcommands:            []*cli.Command{},
+		Flags:                  []cli.Flag{&cli.StringFlag{Name: "project", Aliases: []string{"group"}, Usage: "a project or group id to scan", EnvVars: []string{}, FilePath: "", Required: true, Hidden: false, TakesFile: false, Value: "", DefaultText: "", Destination: new(string), HasBeenSet: false}, &cli.StringFlag{Name: "token", Aliases: []string{}, Usage: "a oauth token", EnvVars: []string{"GITLAB_TOKEN"}, FilePath: "", Required: true, Hidden: false, TakesFile: false, Value: "", DefaultText: "", Destination: new(string), HasBeenSet: false}},
+		SkipFlagParsing:        false,
+		HideHelp:               false,
+		HideHelpCommand:        false,
+		Hidden:                 false,
+		UseShortOptionHandling: false,
+		HelpName:               "",
+		CustomHelpTemplate:     "",
 	}
 
 }
