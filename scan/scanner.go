@@ -10,6 +10,10 @@ import (
 	"tubenhirn.com/cve2issue/types"
 )
 
+/**
+  scan with trivy binary
+  and save the output as result.json
+ **/
 func Scanner(project string, issues types.Issues) error {
 	app := "trivy"
 	arg0 := "-q"
@@ -43,6 +47,7 @@ func Scanner(project string, issues types.Issues) error {
 				for i := range issues {
 					if issues[i].Title == cve.VulnerabilityID {
 						// TODO: allow to control State
+						// maybe check for label "wont-fix" on the closed issue - otherwise reopen it
 						if issues[i].State == "opened" {
 							fmt.Println("open issue exists for " + cve.VulnerabilityID)
 							exists = true
@@ -51,7 +56,7 @@ func Scanner(project string, issues types.Issues) error {
 					}
 				}
 				if !exists {
-					// open issue if new
+					// open issue if no issuw present in thes current porject
 					issue.Open(project, &cve, result.Target, result.Type)
 				}
 

@@ -47,17 +47,18 @@ func Scan() *cli.Command {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			project := c.String("project")
-			token := c.String("token")
+			projectId := c.String("project")
+			authToken := c.String("token")
 			fmt.Println("scan for cve's")
 
 			var projects types.Projects
-			projects, _ = api.GetProjectList(project, token)
+			projects, _ = api.GetProjectList(projectId, authToken)
 			if len(projects) < 1 {
-				fmt.Println("no projects found in group " + project + "(maybe it is project?)")
-				singleProject, _ := api.GetProject(project, token)
+				fmt.Println("no projects found in group " + projectId + "(maybe it is a project?)")
+				// try to get the project
+				singleProject, _ := api.GetProject(projectId, authToken)
 				var issues types.Issues
-				issues, _ = api.GetIssueList(strconv.Itoa(singleProject.ID), token)
+				issues, _ = api.GetIssueList(strconv.Itoa(singleProject.ID), authToken)
 				fmt.Println("scan: " + singleProject.WebURL)
 				err := scan.Scanner(singleProject.WebURL, issues)
 				if err != nil {
@@ -67,12 +68,12 @@ func Scan() *cli.Command {
 				return nil
 			}
 
-			for _, pro := range projects {
+			for _, project := range projects {
 				// get all issues for current project
 				var issues types.Issues
-				issues, _ = api.GetIssueList(strconv.Itoa(pro.ID), token)
-				fmt.Println("scan: " + pro.WebURL)
-				err := scan.Scanner(pro.WebURL, issues)
+				issues, _ = api.GetIssueList(strconv.Itoa(project.ID), authToken)
+				fmt.Println("scan: " + project.WebURL)
+				err := scan.Scanner(project.WebURL, issues)
 				if err != nil {
 					fmt.Println(err)
 				}
