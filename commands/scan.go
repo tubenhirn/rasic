@@ -46,6 +46,7 @@ func Scan() *cli.Command {
 				}
 				return nil
 			}
+			pterm.Info.Println(strconv.Itoa(len(projects)) + " projects found in group " + projectId)
 			for _, project := range projects {
 				var issues types.Issues
 				issues, _ = api.GetIssueList(strconv.Itoa(project.ID), authToken)

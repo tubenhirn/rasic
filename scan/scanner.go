@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"syscall"
+	"strconv"
 
 	"github.com/pterm/pterm"
 
@@ -24,15 +24,19 @@ func Scanner(project string, issues types.Issues) error {
 		panic(lookErr)
 	}
 	// build args
-	args := []string{"trivy", "-q", "repo", "--format=json", "--output=result.json", project}
+	args := []string{"-q", "repo", "--format=json", "--output=result.json", project}
 
 	// get current environment
 	env := os.Environ()
 
 	// exec trivy with args and env
-	execErr := syscall.Exec(binary, args, env)
+	// execErr := syscall.Exec(binary, args, env)
+	cmd := exec.Command(binary, args...)
+	cmd.Env = env
+	_, execErr := cmd.Output()
 	if execErr != nil {
-		pterm.Error.Printfln(execErr.Error())
+		// pterm.Error.Printfln(execErr.Error())
+		return execErr
 	}
 
 	result, err := ioutil.ReadFile("result.json")
@@ -43,11 +47,15 @@ func Scanner(project string, issues types.Issues) error {
 	var report types.CVEReport
 	unmarshalerr := json.Unmarshal(result, &report)
 	if unmarshalerr != nil {
+		pterm.Error.Println(unmarshalerr)
 		return unmarshalerr
 	}
 
 	for _, result := range report.Results {
 		if len(result.Vulnerabilities) > 0 {
+
+			pterm.Warning.Println(strconv.Itoa(len(result.Vulnerabilities)) + " vulnerabilities found")
+
 			for _, cve := range result.Vulnerabilities {
 				// check for open issues
 				exists := false
