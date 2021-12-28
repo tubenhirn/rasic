@@ -2,9 +2,12 @@ package scan
 
 import (
 	"encoding/json"
-	"github.com/pterm/pterm"
 	"io/ioutil"
+	"os"
 	"os/exec"
+	"syscall"
+
+	"github.com/pterm/pterm"
 
 	"tubenhirn.com/cve2issue/issue"
 	"tubenhirn.com/cve2issue/types"
@@ -15,17 +18,21 @@ import (
   and save the output as result.json
  **/
 func Scanner(project string, issues types.Issues) error {
-	app := "trivy"
-	arg0 := "-q"
-	arg1 := "repo"
-	arg2 := "--format=json"
-	arg3 := "--output=result.json"
-	arg4 := project
-	cmd := exec.Command(app, arg0, arg1, arg2, arg3, arg4)
-	_, err := cmd.Output()
-	if err != nil {
-		pterm.Error.Printfln(err.Error())
-		return err
+	// find path to trivy binary
+	binary, lookErr := exec.LookPath("trivy")
+	if lookErr != nil {
+		panic(lookErr)
+	}
+	// build args
+	args := []string{"trivy", "-q", "repo", "--format=json", "--output=result.json", project}
+
+	// get current environment
+	env := os.Environ()
+
+	// exec trivy with args and env
+	execErr := syscall.Exec(binary, args, env)
+	if execErr != nil {
+		pterm.Error.Printfln(execErr.Error())
 	}
 
 	result, err := ioutil.ReadFile("result.json")
