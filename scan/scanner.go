@@ -17,14 +17,14 @@ import (
   scan with trivy binary
   and save the output as result.json
  **/
-func Scanner(project string, issues types.Issues) error {
+func Scanner(project string, issues types.Issues, ignorefile string) error {
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
 		panic(lookErr)
 	}
 	// build args
-	args := []string{"-q", "repo", "--format=json", "--output=result.json", project}
+	args := []string{"-q", "repo", "--ignorefile=" + ignorefile, "--format=json", "--output=result.json", project}
 
 	// get current environment
 	env := os.Environ()

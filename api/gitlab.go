@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -119,4 +120,36 @@ func GetIssueList(project string, token string) (types.Issues, error) {
 		return nil, cli.NewExitError(string(res.Status), 2)
 	}
 
+}
+
+// get a file from a gitlab project (raw as string)
+// used to get .trivyignore when scanning projects
+func GetFile(project string, filepath string, fileref string, token string) (string, error) {
+	url := baseUrl + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
+
+	client := http.Client{}
+	req, reqerr := http.NewRequest("GET", url, nil)
+	if reqerr != nil {
+		pterm.Error.Println(reqerr)
+		return "", cli.NewExitError("request error", 1)
+	}
+
+	req.Header.Set("PRIVATE-TOKEN", token)
+
+	res, reserr := client.Do(req)
+	if reserr != nil {
+		pterm.Error.Println(reserr)
+		return "", cli.NewExitError("request error", 1)
+	}
+	if res.Status == "200 OK" || res.Status == "200" {
+		fileContent, readErr := ioutil.ReadAll(res.Body)
+		if readErr != nil {
+			return "", readErr
+		}
+		return string(fileContent), nil
+	}
+
+	defer res.Body.Close()
+
+	return "", errors.New("no ignorefile found in project")
 }
