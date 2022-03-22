@@ -22,7 +22,7 @@ func apiCall(client HttpClient, url string, token string) (*http.Response, error
 	req, reqerr := http.NewRequest("GET", url, nil)
 
 	if reqerr != nil {
-		return nil, cli.NewExitError("request error", 1)
+		return nil, cli.NewExitError(reqerr, 1)
 	}
 
 	// set auth header
@@ -31,7 +31,7 @@ func apiCall(client HttpClient, url string, token string) (*http.Response, error
 	// do the request
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		return nil, cli.NewExitError("response error", 1)
+		return nil, cli.NewExitError(reserr, 1)
 	}
 	// close the request on function end
 	defer res.Body.Close()
