@@ -47,7 +47,8 @@ func List() *cli.Command {
 		Action: func(c *cli.Context) error {
 			group := c.String("group")
 			token := c.String("token")
-			projects, _ := api.GetProjectList(group, token)
+			client := &http.Client{}
+			projects, _ := api.GetProjectList(client, group, token)
 			bytes, marshalerror := json.Marshal(projects)
 			if marshalerror != nil {
 				pterm.Error.Println(marshalerror)

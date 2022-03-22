@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"net/http"
 	"os"
 	"path"
 	"strconv"
@@ -120,14 +121,15 @@ func Scan() *cli.Command {
 			ignoreFileName := c.String("ignorefile")
 			pterm.Info.Println("scan for cve's")
 			var projects types.Projects
-			projects, _ = api.GetProjectList(projectId, authToken)
+			client := &http.Client{}
+			projects, _ = api.GetProjectList(client, projectId, authToken)
 			if len(projects) < 1 {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 
-				singleProject, _ := api.GetProject(projectId, authToken)
+				singleProject, _ := api.GetProject(client, projectId, authToken)
 
 				var issues types.Issues
-				issues, _ = api.GetIssueList(strconv.Itoa(singleProject.ID), authToken)
+				issues, _ = api.GetIssueList(client, strconv.Itoa(singleProject.ID), authToken)
 				pterm.Info.Printfln("scan: " + singleProject.WebURL)
 
 				tempFileName, _ := createLocalIgnorefile(strconv.Itoa(singleProject.ID), ignoreFileName, singleProject.DefaultBranch, authToken)
@@ -144,7 +146,7 @@ func Scan() *cli.Command {
 			pterm.Info.Println(strconv.Itoa(len(projects)) + " projects found in group " + projectId)
 			for _, project := range projects {
 				var issues types.Issues
-				issues, _ = api.GetIssueList(strconv.Itoa(project.ID), authToken)
+				issues, _ = api.GetIssueList(client, strconv.Itoa(project.ID), authToken)
 				pterm.Info.Println("scan: " + project.WebURL)
 
 				tempFileName, _ := createLocalIgnorefile(strconv.Itoa(project.ID), ignoreFileName, project.DefaultBranch, authToken)
