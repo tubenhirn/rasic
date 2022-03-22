@@ -2,6 +2,7 @@ package commands
 
 import (
 	"encoding/json"
+	"net/http"
 
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"

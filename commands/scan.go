@@ -59,8 +59,8 @@ var (
 	}
 )
 
-func createLocalIgnorefile(projectId string, ignoreFileName string, defaultBranch string, authToken string) (string, error) {
-	ignorefileString, fileErr := api.GetFile(projectId, ignoreFileName, defaultBranch, authToken)
+func createLocalIgnorefile(client *http.Client, projectId string, ignoreFileName string, defaultBranch string, authToken string) (string, error) {
+	ignorefileString, fileErr := api.GetFile(client, projectId, ignoreFileName, defaultBranch, authToken)
 	ignoreFilePath := "/tmp/scan-" + projectId + "/"
 	if fileErr != nil {
 		return "", fileErr
@@ -132,7 +132,7 @@ func Scan() *cli.Command {
 				issues, _ = api.GetIssueList(client, strconv.Itoa(singleProject.ID), authToken)
 				pterm.Info.Printfln("scan: " + singleProject.WebURL)
 
-				tempFileName, _ := createLocalIgnorefile(strconv.Itoa(singleProject.ID), ignoreFileName, singleProject.DefaultBranch, authToken)
+				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(singleProject.ID), ignoreFileName, singleProject.DefaultBranch, authToken)
 
 				err := scan.Scanner(singleProject.WebURL, issues, tempFileName)
 				if err != nil {
@@ -149,7 +149,7 @@ func Scan() *cli.Command {
 				issues, _ = api.GetIssueList(client, strconv.Itoa(project.ID), authToken)
 				pterm.Info.Println("scan: " + project.WebURL)
 
-				tempFileName, _ := createLocalIgnorefile(strconv.Itoa(project.ID), ignoreFileName, project.DefaultBranch, authToken)
+				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(project.ID), ignoreFileName, project.DefaultBranch, authToken)
 
 				err := scan.Scanner(project.WebURL, issues, tempFileName)
 				if err != nil {
