@@ -10,6 +10,7 @@ import (
 
 type MockHttpClientWithResponse struct{}
 type MockHttpClientWithArray struct{}
+type MockHttpClientWithNilArray struct{}
 type MockHttpClientWithError struct{}
 
 func (m *MockHttpClientWithResponse) Do(req *http.Request) (*http.Response, error) {
@@ -22,7 +23,16 @@ func (m *MockHttpClientWithResponse) Do(req *http.Request) (*http.Response, erro
 
 func (m *MockHttpClientWithArray) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
-		Body: ioutil.NopCloser(bytes.NewBuffer([]byte("[]"))),
+		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("[]"))),
+		Status: "200",
+	}
+
+	return response, nil
+}
+
+func (m *MockHttpClientWithNilArray) Do(req *http.Request) (*http.Response, error) {
+	response := &http.Response{
+		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("{}"))),
 		Status: "200",
 	}
 
@@ -71,5 +81,13 @@ func TestGetProjectListWithResponse(t *testing.T) {
 	_, err := GetProjectList(httpClient, "testgroup", "1234")
 	if err != nil {
 		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)
+	}
+}
+
+func TestGetProjectListWithResponseError(t *testing.T) {
+	httpClient := &MockHttpClientWithNilArray{}
+	_, err := GetProjectList(httpClient, "testgroup", "1234")
+	if err == nil {
+		t.Errorf("Should have received an error with a MockHttpClientWithNilArray, got %s", "nil")
 	}
 }
