@@ -9,9 +9,9 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
-	"tubenhirn.com/cve2issue/api"
-	"tubenhirn.com/cve2issue/scan"
-	"tubenhirn.com/cve2issue/types"
+	"tubenhirn.com/risc/api"
+	"tubenhirn.com/risc/scan"
+	"tubenhirn.com/risc/types"
 )
 
 var (

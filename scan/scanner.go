@@ -9,8 +9,8 @@ import (
 
 	"github.com/pterm/pterm"
 
-	"tubenhirn.com/cve2issue/issue"
-	"tubenhirn.com/cve2issue/types"
+	"tubenhirn.com/risc/issue"
+	"tubenhirn.com/risc/types"
 )
 
 /**

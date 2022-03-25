@@ -1,4 +1,4 @@
-# cve2issue
+# risc
 
 a simple cli for sve scanning and issue creation on gitlab.com
 

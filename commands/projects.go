@@ -7,7 +7,7 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
-	"tubenhirn.com/cve2issue/api"
+	"tubenhirn.com/risc/api"
 )
 
 func List() *cli.Command {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
-	"tubenhirn.com/cve2issue/types"
+	"tubenhirn.com/risc/types"
 )
 
 var baseUrl = "https://gitlab.com"

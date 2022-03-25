@@ -1,6 +1,6 @@
-module tubenhirn.com/cve2issue
+module tubenhirn.com/risc
 
-go 1.17
+go 1.18
 
 require (
 	github.com/pterm/pterm v0.12.33

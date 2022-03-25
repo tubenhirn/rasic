@@ -7,12 +7,12 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
-	"tubenhirn.com/cve2issue/commands"
+	"tubenhirn.com/risc/commands"
 )
 
 func main() {
 	app := &cli.App{
-		Name:                 "cve2issue",
+		Name:                 "risc",
 		HelpName:             "",
 		Usage:                "create issues from known cve's",
 		UsageText:            "",
