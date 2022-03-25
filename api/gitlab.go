@@ -40,7 +40,7 @@ func apiCall(client HttpClient, url string, token string) (*http.Response, error
 	return res, nil
 }
 
-func GetProjectList(client *http.Client, group string, token string) (types.Projects, error) {
+func GetProjectList(client HttpClient, group string, token string) (types.Projects, error) {
 	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
 	res, err := apiCall(client, url, token)
@@ -52,21 +52,22 @@ func GetProjectList(client *http.Client, group string, token string) (types.Proj
 	if res.Status == "200 OK" || res.Status == "200" {
 		var projectlist types.Projects
 		if err := json.NewDecoder(res.Body).Decode(&projectlist); err != nil {
-			return nil, cli.NewExitError("decoder error", 2)
+			pterm.Error.Println(err)
+			return nil, cli.NewExitError(err, 2)
 		}
 		return projectlist, nil
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			pterm.Error.Println(err)
-			return nil, cli.NewExitError("read error", 3)
+			return nil, cli.NewExitError(err, 3)
 		}
 		return nil, cli.NewExitError(string(res.Status), 2)
 	}
 
 }
 
-func GetProject(client *http.Client, project string, token string) (*types.Project, error) {
+func GetProject(client HttpClient, project string, token string) (*types.Project, error) {
 	url := baseUrl + apiPath + "projects/" + project
 
 	res, err := apiCall(client, url, token)
@@ -92,7 +93,7 @@ func GetProject(client *http.Client, project string, token string) (*types.Proje
 
 }
 
-func GetIssueList(client *http.Client, project string, token string) (types.Issues, error) {
+func GetIssueList(client HttpClient, project string, token string) (types.Issues, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 
 	res, err := apiCall(client, url, token)
@@ -120,7 +121,7 @@ func GetIssueList(client *http.Client, project string, token string) (types.Issu
 
 // get a file from a gitlab project (raw as string)
 // used to get .trivyignore when scanning projects
-func GetFile(client *http.Client, project string, filepath string, fileref string, token string) (string, error) {
+func GetFile(client HttpClient, project string, filepath string, fileref string, token string) (string, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
 
 	res, err := apiCall(client, url, token)

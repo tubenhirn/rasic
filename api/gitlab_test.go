@@ -9,11 +9,21 @@ import (
 )
 
 type MockHttpClientWithResponse struct{}
+type MockHttpClientWithArray struct{}
 type MockHttpClientWithError struct{}
 
 func (m *MockHttpClientWithResponse) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
 		Body: ioutil.NopCloser(bytes.NewBuffer([]byte("Test Response"))),
+	}
+
+	return response, nil
+}
+
+func (m *MockHttpClientWithArray) Do(req *http.Request) (*http.Response, error) {
+	response := &http.Response{
+		Body: ioutil.NopCloser(bytes.NewBuffer([]byte("[]"))),
+		Status: "200",
 	}
 
 	return response, nil
@@ -45,5 +55,21 @@ func TestApiCallWithError(t *testing.T) {
 	t.Log(err)
 	if err == nil {
 		t.Errorf("Should have received an error with a valid MockHttpClientWithError, got %s", "nil")
+	}
+}
+
+func TestGetProjectListWithError(t *testing.T) {
+	httpClient := &MockHttpClientWithError{}
+	_, err := GetProjectList(httpClient, "testgroup", "1234")
+	if err == nil {
+		t.Errorf("Should have received an error with a valid MockHttpClientWithError, got %s", "nil")
+	}
+}
+
+func TestGetProjectListWithResponse(t *testing.T) {
+	httpClient := &MockHttpClientWithArray{}
+	_, err := GetProjectList(httpClient, "testgroup", "1234")
+	if err != nil {
+		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)
 	}
 }
