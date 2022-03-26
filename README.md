@@ -1,6 +1,6 @@
 # risc
 
-a simple cli for sve scanning and issue creation on gitlab.com
+a simple cli for cve scanning with trivy and issue creation on gitlab.com
 
 ## requirements
 
