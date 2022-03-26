@@ -9,8 +9,8 @@ import (
 
 	"github.com/pterm/pterm"
 
-	"tubenhirn.com/risc/issue"
-	"tubenhirn.com/risc/types"
+	"tubenhirn.com/rasic/issue"
+	"tubenhirn.com/rasic/types"
 )
 
 /**

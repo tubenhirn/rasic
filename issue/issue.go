@@ -4,7 +4,7 @@ import (
 	"os/exec"
 
 	"github.com/pterm/pterm"
-	"tubenhirn.com/risc/types"
+	"tubenhirn.com/rasic/types"
 )
 
 func Open(project string, issue *types.Vulnerabilities, packagetarget string, packagetype string) error {

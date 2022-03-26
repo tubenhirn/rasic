@@ -1,4 +1,4 @@
-module tubenhirn.com/risc
+module tubenhirn.com/rasic
 
 go 1.18
 
