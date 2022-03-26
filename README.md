@@ -1,4 +1,6 @@
-# risc
+# rasic
+
+rapid security incident creation
 
 a simple cli for cve scanning with trivy and issue creation on gitlab.com
 
