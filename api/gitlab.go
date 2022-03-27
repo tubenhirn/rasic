@@ -62,7 +62,7 @@ func GetProjectList(client HttpClient, group string, token string) (types.Projec
 			pterm.Error.Println(err)
 			return nil, cli.NewExitError(err, 3)
 		}
-		return nil, cli.NewExitError(string(res.Status), 2)
+		return nil, cli.NewExitError("response error", 2)
 	}
 
 }
@@ -88,7 +88,7 @@ func GetProject(client HttpClient, project string, token string) (*types.Project
 			pterm.Error.Println(err)
 			return nil, cli.NewExitError("read error", 3)
 		}
-		return nil, cli.NewExitError(string(res.Status), 2)
+		return nil, cli.NewExitError("response error", 2)
 	}
 
 }
