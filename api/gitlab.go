@@ -18,6 +18,7 @@ type HttpClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
+// do api calls against gitlab.com
 func apiCall(client HttpClient, url string, token string) (*http.Response, error) {
 	req, reqerr := http.NewRequest("GET", url, nil)
 
@@ -40,6 +41,7 @@ func apiCall(client HttpClient, url string, token string) (*http.Response, error
 	return res, nil
 }
 
+// get a list of projects in a given group
 func GetProjectList(client HttpClient, group string, token string) (types.Projects, error) {
 	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
@@ -67,6 +69,7 @@ func GetProjectList(client HttpClient, group string, token string) (types.Projec
 
 }
 
+// get a project
 func GetProject(client HttpClient, project string, token string) (*types.Project, error) {
 	url := baseUrl + apiPath + "projects/" + project
 
@@ -93,6 +96,7 @@ func GetProject(client HttpClient, project string, token string) (*types.Project
 
 }
 
+// get a list of issues from a project
 func GetIssueList(client HttpClient, project string, token string) (types.Issues, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 

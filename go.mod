@@ -1,4 +1,4 @@
-module tubenhirn.com/rasic
+module gitlab.com/jstang/rasic
 
 go 1.18
 
