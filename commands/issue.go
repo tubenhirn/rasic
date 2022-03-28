@@ -4,6 +4,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// open an new issue for a found cve
 func OpenIssue() *cli.Command {
 	return &cli.Command{
 		Name:        "open",

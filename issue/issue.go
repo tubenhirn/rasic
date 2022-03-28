@@ -7,6 +7,9 @@ import (
 	"tubenhirn.com/rasic/types"
 )
 
+// open a new issue in the given project
+// we use glab cli to make this more easy
+// TODO: remove glab dependency and use a custom api-call
 func Open(project string, issue *types.Vulnerabilities, packagetarget string, packagetype string) error {
 	// TODO: allow to configure Severity
 	if issue.Severity == "CRITICAL" {
@@ -30,6 +33,8 @@ func Open(project string, issue *types.Vulnerabilities, packagetarget string, pa
 	return nil
 }
 
+// generate markdown to populate the new issue
+// TODO: check if this can be done with a template
 func generateMarkdown(issue *types.Vulnerabilities, packagetarget string, packagetype string) string {
 	markdown := newline("### " + issue.Title)
 	markdown += newline(dobreak(issue.Description))
@@ -47,21 +52,27 @@ func generateMarkdown(issue *types.Vulnerabilities, packagetarget string, packag
 	return markdown
 }
 
+// create a newline
 func newline(input string) string {
 	return input + "\n"
 }
 
+// create a break-tag
 func dobreak(input string) string {
 	return input + "<br>"
 }
 
+// write bold
 func bold(input string) string {
 	return "**" + input + "**"
 }
 
+// open a code-style bash block
 func consoleStart() string {
 	return "```bash\n"
 }
+
+// end a code-style bash block
 func consoleEnd() string {
 	return "\n```"
 }

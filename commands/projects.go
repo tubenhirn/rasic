@@ -10,6 +10,7 @@ import (
 	"tubenhirn.com/rasic/api"
 )
 
+// list all projects of a give group
 func List() *cli.Command {
 	return &cli.Command{
 		Name:    "list",

@@ -59,6 +59,8 @@ var (
 	}
 )
 
+// create a local .triviyignore file
+// downloaded from the respective project given
 func createLocalIgnorefile(client *http.Client, projectId string, ignoreFileName string, defaultBranch string, authToken string) (string, error) {
 	ignorefileString, fileErr := api.GetFile(client, projectId, ignoreFileName, defaultBranch, authToken)
 	ignoreFilePath := "/tmp/scan-" + projectId + "/"
@@ -98,6 +100,7 @@ func cleanTempFiles(fileName string) error {
 	return nil
 }
 
+// scan a project for cve's
 func Scan() *cli.Command {
 	return &cli.Command{
 		Name:        "scan",
