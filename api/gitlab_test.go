@@ -52,7 +52,7 @@ func (m *MockHttpClientWithIssue) Do(req *http.Request) (*http.Response, error) 
 	responseBody, _:= json.Marshal(&types.Issue{Title: "test", ID: 666})
 	response := &http.Response{
 		Body:   ioutil.NopCloser(bytes.NewBuffer(responseBody)),
-		Status: "200",
+		Status: "201 Created",
 	}
 
 	return response, nil
@@ -150,7 +150,7 @@ func TestGetProjectWithResponse(t *testing.T) {
 
 func TestCreateIssueWithResponse(t *testing.T) {
 	httpClient := &MockHttpClientWithIssue{}
-	issue := &types.Issue{}
+	issue := &types.CreateIssue{}
 	_, err := CreateIssue(httpClient, "testproject", "1234", issue)
 	if err != nil {
 		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)

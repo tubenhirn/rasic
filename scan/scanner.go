@@ -17,14 +17,14 @@ import (
   scan with trivy binary
   and save the output as result.json
  **/
-func Scanner(client types.HttpClient, project string, token string, issues types.Issues, ignorefile string) error {
+func Scanner(client types.HttpClient, projectId string, projectUrl string, token string, issues types.Issues, ignorefile string) error {
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
 		panic(lookErr)
 	}
 	// build args
-	args := []string{"-q", "repo", "--ignorefile=" + ignorefile, "--format=json", "--output=result.json", project}
+	args := []string{"-q", "repo", "--ignorefile=" + ignorefile, "--format=json", "--output=result.json", projectUrl}
 
 	// get current environment
 	env := os.Environ()
@@ -72,7 +72,7 @@ func Scanner(client types.HttpClient, project string, token string, issues types
 				}
 				if !exists {
 					// open issue if no issuw present in thes current porject
-					issue.Open(client, project, token, cve, result.Target, result.Type)
+					issue.Open(client, projectId, token, cve, result.Target, result.Type)
 				}
 
 			}

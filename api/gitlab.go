@@ -46,6 +46,7 @@ func apiCallPost(client types.HttpClient, url string, token string, body string)
 
 	// set auth header
 	req.Header.Set("PRIVATE-TOKEN", token)
+	req.Header.Set("content-type", "application/json")
 
 	// do the request
 	res, reserr := client.Do(req)
@@ -166,7 +167,7 @@ func GetFile(client types.HttpClient, project string, filepath string, fileref s
 	return "", errors.New("no ignorefile found in project")
 }
 
-func CreateIssue(client types.HttpClient, project string, token string, issue *types.Issue) (*types.Issue, error) {
+func CreateIssue(client types.HttpClient, project string, token string, issue *types.CreateIssue) (*types.Issue, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues"
 
 	body, marshalErr := json.Marshal(issue)
@@ -176,13 +177,12 @@ func CreateIssue(client types.HttpClient, project string, token string, issue *t
 	}
 
 	res, err := apiCallPost(client, url, token, string(body))
-
 	if err != nil {
 		pterm.Error.Println(err)
 		return &types.Issue{}, cli.NewExitError(err, 1)
 	}
 
-	if res.Status == "200 OK" || res.Status == "200" {
+	if res.Status == "201 Created" {
 		var issue types.Issue
 		if err := json.NewDecoder(res.Body).Decode(&issue); err != nil {
 			return &types.Issue{}, cli.NewExitError("decoder error", 2)

@@ -462,3 +462,9 @@ type Issue struct {
 		CompletedCount int `json:"completed_count"`
 	} `json:"task_completion_status"`
 }
+
+type CreateIssue struct {
+	Id          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+}

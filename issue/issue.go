@@ -1,6 +1,8 @@
 package issue
 
 import (
+	"strconv"
+
 	"github.com/pterm/pterm"
 	"gitlab.com/jstang/rasic/api"
 	"gitlab.com/jstang/rasic/types"
@@ -10,9 +12,10 @@ import (
 // we use glab cli to make this more easy
 // TODO: remove glab dependency and use a custom api-call
 func Open(client types.HttpClient, project string, token string, issue types.Vulnerabilities, packagetarget string, packagetype string) error {
-	newIssue := &types.Issue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype)}
+	projectId, _ :=  strconv.Atoi(project)
+	newIssue := &types.CreateIssue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype), Id: projectId}
 	// TODO: allow to configure Severity
-	if issue.Severity == "CRITICAL" {
+	if issue.Severity == "HIGH" {
 		_, err := api.CreateIssue(client, project, token, newIssue)
 		// app := "glab"
 		// arg0 := "issue"

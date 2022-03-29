@@ -140,7 +140,7 @@ func Scan() *cli.Command {
 
 				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(singleProject.ID), ignoreFileName, singleProject.DefaultBranch, authToken)
 
-				err = scan.Scanner(client, singleProject.WebURL, authToken, issues, tempFileName)
+				err = scan.Scanner(client, strconv.Itoa(singleProject.ID), singleProject.WebURL, authToken, issues, tempFileName)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
@@ -157,7 +157,7 @@ func Scan() *cli.Command {
 
 				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(project.ID), ignoreFileName, project.DefaultBranch, authToken)
 
-				err := scan.Scanner(client, project.WebURL, authToken, issues, tempFileName)
+				err := scan.Scanner(client, strconv.Itoa(project.ID), project.WebURL, authToken, issues, tempFileName)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
