@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
@@ -18,8 +19,8 @@ type HttpClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-// do api calls against gitlab.com
-func apiCall(client HttpClient, url string, token string) (*http.Response, error) {
+// do a get api call against gitlab.com
+func apiCallGet(client HttpClient, url string, token string) (*http.Response, error) {
 	req, reqerr := http.NewRequest("GET", url, nil)
 
 	if reqerr != nil {
@@ -41,11 +42,33 @@ func apiCall(client HttpClient, url string, token string) (*http.Response, error
 	return res, nil
 }
 
+// do a post api call against gitlab.com
+func apiCallPost(client HttpClient, url string, token string, body string) (*http.Response, error) {
+	req, reqerr := http.NewRequest("POST", url, strings.NewReader(body))
+
+	if reqerr != nil {
+		return nil, cli.NewExitError(reqerr, 1)
+	}
+
+	// set auth header
+	req.Header.Set("PRIVATE-TOKEN", token)
+
+	// do the request
+	res, reserr := client.Do(req)
+	if reserr != nil {
+		return nil, cli.NewExitError(reserr, 1)
+	}
+	// close the request on function end
+	defer res.Body.Close()
+
+	return res, nil
+}
+
 // get a list of projects in a given group
 func GetProjectList(client HttpClient, group string, token string) (types.Projects, error) {
 	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
-	res, err := apiCall(client, url, token)
+	res, err := apiCallGet(client, url, token)
 	if err != nil {
 		pterm.Error.Println(err)
 		return nil, cli.NewExitError(err, 1)
@@ -73,7 +96,7 @@ func GetProjectList(client HttpClient, group string, token string) (types.Projec
 func GetProject(client HttpClient, project string, token string) (*types.Project, error) {
 	url := baseUrl + apiPath + "projects/" + project
 
-	res, err := apiCall(client, url, token)
+	res, err := apiCallGet(client, url, token)
 	if err != nil {
 		pterm.Error.Println(err)
 		return nil, cli.NewExitError(err, 1)
@@ -97,11 +120,11 @@ func GetProject(client HttpClient, project string, token string) (*types.Project
 }
 
 // get a list of issues from a project
-// 
+//
 func GetIssueList(client HttpClient, project string, token string) (types.Issues, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 
-	res, err := apiCall(client, url, token)
+	res, err := apiCallGet(client, url, token)
 	if err != nil {
 		pterm.Error.Println(err)
 		return nil, cli.NewExitError(err, 1)
@@ -129,7 +152,7 @@ func GetIssueList(client HttpClient, project string, token string) (types.Issues
 func GetFile(client HttpClient, project string, filepath string, fileref string, token string) (string, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
 
-	res, err := apiCall(client, url, token)
+	res, err := apiCallGet(client, url, token)
 	if err != nil {
 		pterm.Error.Println(err)
 		return "", cli.NewExitError(err, 1)
@@ -144,4 +167,35 @@ func GetFile(client HttpClient, project string, filepath string, fileref string,
 	}
 
 	return "", errors.New("no ignorefile found in project")
+}
+
+func CreateIssue(client HttpClient, project string, token string, issue *types.Issue) (*types.Issue, error) {
+	url := baseUrl + apiPath + "projects/" + project + "/issues"
+
+	body, marshalErr := json.Marshal(issue)
+	if marshalErr != nil {
+		pterm.Error.Println(marshalErr)
+		return &types.Issue{}, marshalErr
+	}
+
+	res, err := apiCallPost(client, url, token, string(body))
+	if err != nil {
+		pterm.Error.Println(err)
+		return &types.Issue{}, cli.NewExitError(err, 1)
+	}
+
+	if res.Status == "200 OK" || res.Status == "200" {
+		var issue types.Issue
+		if err := json.NewDecoder(res.Body).Decode(&issue); err != nil {
+			return &types.Issue{}, cli.NewExitError("decoder error", 2)
+		}
+		return &issue, nil
+	} else {
+		_, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			pterm.Error.Println(err)
+			return &types.Issue{}, cli.NewExitError("read error", 3)
+		}
+		return &types.Issue{}, cli.NewExitError(string(res.Status), 2)
+	}
 }

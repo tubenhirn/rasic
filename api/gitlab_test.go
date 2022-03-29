@@ -2,16 +2,20 @@ package api
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net/http"
 	"testing"
+
+	"gitlab.com/jstang/rasic/types"
 )
 
 type MockHttpClientWithResponse struct{}
 type MockHttpClientWithArray struct{}
 type MockHttpClientWithEmptyObject struct{}
 type MockHttpClientWithError struct{}
+type MockHttpClientWithIssue struct{}
 
 func (m *MockHttpClientWithResponse) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
@@ -44,25 +48,60 @@ func (m *MockHttpClientWithError) Do(req *http.Request) (*http.Response, error) 
 	return nil, errors.New("An Error")
 }
 
-func TestApiCall(t *testing.T) {
+func (m *MockHttpClientWithIssue) Do(req *http.Request) (*http.Response, error) {
+	responseBody, _:= json.Marshal(&types.Issue{Title: "test", ID: 666})
+	response := &http.Response{
+		Body:   ioutil.NopCloser(bytes.NewBuffer(responseBody)),
+		Status: "200",
+	}
+
+	return response, nil
+}
+
+func TestApiCallGet(t *testing.T) {
 	httpClient := &MockHttpClientWithResponse{}
-	_, err := apiCall(httpClient, "", "")
+	_, err := apiCallGet(httpClient, "", "")
 	if err != nil {
 		t.Errorf("Shouldn't have received an error with a valid MockHttpClient, got %s", err)
 	}
 }
 
-func TestApiCallResponse(t *testing.T) {
+func TestApiCallPost(t *testing.T) {
 	httpClient := &MockHttpClientWithResponse{}
-	res, _ := apiCall(httpClient, "", "")
+	_, err := apiCallPost(httpClient, "", "", "testbody")
+	if err != nil {
+		t.Errorf("Shouldn't have received an error with a valid MockHttpClient, got %s", err)
+	}
+}
+
+func TestApiCallPostResponse(t *testing.T) {
+	httpClient := &MockHttpClientWithResponse{}
+	res, _ := apiCallPost(httpClient, "", "", "testbody")
 	if res == nil {
 		t.Errorf("Should have received an response with a valid MockHttpClient, got %s", "nil")
 	}
 }
 
-func TestApiCallWithError(t *testing.T) {
+func TestApiCallGetResponse(t *testing.T) {
+	httpClient := &MockHttpClientWithResponse{}
+	res, _ := apiCallGet(httpClient, "", "")
+	if res == nil {
+		t.Errorf("Should have received an response with a valid MockHttpClient, got %s", "nil")
+	}
+}
+
+func TestApiCallGetWithError(t *testing.T) {
 	httpClient := &MockHttpClientWithError{}
-	_, err := apiCall(httpClient, "", "")
+	_, err := apiCallGet(httpClient, "", "")
+	t.Log(err)
+	if err == nil {
+		t.Errorf("Should have received an error with a valid MockHttpClientWithError, got %s", "nil")
+	}
+}
+
+func TestApiCallPostWithError(t *testing.T) {
+	httpClient := &MockHttpClientWithError{}
+	_, err := apiCallPost(httpClient, "", "", "testbody")
 	t.Log(err)
 	if err == nil {
 		t.Errorf("Should have received an error with a valid MockHttpClientWithError, got %s", "nil")
@@ -104,6 +143,15 @@ func TestGetProjectWithError(t *testing.T) {
 func TestGetProjectWithResponse(t *testing.T) {
 	httpClient := &MockHttpClientWithEmptyObject{}
 	_, err := GetProject(httpClient, "testproject", "1234")
+	if err != nil {
+		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)
+	}
+}
+
+func TestCreateIssueWithResponse(t *testing.T) {
+	httpClient := &MockHttpClientWithIssue{}
+	issue := &types.Issue{}
+	_, err := CreateIssue(httpClient, "testproject", "1234", issue)
 	if err != nil {
 		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)
 	}

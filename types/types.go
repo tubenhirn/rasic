@@ -397,3 +397,61 @@ type Project struct {
 		} `json:"group_access"`
 	} `json:"permissions"`
 }
+
+type Issue struct {
+	ProjectID          int           `json:"project_id"`
+	ID                 int           `json:"id"`
+	CreatedAt          time.Time     `json:"created_at"`
+	Iid                int           `json:"iid"`
+	Title              string        `json:"title"`
+	State              string        `json:"state"`
+	Assignees          []interface{} `json:"assignees"`
+	Assignee           interface{}   `json:"assignee"`
+	Type               string        `json:"type"`
+	Labels             []string      `json:"labels"`
+	Upvotes            int           `json:"upvotes"`
+	Downvotes          int           `json:"downvotes"`
+	MergeRequestsCount int           `json:"merge_requests_count"`
+	Author             struct {
+		Name      string      `json:"name"`
+		AvatarURL interface{} `json:"avatar_url"`
+		State     string      `json:"state"`
+		WebURL    string      `json:"web_url"`
+		ID        int         `json:"id"`
+		Username  string      `json:"username"`
+	} `json:"author"`
+	Description    interface{} `json:"description"`
+	UpdatedAt      time.Time   `json:"updated_at"`
+	ClosedAt       interface{} `json:"closed_at"`
+	ClosedBy       interface{} `json:"closed_by"`
+	Milestone      interface{} `json:"milestone"`
+	Subscribed     bool        `json:"subscribed"`
+	UserNotesCount int         `json:"user_notes_count"`
+	DueDate        interface{} `json:"due_date"`
+	WebURL         string      `json:"web_url"`
+	References     struct {
+		Short    string `json:"short"`
+		Relative string `json:"relative"`
+		Full     string `json:"full"`
+	} `json:"references"`
+	TimeStats struct {
+		TimeEstimate        int         `json:"time_estimate"`
+		TotalTimeSpent      int         `json:"total_time_spent"`
+		HumanTimeEstimate   interface{} `json:"human_time_estimate"`
+		HumanTotalTimeSpent interface{} `json:"human_total_time_spent"`
+	} `json:"time_stats"`
+	Confidential     bool   `json:"confidential"`
+	DiscussionLocked bool   `json:"discussion_locked"`
+	IssueType        string `json:"issue_type"`
+	Severity         string `json:"severity"`
+	Links            struct {
+		Self       string `json:"self"`
+		Notes      string `json:"notes"`
+		AwardEmoji string `json:"award_emoji"`
+		Project    string `json:"project"`
+	} `json:"_links"`
+	TaskCompletionStatus struct {
+		Count          int `json:"count"`
+		CompletedCount int `json:"completed_count"`
+	} `json:"task_completion_status"`
+}
