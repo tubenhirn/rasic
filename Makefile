@@ -15,14 +15,18 @@
 
 all: build
 
-build: ## Compile for the local architecture
+build: ## Compile for the local architecture 🔨
 	@echo "Compiling..."
 	go build -o rasic
 
-install: ## install rasic
+install: ## install rasic 💣
 	@echo "Installing..."
 	sudo cp rasic /usr/local/bin/rasic
 
-test: ## test your stuff
+test: ## test your stuff 😁
 	@echo "Testing..."
 	go test -v ./...
+
+.PHONY: help
+help:  ## 🤔 Show help messages for make targets
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
