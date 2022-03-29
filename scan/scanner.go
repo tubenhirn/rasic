@@ -17,7 +17,7 @@ import (
   scan with trivy binary
   and save the output as result.json
  **/
-func Scanner(project string, issues types.Issues, ignorefile string) error {
+func Scanner(client types.HttpClient, project string, token string, issues types.Issues, ignorefile string) error {
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
@@ -72,7 +72,7 @@ func Scanner(project string, issues types.Issues, ignorefile string) error {
 				}
 				if !exists {
 					// open issue if no issuw present in thes current porject
-					issue.Open(project, cve, result.Target, result.Type)
+					issue.Open(client, project, token, cve, result.Target, result.Type)
 				}
 
 			}

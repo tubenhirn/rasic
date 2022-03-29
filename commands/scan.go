@@ -129,7 +129,10 @@ func Scan() *cli.Command {
 			if len(projects) < 1 {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 
-				singleProject, _ := api.GetProject(client, projectId, authToken)
+				singleProject, err := api.GetProject(client, projectId, authToken)
+				if err != nil {
+					return err
+				}
 
 				var issues types.Issues
 				issues, _ = api.GetIssueList(client, strconv.Itoa(singleProject.ID), authToken)
@@ -137,7 +140,7 @@ func Scan() *cli.Command {
 
 				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(singleProject.ID), ignoreFileName, singleProject.DefaultBranch, authToken)
 
-				err := scan.Scanner(singleProject.WebURL, issues, tempFileName)
+				err = scan.Scanner(client, singleProject.WebURL, authToken, issues, tempFileName)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
@@ -154,7 +157,7 @@ func Scan() *cli.Command {
 
 				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(project.ID), ignoreFileName, project.DefaultBranch, authToken)
 
-				err := scan.Scanner(project.WebURL, issues, tempFileName)
+				err := scan.Scanner(client, project.WebURL, authToken, issues, tempFileName)
 				if err != nil {
 					pterm.Error.Println(err)
 				}

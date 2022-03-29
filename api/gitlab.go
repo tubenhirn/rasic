@@ -15,12 +15,8 @@ import (
 var baseUrl = "https://gitlab.com"
 var apiPath = "/api/v4/"
 
-type HttpClient interface {
-	Do(*http.Request) (*http.Response, error)
-}
-
 // do a get api call against gitlab.com
-func apiCallGet(client HttpClient, url string, token string) (*http.Response, error) {
+func apiCallGet(client types.HttpClient, url string, token string) (*http.Response, error) {
 	req, reqerr := http.NewRequest("GET", url, nil)
 
 	if reqerr != nil {
@@ -35,15 +31,13 @@ func apiCallGet(client HttpClient, url string, token string) (*http.Response, er
 	if reserr != nil {
 		return nil, cli.NewExitError(reserr, 1)
 	}
-	// close the request on function end
-	defer res.Body.Close()
 
 	// retrun the response
 	return res, nil
 }
 
 // do a post api call against gitlab.com
-func apiCallPost(client HttpClient, url string, token string, body string) (*http.Response, error) {
+func apiCallPost(client types.HttpClient, url string, token string, body string) (*http.Response, error) {
 	req, reqerr := http.NewRequest("POST", url, strings.NewReader(body))
 
 	if reqerr != nil {
@@ -58,17 +52,16 @@ func apiCallPost(client HttpClient, url string, token string, body string) (*htt
 	if reserr != nil {
 		return nil, cli.NewExitError(reserr, 1)
 	}
-	// close the request on function end
-	defer res.Body.Close()
 
 	return res, nil
 }
 
 // get a list of projects in a given group
-func GetProjectList(client HttpClient, group string, token string) (types.Projects, error) {
+func GetProjectList(client types.HttpClient, group string, token string) (types.Projects, error) {
 	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
 	res, err := apiCallGet(client, url, token)
+
 	if err != nil {
 		pterm.Error.Println(err)
 		return nil, cli.NewExitError(err, 1)
@@ -93,38 +86,41 @@ func GetProjectList(client HttpClient, group string, token string) (types.Projec
 }
 
 // get a project
-func GetProject(client HttpClient, project string, token string) (*types.Project, error) {
+func GetProject(client types.HttpClient, project string, token string) (types.Project, error) {
 	url := baseUrl + apiPath + "projects/" + project
 
 	res, err := apiCallGet(client, url, token)
+
 	if err != nil {
 		pterm.Error.Println(err)
-		return nil, cli.NewExitError(err, 1)
+		return types.Project{}, cli.NewExitError(err, 1)
 	}
 
 	if res.Status == "200 OK" || res.Status == "200" {
-		project := &types.Project{}
+		var project types.Project
 		if err := json.NewDecoder(res.Body).Decode(&project); err != nil {
-			return nil, cli.NewExitError("decoder error", 2)
+			pterm.Info.Println(res.Body)
+			return types.Project{}, cli.NewExitError("decoder error", 2)
 		}
 		return project, nil
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			pterm.Error.Println(err)
-			return nil, cli.NewExitError("read error", 3)
+			return types.Project{}, cli.NewExitError("read error", 3)
 		}
-		return nil, cli.NewExitError("response error", 2)
+		return types.Project{}, cli.NewExitError("response error", 2)
 	}
 
 }
 
 // get a list of issues from a project
 //
-func GetIssueList(client HttpClient, project string, token string) (types.Issues, error) {
+func GetIssueList(client types.HttpClient, project string, token string) (types.Issues, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 
 	res, err := apiCallGet(client, url, token)
+
 	if err != nil {
 		pterm.Error.Println(err)
 		return nil, cli.NewExitError(err, 1)
@@ -149,10 +145,11 @@ func GetIssueList(client HttpClient, project string, token string) (types.Issues
 
 // get a file from a gitlab project (raw as string)
 // used to get .trivyignore when scanning projects
-func GetFile(client HttpClient, project string, filepath string, fileref string, token string) (string, error) {
+func GetFile(client types.HttpClient, project string, filepath string, fileref string, token string) (string, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
 
 	res, err := apiCallGet(client, url, token)
+
 	if err != nil {
 		pterm.Error.Println(err)
 		return "", cli.NewExitError(err, 1)
@@ -169,7 +166,7 @@ func GetFile(client HttpClient, project string, filepath string, fileref string,
 	return "", errors.New("no ignorefile found in project")
 }
 
-func CreateIssue(client HttpClient, project string, token string, issue *types.Issue) (*types.Issue, error) {
+func CreateIssue(client types.HttpClient, project string, token string, issue *types.Issue) (*types.Issue, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues"
 
 	body, marshalErr := json.Marshal(issue)
@@ -179,6 +176,7 @@ func CreateIssue(client HttpClient, project string, token string, issue *types.I
 	}
 
 	res, err := apiCallPost(client, url, token, string(body))
+
 	if err != nil {
 		pterm.Error.Println(err)
 		return &types.Issue{}, cli.NewExitError(err, 1)

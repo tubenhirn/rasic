@@ -1,6 +1,13 @@
 package types
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
+
+type HttpClient interface {
+	Do(*http.Request) (*http.Response, error)
+}
 
 type CVEReport struct {
 	SchemaVersion int       `json:"SchemaVersion"`

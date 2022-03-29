@@ -1,33 +1,34 @@
 package issue
 
 import (
-	"os/exec"
-
 	"github.com/pterm/pterm"
+	"gitlab.com/jstang/rasic/api"
 	"gitlab.com/jstang/rasic/types"
 )
 
 // open a new issue in the given project
 // we use glab cli to make this more easy
 // TODO: remove glab dependency and use a custom api-call
-func Open(project string, issue types.Vulnerabilities, packagetarget string, packagetype string) error {
+func Open(client types.HttpClient, project string, token string, issue types.Vulnerabilities, packagetarget string, packagetype string) error {
+	newIssue := &types.Issue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype)}
 	// TODO: allow to configure Severity
 	if issue.Severity == "CRITICAL" {
-		app := "glab"
-		arg0 := "issue"
-		arg1 := "create"
+		_, err := api.CreateIssue(client, project, token, newIssue)
+		// app := "glab"
+		// arg0 := "issue"
+		// arg1 := "create"
 		// TODO: check if other label color is possible
-		arg2 := "-l cve, " + issue.Severity
-		arg3 := "-t " + issue.VulnerabilityID
-		arg4 := "-d " + generateMarkdown(issue, packagetarget, packagetype)
-		arg5 := "-R " + project
-		cmd := exec.Command(app, arg0, arg1, arg2, arg3, arg4, arg5)
-		stdout, err := cmd.Output()
+		// arg2 := "-l cve, " + issue.Severity
+		// arg3 := "-t " + issue.VulnerabilityID
+		// arg4 := "-d " + generateMarkdown(issue, packagetarget, packagetype)
+		// arg5 := "-R " + project
+		// cmd := exec.Command(app, arg0, arg1, arg2, arg3, arg4, arg5)
+		// stdout, err := cmd.Output()
 		if err != nil {
 			pterm.Error.Println(err.Error())
 			return err
 		}
-		pterm.Info.Println(string(stdout))
+		pterm.Info.Println("issue created")
 	}
 
 	return nil
