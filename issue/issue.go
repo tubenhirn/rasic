@@ -12,8 +12,8 @@ import (
 // we use glab cli to make this more easy
 // TODO: remove glab dependency and use a custom api-call
 func Open(client types.HttpClient, project string, token string, issue types.Vulnerabilities, packagetarget string, packagetype string) error {
-	projectId, _ :=  strconv.Atoi(project)
-	newIssue := &types.CreateIssue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype), Id: projectId}
+	projectId, _ := strconv.Atoi(project)
+	newIssue := &types.Issue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype), Id: projectId}
 	// TODO: allow to configure Severity
 	if issue.Severity == "HIGH" {
 		_, err := api.CreateIssue(client, project, token, newIssue)
