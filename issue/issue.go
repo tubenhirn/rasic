@@ -10,7 +10,7 @@ import (
 // open a new issue in the given project
 // we use glab cli to make this more easy
 // TODO: remove glab dependency and use a custom api-call
-func Open(project string, issue *types.Vulnerabilities, packagetarget string, packagetype string) error {
+func Open(project string, issue types.Vulnerabilities, packagetarget string, packagetype string) error {
 	// TODO: allow to configure Severity
 	if issue.Severity == "CRITICAL" {
 		app := "glab"
@@ -35,7 +35,7 @@ func Open(project string, issue *types.Vulnerabilities, packagetarget string, pa
 
 // generate markdown to populate the new issue
 // TODO: check if this can be done with a template
-func generateMarkdown(issue *types.Vulnerabilities, packagetarget string, packagetype string) string {
+func generateMarkdown(issue types.Vulnerabilities, packagetarget string, packagetype string) string {
 	markdown := newline("### " + issue.Title)
 	markdown += newline(dobreak(issue.Description))
 	markdown += newline(dobreak(issue.PrimaryURL))

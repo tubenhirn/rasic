@@ -72,7 +72,7 @@ func Scanner(project string, issues types.Issues, ignorefile string) error {
 				}
 				if !exists {
 					// open issue if no issuw present in thes current porject
-					issue.Open(project, &cve, result.Target, result.Type)
+					issue.Open(project, cve, result.Target, result.Type)
 				}
 
 			}
