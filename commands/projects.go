@@ -7,7 +7,7 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
-	"tubenhirn.com/rasic/api"
+	"gitlab.com/jstang/rasic/api"
 )
 
 // list all projects of a give group

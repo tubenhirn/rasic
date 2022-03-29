@@ -8,7 +8,7 @@ import (
 
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
-	"tubenhirn.com/rasic/types"
+	"gitlab.com/jstang/rasic/types"
 )
 
 var baseUrl = "https://gitlab.com"
@@ -97,6 +97,7 @@ func GetProject(client HttpClient, project string, token string) (*types.Project
 }
 
 // get a list of issues from a project
+// 
 func GetIssueList(client HttpClient, project string, token string) (types.Issues, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 

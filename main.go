@@ -7,7 +7,7 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
-	"tubenhirn.com/rasic/commands"
+	"gitlab.com/jstang/rasic/commands"
 )
 
 func main() {

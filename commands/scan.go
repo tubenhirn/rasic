@@ -9,9 +9,9 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
-	"tubenhirn.com/rasic/api"
-	"tubenhirn.com/rasic/scan"
-	"tubenhirn.com/rasic/types"
+	"gitlab.com/jstang/rasic/api"
+	"gitlab.com/jstang/rasic/scan"
+	"gitlab.com/jstang/rasic/types"
 )
 
 var (

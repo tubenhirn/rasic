@@ -4,7 +4,7 @@ import (
 	"os/exec"
 
 	"github.com/pterm/pterm"
-	"tubenhirn.com/rasic/types"
+	"gitlab.com/jstang/rasic/types"
 )
 
 // open a new issue in the given project
