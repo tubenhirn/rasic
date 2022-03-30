@@ -19,7 +19,7 @@ make test
 ## build
 
 ```sh
-make build
+make compile
 ```
 
 ## install

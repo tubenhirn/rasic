@@ -19,13 +19,13 @@
 # ██║  ██║██║  ██║███████║██║╚██████╗
 # ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝
 
-all: build
+all: compile
 
-build: ## 🔨 Compile for the local architecture
+compile: ## 🔨 Compile for the local architecture
 	@echo "Compiling..."
 	go build -o rasic
 
-install: build ## 💣 install rasic
+install: compile ## 💣 install rasic
 	@echo "Installing..."
 	sudo cp rasic /usr/local/bin/rasic
 
