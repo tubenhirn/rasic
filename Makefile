@@ -25,7 +25,7 @@ build: ## 🔨 Compile for the local architecture
 	@echo "Compiling..."
 	go build -o rasic
 
-install: ## 💣 install rasic
+install: build ## 💣 install rasic
 	@echo "Installing..."
 	sudo cp rasic /usr/local/bin/rasic
 
