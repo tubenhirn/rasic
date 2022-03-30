@@ -20,7 +20,7 @@ type MockHttpClientWithIssue struct{}
 func (m *MockHttpClientWithResponse) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
 		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("Test Response"))),
-		Status: "200",
+		Status: "200 OK",
 	}
 
 	return response, nil
@@ -29,7 +29,7 @@ func (m *MockHttpClientWithResponse) Do(req *http.Request) (*http.Response, erro
 func (m *MockHttpClientWithArray) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
 		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("[]"))),
-		Status: "200",
+		Status: "200 OK",
 	}
 
 	return response, nil
@@ -38,7 +38,7 @@ func (m *MockHttpClientWithArray) Do(req *http.Request) (*http.Response, error) 
 func (m *MockHttpClientWithEmptyObject) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
 		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("{}"))),
-		Status: "200",
+		Status: "200 OK",
 	}
 
 	return response, nil
@@ -49,7 +49,7 @@ func (m *MockHttpClientWithError) Do(req *http.Request) (*http.Response, error) 
 }
 
 func (m *MockHttpClientWithIssue) Do(req *http.Request) (*http.Response, error) {
-	responseBody, _:= json.Marshal(&types.Issue{Title: "test", ID: 666})
+	responseBody, _ := json.Marshal(&types.GitlabIssue{Title: "test", ID: 666})
 	response := &http.Response{
 		Body:   ioutil.NopCloser(bytes.NewBuffer(responseBody)),
 		Status: "201 Created",
@@ -110,7 +110,7 @@ func TestApiCallPostWithError(t *testing.T) {
 
 func TestGetProjectListWithError(t *testing.T) {
 	httpClient := &MockHttpClientWithError{}
-	_, err := GetProjectList(httpClient, "testgroup", "1234")
+	_, err := GetProjects(httpClient, "testgroup", "1234")
 	if err == nil {
 		t.Errorf("Should have received an error with a valid MockHttpClientWithError, got %s", "nil")
 	}
@@ -118,7 +118,7 @@ func TestGetProjectListWithError(t *testing.T) {
 
 func TestGetProjectListWithResponse(t *testing.T) {
 	httpClient := &MockHttpClientWithArray{}
-	_, err := GetProjectList(httpClient, "testgroup", "1234")
+	_, err := GetProjects(httpClient, "testgroup", "1234")
 	if err != nil {
 		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)
 	}
@@ -126,7 +126,7 @@ func TestGetProjectListWithResponse(t *testing.T) {
 
 func TestGetProjectListWithResponseError(t *testing.T) {
 	httpClient := &MockHttpClientWithEmptyObject{}
-	_, err := GetProjectList(httpClient, "testgroup", "1234")
+	_, err := GetProjects(httpClient, "testgroup", "1234")
 	if err == nil {
 		t.Errorf("Should have received an error with a MockHttpClientWithEmptyObject, got %s", "nil")
 	}
@@ -150,7 +150,7 @@ func TestGetProjectWithResponse(t *testing.T) {
 
 func TestCreateIssueWithResponse(t *testing.T) {
 	httpClient := &MockHttpClientWithIssue{}
-	issue := &types.CreateIssue{}
+	issue := &types.Issue{}
 	_, err := CreateIssue(httpClient, "testproject", "1234", issue)
 	if err != nil {
 		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)

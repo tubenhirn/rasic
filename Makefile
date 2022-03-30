@@ -12,18 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# ██████╗  █████╗ ███████╗██╗ ██████╗
+# ██╔══██╗██╔══██╗██╔════╝██║██╔════╝
+# ██████╔╝███████║███████╗██║██║
+# ██╔══██╗██╔══██║╚════██║██║██║
+# ██║  ██║██║  ██║███████║██║╚██████╗
+# ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝
 
 all: build
 
-build: ## Compile for the local architecture 🔨
+build: ## 🔨 Compile for the local architecture
 	@echo "Compiling..."
 	go build -o rasic
 
-install: ## install rasic 💣
+install: ## 💣 install rasic
 	@echo "Installing..."
 	sudo cp rasic /usr/local/bin/rasic
 
-test: ## test your stuff 😁
+test: ## 😁 test your stuff
 	@echo "Testing..."
 	go test -v ./...
 

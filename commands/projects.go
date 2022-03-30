@@ -11,10 +11,10 @@ import (
 )
 
 // list all projects of a give group
-func List() *cli.Command {
+func ListProjects() *cli.Command {
 	return &cli.Command{
-		Name:    "list",
-		Aliases: []string{"l"},
+		Name:    "projects",
+		Aliases: []string{"p"},
 		Usage:   "list projects of a group",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -50,7 +50,7 @@ func List() *cli.Command {
 			group := c.String("group")
 			token := c.String("token")
 			client := &http.Client{}
-			projects, _ := api.GetProjectList(client, group, token)
+			projects, _ := api.GetProjects(client, group, token)
 			bytes, marshalerror := json.Marshal(projects)
 			if marshalerror != nil {
 				pterm.Error.Println(marshalerror)

@@ -12,6 +12,7 @@ import (
 	"gitlab.com/jstang/rasic/types"
 )
 
+// TODO: put base config in a config file in local .config folder
 var baseUrl = "https://gitlab.com"
 var apiPath = "/api/v4/"
 
@@ -58,7 +59,7 @@ func apiCallPost(client types.HttpClient, url string, token string, body string)
 }
 
 // get a list of projects in a given group
-func GetProjectList(client types.HttpClient, group string, token string) (types.Projects, error) {
+func GetProjects(client types.HttpClient, group string, token string) (types.GitlabProjects, error) {
 	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
 	res, err := apiCallGet(client, url, token)
@@ -68,8 +69,8 @@ func GetProjectList(client types.HttpClient, group string, token string) (types.
 		return nil, cli.NewExitError(err, 1)
 	}
 
-	if res.Status == "200 OK" || res.Status == "200" {
-		var projectlist types.Projects
+	if res.Status == "200 OK" {
+		var projectlist types.GitlabProjects
 		if err := json.NewDecoder(res.Body).Decode(&projectlist); err != nil {
 			pterm.Error.Println(err)
 			return nil, cli.NewExitError(err, 2)
@@ -87,37 +88,36 @@ func GetProjectList(client types.HttpClient, group string, token string) (types.
 }
 
 // get a project
-func GetProject(client types.HttpClient, project string, token string) (types.Project, error) {
+func GetProject(client types.HttpClient, project string, token string) (types.GitlabProject, error) {
 	url := baseUrl + apiPath + "projects/" + project
 
 	res, err := apiCallGet(client, url, token)
 
 	if err != nil {
 		pterm.Error.Println(err)
-		return types.Project{}, cli.NewExitError(err, 1)
+		return types.GitlabProject{}, cli.NewExitError(err, 1)
 	}
 
-	if res.Status == "200 OK" || res.Status == "200" {
-		var project types.Project
+	if res.Status == "200 OK" {
+		var project types.GitlabProject
 		if err := json.NewDecoder(res.Body).Decode(&project); err != nil {
 			pterm.Info.Println(res.Body)
-			return types.Project{}, cli.NewExitError("decoder error", 2)
+			return types.GitlabProject{}, cli.NewExitError("decoder error", 2)
 		}
 		return project, nil
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			pterm.Error.Println(err)
-			return types.Project{}, cli.NewExitError("read error", 3)
+			return types.GitlabProject{}, cli.NewExitError("read error", 3)
 		}
-		return types.Project{}, cli.NewExitError("response error", 2)
+		return types.GitlabProject{}, cli.NewExitError("response error", 2)
 	}
 
 }
 
 // get a list of issues from a project
-//
-func GetIssueList(client types.HttpClient, project string, token string) (types.Issues, error) {
+func GetIssues(client types.HttpClient, project string, token string) (types.GitlabIssues, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 
 	res, err := apiCallGet(client, url, token)
@@ -127,8 +127,8 @@ func GetIssueList(client types.HttpClient, project string, token string) (types.
 		return nil, cli.NewExitError(err, 1)
 	}
 
-	if res.Status == "200 OK" || res.Status == "200" {
-		var issuelist types.Issues
+	if res.Status == "200 OK" {
+		var issuelist types.GitlabIssues
 		if err := json.NewDecoder(res.Body).Decode(&issuelist); err != nil {
 			return nil, cli.NewExitError("decoder error", 2)
 		}
@@ -156,7 +156,7 @@ func GetFile(client types.HttpClient, project string, filepath string, fileref s
 		return "", cli.NewExitError(err, 1)
 	}
 
-	if res.Status == "200 OK" || res.Status == "200" {
+	if res.Status == "200 OK" {
 		fileContent, readErr := ioutil.ReadAll(res.Body)
 		if readErr != nil {
 			return "", readErr
@@ -167,33 +167,33 @@ func GetFile(client types.HttpClient, project string, filepath string, fileref s
 	return "", errors.New("no ignorefile found in project")
 }
 
-func CreateIssue(client types.HttpClient, project string, token string, issue *types.CreateIssue) (*types.Issue, error) {
+func CreateIssue(client types.HttpClient, project string, token string, issue *types.Issue) (*types.GitlabIssue, error) {
 	url := baseUrl + apiPath + "projects/" + project + "/issues"
 
 	body, marshalErr := json.Marshal(issue)
 	if marshalErr != nil {
 		pterm.Error.Println(marshalErr)
-		return &types.Issue{}, marshalErr
+		return &types.GitlabIssue{}, marshalErr
 	}
 
 	res, err := apiCallPost(client, url, token, string(body))
 	if err != nil {
 		pterm.Error.Println(err)
-		return &types.Issue{}, cli.NewExitError(err, 1)
+		return &types.GitlabIssue{}, cli.NewExitError(err, 1)
 	}
 
 	if res.Status == "201 Created" {
-		var issue types.Issue
+		var issue types.GitlabIssue
 		if err := json.NewDecoder(res.Body).Decode(&issue); err != nil {
-			return &types.Issue{}, cli.NewExitError("decoder error", 2)
+			return &types.GitlabIssue{}, cli.NewExitError("decoder error", 2)
 		}
 		return &issue, nil
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			pterm.Error.Println(err)
-			return &types.Issue{}, cli.NewExitError("read error", 3)
+			return &types.GitlabIssue{}, cli.NewExitError("read error", 3)
 		}
-		return &types.Issue{}, cli.NewExitError(string(res.Status), 2)
+		return &types.GitlabIssue{}, cli.NewExitError(string(res.Status), 2)
 	}
 }

@@ -123,9 +123,9 @@ func Scan() *cli.Command {
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
 			pterm.Info.Println("scan for cve's")
-			var projects types.Projects
+			var projects types.GitlabProjects
 			client := &http.Client{}
-			projects, _ = api.GetProjectList(client, projectId, authToken)
+			projects, _ = api.GetProjects(client, projectId, authToken)
 			if len(projects) < 1 {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 
@@ -133,14 +133,17 @@ func Scan() *cli.Command {
 				if err != nil {
 					return err
 				}
+				var pro types.Project
+				pro.Id = singleProject.ID
+				pro.WebUrl = singleProject.WebURL
 
-				var issues types.Issues
-				issues, _ = api.GetIssueList(client, strconv.Itoa(singleProject.ID), authToken)
-				pterm.Info.Printfln("scan: " + singleProject.WebURL)
+				var issues types.GitlabIssues
+				issues, _ = api.GetIssues(client, strconv.Itoa(singleProject.ID), authToken)
+				pterm.Info.Printfln("scan: " + pro.WebUrl)
 
 				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(singleProject.ID), ignoreFileName, singleProject.DefaultBranch, authToken)
 
-				err = scan.Scanner(client, strconv.Itoa(singleProject.ID), singleProject.WebURL, authToken, issues, tempFileName)
+				err = scan.Scanner(client, pro, authToken, issues, tempFileName)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
@@ -151,13 +154,18 @@ func Scan() *cli.Command {
 			}
 			pterm.Info.Println(strconv.Itoa(len(projects)) + " projects found in group " + projectId)
 			for _, project := range projects {
-				var issues types.Issues
-				issues, _ = api.GetIssueList(client, strconv.Itoa(project.ID), authToken)
+				var issues types.GitlabIssues
+
+				var pro types.Project
+				pro.Id = project.ID
+				pro.WebUrl = project.WebURL
+
+				issues, _ = api.GetIssues(client, strconv.Itoa(project.ID), authToken)
 				pterm.Info.Println("scan: " + project.WebURL)
 
 				tempFileName, _ := createLocalIgnorefile(client, strconv.Itoa(project.ID), ignoreFileName, project.DefaultBranch, authToken)
 
-				err := scan.Scanner(client, strconv.Itoa(project.ID), project.WebURL, authToken, issues, tempFileName)
+				err := scan.Scanner(client, pro, authToken, issues, tempFileName)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
