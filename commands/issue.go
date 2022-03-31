@@ -3,14 +3,18 @@ package commands
 import (
 	"encoding/json"
 	"net/http"
+	"os"
+	"os/exec"
 
+	hclog "github.com/hashicorp/go-hclog"
+	"github.com/hashicorp/go-plugin"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
-	"gitlab.com/jstang/rasic/api"
+	"gitlab.com/jstang/rasic/types/plugins"
 )
 
 // open an new issue for a found cve
-func ListIssues() *cli.Command {
+func Issues() *cli.Command {
 	return &cli.Command{
 		Name:        "issues",
 		Aliases:     []string{"i"},
@@ -54,10 +58,46 @@ func ListIssues() *cli.Command {
 					return nil
 				},
 				Action: func(c *cli.Context) error {
+					backend := c.String("api")
 					project := c.String("project")
 					token := c.String("token")
-					client := &http.Client{}
-					issues, _ := api.GetIssues(client, project, token)
+					var handshakeConfig = plugin.HandshakeConfig{
+						ProtocolVersion:  1,
+						MagicCookieKey:   "API_PLUGIN",
+						MagicCookieValue: "allow",
+					}
+
+					var pluginMap = map[string]plugin.Plugin{
+						"gitlab": &plugins.ApiPlugin{},
+					}
+
+					httpClient := &http.Client{}
+					logger := hclog.New(&hclog.LoggerOptions{
+						Name:   "plugin",
+						Output: os.Stdout,
+						Level:  hclog.Error,
+					})
+
+					client := plugin.NewClient(&plugin.ClientConfig{
+						HandshakeConfig: handshakeConfig,
+						Plugins:         pluginMap,
+						Cmd:             exec.Command("./plugins/api/" + backend),
+						Logger:          logger,
+					})
+					defer client.Kill()
+
+					rpcClient, err := client.Client()
+					if err != nil {
+						pterm.Error.Println(err)
+					}
+
+					raw, err := rpcClient.Dispense(backend)
+					if err != nil {
+						pterm.Error.Println(err)
+					}
+					api := raw.(plugins.Api)
+
+					issues := api.GetIssues(httpClient, project, token)
 					bytes, marshalerror := json.Marshal(issues)
 					if marshalerror != nil {
 						pterm.Error.Println(marshalerror)

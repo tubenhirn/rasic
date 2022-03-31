@@ -1,3 +1,5 @@
 rasic
 /result.json
 /blubb.json
+/plugins/api/**/*
+!/plugins/api/**/*.go
