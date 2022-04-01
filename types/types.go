@@ -17,4 +17,6 @@ type Issue struct {
 type Project struct {
 	Id     int
 	WebUrl string
+	DefaultBranch string
+	IgnoreFileName string
 }

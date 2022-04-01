@@ -23,6 +23,7 @@ all: compile
 
 compile: ## 🔨 Compile for the local architecture
 	@echo "Compiling..."
+	go build -o ./plugins/api/gitlab ./plugins/api/gitlab.go
 	go build -o rasic
 
 install: compile ## 💣 install rasic

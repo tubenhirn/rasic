@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/gob"
+	"net/http"
 	"os"
 	"time"
 
@@ -8,19 +10,44 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"gitlab.com/jstang/rasic/commands"
+	"gitlab.com/jstang/rasic/types"
 )
+
+// register types to gob
+// this is required to proper serialize and deserialize the data
+func init() {
+	gob.Register(http.DefaultClient)
+	gob.Register(types.Issue{})
+	gob.Register(types.Project{})
+	gob.Register(map[string]interface{}{})
+}
 
 func main() {
 	app := &cli.App{
-		Name:                 "rasic",
-		HelpName:             "",
-		Usage:                "create issues from known cve's",
-		UsageText:            "",
-		ArgsUsage:            "",
-		Version:              "v0.1.1",
-		Description:          "a simple app to create issues (on gitlab.com) from known cve's",
-		Commands:             []*cli.Command{},
-		Flags:                []cli.Flag{},
+		Name:        "rasic",
+		HelpName:    "",
+		Usage:       "create issues from known cve's",
+		UsageText:   "",
+		ArgsUsage:   "",
+		Version:     "v0.2.1",
+		Description: "a simple app to create issues for known cve's",
+		Commands:    []*cli.Command{},
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "api",
+				Aliases:     []string{},
+				Usage:       "specify the backend to interact with (gitlab, github, jira)",
+				EnvVars:     []string{"RASIC_API"},
+				FilePath:    "",
+				Required:    false,
+				Hidden:      false,
+				TakesFile:   false,
+				Value:       "gitlab",
+				DefaultText: "",
+				Destination: new(string),
+				HasBeenSet:  false,
+			},
+		},
 		EnableBashCompletion: false,
 		HideHelp:             false,
 		HideHelpCommand:      false,
@@ -58,8 +85,8 @@ func main() {
 	}
 
 	app.Commands = append(app.Commands, commands.Scan())
-	app.Commands = append(app.Commands, commands.ListProjects())
-	app.Commands = append(app.Commands, commands.ListIssues())
+	app.Commands = append(app.Commands, commands.Projects())
+	app.Commands = append(app.Commands, commands.Issues())
 
 	app.EnableBashCompletion = true
 
