@@ -130,7 +130,7 @@ func Scan() *cli.Command {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 
 				singleProject := api.GetProject(httpClient, projectId, authToken)
-				var currentProject types.Project
+				var currentProject types.RasicProject
 				currentProject.Id = singleProject.ID
 				currentProject.WebUrl = singleProject.WebURL
 				currentProject.DefaultBranch = singleProject.DefaultBranch
@@ -151,7 +151,7 @@ func Scan() *cli.Command {
 			for _, project := range projects {
 				var issues types.GitlabIssues
 
-				var currentProject types.Project
+				var currentProject types.RasicProject
 				currentProject.Id = project.ID
 				currentProject.WebUrl = project.WebURL
 				currentProject.DefaultBranch = project.DefaultBranch

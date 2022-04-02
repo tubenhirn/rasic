@@ -30,7 +30,7 @@ type Api interface {
 	GetProject(client types.HttpClient, project string, token string) types.GitlabProject
 	GetIssues(client types.HttpClient, project string, token string) types.GitlabIssues
 	GetFile(client types.HttpClient, project string, filepath string, fileref string, token string) string
-	CreateIssue(client types.HttpClient, project string, token string, issue types.Issue) types.GitlabIssue
+	CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.GitlabIssue
 }
 
 // GetProjects
@@ -116,7 +116,7 @@ func (s *ApiRPCServer) GetFile(args map[string]interface{}, resp *string) error 
 }
 
 //CreateIssue
-func (g *ApiRPC) CreateIssue(client types.HttpClient, project string, token string, issue types.Issue) types.GitlabIssue {
+func (g *ApiRPC) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.GitlabIssue {
 	var resp types.GitlabIssue
 	err := g.client.Call("Plugin.CreateIssue", map[string]interface{}{
 		"client":  client,
@@ -132,6 +132,6 @@ func (g *ApiRPC) CreateIssue(client types.HttpClient, project string, token stri
 }
 
 func (s *ApiRPCServer) CreateIssue(args map[string]interface{}, resp *types.GitlabIssue) error {
-	*resp = s.Impl.CreateIssue(args["client"].(types.HttpClient), args["project"].(string), args["token"].(string), args["issue"].(types.Issue))
+	*resp = s.Impl.CreateIssue(args["client"].(types.HttpClient), args["project"].(string), args["token"].(string), args["issue"].(types.RasicIssue))
 	return nil
 }

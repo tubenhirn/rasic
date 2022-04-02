@@ -150,7 +150,7 @@
 
 // func TestCreateIssueWithResponse(t *testing.T) {
 // 	httpClient := &MockHttpClientWithIssue{}
-// 	issue := &types.Issue{}
+// 	issue := &types.RasicIssue{}
 // 	_, err := CreateIssue(httpClient, "testproject", "1234", issue)
 // 	if err != nil {
 // 		t.Errorf("Shouldn't have received an error with a valid MockHttpClientWithResponse, got %s", err)
