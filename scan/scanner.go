@@ -59,7 +59,7 @@ func cleanTempFiles(fileName string) error {
   and save the output as result.json
  **/
 
-func Scanner(client types.HttpClient, api plugins.Api ,project types.Project, token string, issues types.GitlabIssues) error {
+func Scanner(client types.HttpClient, api plugins.Api ,project types.RasicProject, token string, issues types.GitlabIssues) error {
 
 	// look for a ignorefile in the project
 	// if it exists download it

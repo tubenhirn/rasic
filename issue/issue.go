@@ -11,7 +11,7 @@ import (
 // open a new issue in the given project
 func Open(client types.HttpClient, api plugins.Api, project string, token string, issue types.Vulnerabilities, packagetarget string, packagetype string) error {
 	projectId, _ := strconv.Atoi(project)
-	newIssue := types.Issue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype), Id: projectId}
+	newIssue := types.RasicIssue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype), Id: projectId}
 
 	// TODO: allow to configure Severity
 	if issue.Severity == "HIGH" {

@@ -17,8 +17,8 @@ import (
 // this is required to proper serialize and deserialize the data
 func init() {
 	gob.Register(http.DefaultClient)
-	gob.Register(types.Issue{})
-	gob.Register(types.Project{})
+	gob.Register(types.RasicIssue{})
+	gob.Register(types.RasicProject{})
 	gob.Register(map[string]interface{}{})
 }
 

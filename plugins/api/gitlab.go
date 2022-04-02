@@ -122,7 +122,7 @@ func (a *ApiGitlab) GetFile(client types.HttpClient, project string, filepath st
 	return ""
 }
 
-func (a *ApiGitlab) CreateIssue(client types.HttpClient, project string, token string, issue types.Issue) types.GitlabIssue{
+func (a *ApiGitlab) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.GitlabIssue{
 	url := baseUrl + apiPath + "projects/" + project + "/issues"
 
 	body, marshalErr := json.Marshal(issue)
@@ -163,7 +163,7 @@ var handshakeConfig = plugin.HandshakeConfig{
 // this is required to proper serialize and deserialize the data
 func init() {
 	gob.Register(http.DefaultClient)
-	gob.Register(types.Issue{})
+	gob.Register(types.RasicIssue{})
 	gob.Register(map[string]interface{}{})
 }
 
