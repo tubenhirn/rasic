@@ -22,7 +22,7 @@ func createLocalIgnorefile(client types.HttpClient, api plugins.Api, projectId s
 	ignoreFilePath := "/tmp/scan-" + projectId + "/"
 
 	if len(ignorefileString) > 0 {
-		pterm.Info.Println("found" + ignoreFileName + "file in project")
+		pterm.Info.Println("found " + ignoreFileName + "file in project")
 		dirErr := os.Mkdir(ignoreFilePath, 0755)
 		if dirErr != nil {
 			pterm.Warning.Println(dirErr)
@@ -59,7 +59,7 @@ func cleanTempFiles(fileName string) error {
   and save the output as result.json
  **/
 
-func Scanner(client types.HttpClient, api plugins.Api ,project types.RasicProject, token string, issues types.GitlabIssues) error {
+func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProject, token string, issues []types.RasicIssue) error {
 
 	// look for a ignorefile in the project
 	// if it exists download it
@@ -102,7 +102,7 @@ func Scanner(client types.HttpClient, api plugins.Api ,project types.RasicProjec
 	for _, result := range report.Results {
 		if len(result.Vulnerabilities) > 0 {
 
-			pterm.Warning.Println(strconv.Itoa(len(result.Vulnerabilities)) + " vulnerabilities found")
+			pterm.Warning.Println(strconv.Itoa(len(result.Vulnerabilities)) + " " + result.Type + " vulnerabilities found")
 
 			for _, cve := range result.Vulnerabilities {
 				// check for open issues

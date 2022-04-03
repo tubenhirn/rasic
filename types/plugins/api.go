@@ -26,16 +26,16 @@ func (ApiPlugin) Client(b *plugin.MuxBroker, c *rpc.Client) (interface{}, error)
 }
 
 type Api interface {
-	GetProjects(client types.HttpClient, group string, token string) types.GitlabProjects
-	GetProject(client types.HttpClient, project string, token string) types.GitlabProject
-	GetIssues(client types.HttpClient, project string, token string) types.GitlabIssues
+	GetProjects(client types.HttpClient, group string, token string) []types.RasicProject
+	GetProject(client types.HttpClient, project string, token string) types.RasicProject
+	GetIssues(client types.HttpClient, project string, token string) []types.RasicIssue
 	GetFile(client types.HttpClient, project string, filepath string, fileref string, token string) string
-	CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.GitlabIssue
+	CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.RasicIssue
 }
 
 // GetProjects
-func (g *ApiRPC) GetProjects(client types.HttpClient, group string, token string) types.GitlabProjects {
-	var resp types.GitlabProjects
+func (g *ApiRPC) GetProjects(client types.HttpClient, group string, token string) []types.RasicProject {
+	var resp []types.RasicProject
 	err := g.client.Call("Plugin.GetProjects", map[string]interface{}{
 		"client": client,
 		"group":  group,
@@ -48,14 +48,14 @@ func (g *ApiRPC) GetProjects(client types.HttpClient, group string, token string
 	return resp
 }
 
-func (s *ApiRPCServer) GetProjects(args map[string]interface{}, resp *types.GitlabProjects) error {
+func (s *ApiRPCServer) GetProjects(args map[string]interface{}, resp *[]types.RasicProject) error {
 	*resp = s.Impl.GetProjects(args["client"].(types.HttpClient), args["group"].(string), args["token"].(string))
 	return nil
 }
 
 //GetProject
-func (g *ApiRPC) GetProject(client types.HttpClient, project string, token string) types.GitlabProject {
-	var resp types.GitlabProject
+func (g *ApiRPC) GetProject(client types.HttpClient, project string, token string) types.RasicProject {
+	var resp types.RasicProject
 	err := g.client.Call("Plugin.GetProject", map[string]interface{}{
 		"client":  client,
 		"project": project,
@@ -68,14 +68,14 @@ func (g *ApiRPC) GetProject(client types.HttpClient, project string, token strin
 	return resp
 }
 
-func (s *ApiRPCServer) GetProject(args map[string]interface{}, resp *types.GitlabProject) error {
+func (s *ApiRPCServer) GetProject(args map[string]interface{}, resp *types.RasicProject) error {
 	*resp = s.Impl.GetProject(args["client"].(types.HttpClient), args["project"].(string), args["token"].(string))
 	return nil
 }
 
 //GetIssues
-func (g *ApiRPC) GetIssues(client types.HttpClient, project string, token string) types.GitlabIssues {
-	var resp types.GitlabIssues
+func (g *ApiRPC) GetIssues(client types.HttpClient, project string, token string) []types.RasicIssue {
+	var resp []types.RasicIssue
 	err := g.client.Call("Plugin.GetIssues", map[string]interface{}{
 		"client":  client,
 		"project": project,
@@ -88,7 +88,7 @@ func (g *ApiRPC) GetIssues(client types.HttpClient, project string, token string
 	return resp
 }
 
-func (s *ApiRPCServer) GetIssues(args map[string]interface{}, resp *types.GitlabIssues) error {
+func (s *ApiRPCServer) GetIssues(args map[string]interface{}, resp *[]types.RasicIssue) error {
 	*resp = s.Impl.GetIssues(args["client"].(types.HttpClient), args["project"].(string), args["token"].(string))
 	return nil
 }
@@ -116,13 +116,13 @@ func (s *ApiRPCServer) GetFile(args map[string]interface{}, resp *string) error 
 }
 
 //CreateIssue
-func (g *ApiRPC) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.GitlabIssue {
-	var resp types.GitlabIssue
+func (g *ApiRPC) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.RasicIssue {
+	var resp types.RasicIssue
 	err := g.client.Call("Plugin.CreateIssue", map[string]interface{}{
 		"client":  client,
 		"project": project,
 		"token":   token,
-		"issue": issue,
+		"issue":   issue,
 	}, &resp)
 	if err != nil {
 		panic(err)
@@ -131,7 +131,7 @@ func (g *ApiRPC) CreateIssue(client types.HttpClient, project string, token stri
 	return resp
 }
 
-func (s *ApiRPCServer) CreateIssue(args map[string]interface{}, resp *types.GitlabIssue) error {
+func (s *ApiRPCServer) CreateIssue(args map[string]interface{}, resp *types.RasicIssue) error {
 	*resp = s.Impl.CreateIssue(args["client"].(types.HttpClient), args["project"].(string), args["token"].(string), args["issue"].(types.RasicIssue))
 	return nil
 }
