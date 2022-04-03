@@ -3,7 +3,6 @@ package issue
 import (
 	"strconv"
 
-	"github.com/pterm/pterm"
 	"gitlab.com/jstang/rasic/types"
 )
 
@@ -11,12 +10,6 @@ import (
 func Template(project string, vuln types.Vulnerabilities, packagetarget string, packagetype string) (types.RasicIssue, error) {
 	projectId, _ := strconv.Atoi(project)
 	newIssue := types.RasicIssue{Title: vuln.VulnerabilityID, Description: generateMarkdown(vuln, packagetarget, packagetype), Id: projectId}
-
-	// // TODO: allow to configure Severity
-	// if issue.Severity == "HIGH" {
-	// 	api.CreateIssue(client, project, token, newIssue)
-	pterm.Info.Println("issue generated")
-	// }
 
 	return newIssue, nil
 }

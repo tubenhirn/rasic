@@ -121,7 +121,13 @@ func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProjec
 				if !exists {
 					// open issue if no issuw present in thes current porject
 					newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
-					api.CreateIssue(client, strconv.Itoa(project.Id), token, newIssue)
+
+					// TODO: make this configurable
+					// and better.....
+					if cve.Severity == "HIGH" {
+						api.CreateIssue(client, strconv.Itoa(project.Id), token, newIssue)
+						pterm.Info.Println("new issue opened for " + cve.VulnerabilityID + " - " + cve.Severity)
+					}
 				}
 
 			}
