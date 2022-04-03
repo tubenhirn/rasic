@@ -5,21 +5,20 @@ import (
 
 	"github.com/pterm/pterm"
 	"gitlab.com/jstang/rasic/types"
-	"gitlab.com/jstang/rasic/types/plugins"
 )
 
 // open a new issue in the given project
-func Open(client types.HttpClient, api plugins.Api, project string, token string, issue types.Vulnerabilities, packagetarget string, packagetype string) error {
+func Template(project string, vuln types.Vulnerabilities, packagetarget string, packagetype string) (types.RasicIssue, error) {
 	projectId, _ := strconv.Atoi(project)
-	newIssue := types.RasicIssue{Title: issue.Title, Description: generateMarkdown(issue, packagetarget, packagetype), Id: projectId}
+	newIssue := types.RasicIssue{Title: vuln.VulnerabilityID, Description: generateMarkdown(vuln, packagetarget, packagetype), Id: projectId}
 
-	// TODO: allow to configure Severity
-	if issue.Severity == "HIGH" {
-		api.CreateIssue(client, project, token, newIssue)
-		pterm.Info.Println("issue created")
-	}
+	// // TODO: allow to configure Severity
+	// if issue.Severity == "HIGH" {
+	// 	api.CreateIssue(client, project, token, newIssue)
+	pterm.Info.Println("issue generated")
+	// }
 
-	return nil
+	return newIssue, nil
 }
 
 // generate markdown to populate the new issue

@@ -120,7 +120,8 @@ func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProjec
 				}
 				if !exists {
 					// open issue if no issuw present in thes current porject
-					issue.Open(client, api, strconv.Itoa(project.Id), token, cve, result.Target, result.Type)
+					newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
+					api.CreateIssue(client, strconv.Itoa(project.Id), token, newIssue)
 				}
 
 			}
