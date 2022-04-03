@@ -61,8 +61,6 @@ var (
 	}
 )
 
-
-
 // scan a project for cve's
 func Scan() *cli.Command {
 	return &cli.Command{
@@ -124,20 +122,20 @@ func Scan() *cli.Command {
 			api := raw.(plugins.Api)
 
 			pterm.Info.Println("scan for cve's")
-			var projects types.GitlabProjects
-			projects = api.GetProjects(httpClient, projectId, authToken)
+			projects := api.GetProjects(httpClient, projectId, authToken)
 			if len(projects) < 1 {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 
 				singleProject := api.GetProject(httpClient, projectId, authToken)
 				var currentProject types.RasicProject
-				currentProject.Id = singleProject.ID
-				currentProject.WebUrl = singleProject.WebURL
+				currentProject.Id = singleProject.Id
+				currentProject.WebUrl = singleProject.WebUrl
 				currentProject.DefaultBranch = singleProject.DefaultBranch
+				// passed as argument
 				currentProject.IgnoreFileName = ignoreFileName
 
-				var issues types.GitlabIssues
-				issues = api.GetIssues(httpClient, strconv.Itoa(singleProject.ID), authToken)
+				var issues []types.RasicIssue
+				issues = api.GetIssues(httpClient, strconv.Itoa(singleProject.Id), authToken)
 				pterm.Info.Printfln("scan: " + currentProject.WebUrl)
 
 				err = scan.Scanner(httpClient, api, currentProject, authToken, issues)
@@ -149,17 +147,16 @@ func Scan() *cli.Command {
 			}
 			pterm.Info.Println(strconv.Itoa(len(projects)) + " projects found in group " + projectId)
 			for _, project := range projects {
-				var issues types.GitlabIssues
+				var issues []types.RasicIssue
 
 				var currentProject types.RasicProject
-				currentProject.Id = project.ID
-				currentProject.WebUrl = project.WebURL
+				currentProject.Id = project.Id
+				currentProject.WebUrl = project.WebUrl
 				currentProject.DefaultBranch = project.DefaultBranch
 				currentProject.IgnoreFileName = ignoreFileName
 
-				issues = api.GetIssues(httpClient, strconv.Itoa(project.ID), authToken)
-				pterm.Info.Println("scan: " + project.WebURL)
-
+				issues = api.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
+				pterm.Info.Println("scan: " + project.WebUrl)
 
 				err := scan.Scanner(httpClient, api, currentProject, authToken, issues)
 				if err != nil {

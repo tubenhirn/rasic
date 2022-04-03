@@ -19,7 +19,7 @@ var apiPath = "/api/v4/"
 
 type ApiGitlab struct{}
 
-func (a *ApiGitlab) GetProjects(client types.HttpClient, group string, token string) types.GitlabProjects {
+func (a *ApiGitlab) GetProjects(client types.HttpClient, group string, token string) []types.RasicProject {
 	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
 	res, err := apiCallGet(client, url, token)
@@ -35,7 +35,19 @@ func (a *ApiGitlab) GetProjects(client types.HttpClient, group string, token str
 			pterm.Error.Println(err)
 			return nil
 		}
-		return projectlist
+
+		var returnValue []types.RasicProject
+		for _, pro := range projectlist {
+			ele := types.RasicProject{
+				Id:            pro.ID,
+				WebUrl:        pro.WebURL,
+				DefaultBranch: pro.DefaultBranch,
+			}
+			returnValue = append(returnValue, ele)
+
+		}
+
+		return returnValue
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
@@ -47,35 +59,42 @@ func (a *ApiGitlab) GetProjects(client types.HttpClient, group string, token str
 
 }
 
-func (a *ApiGitlab) GetProject(client types.HttpClient, project string, token string) types.GitlabProject {
+func (a *ApiGitlab) GetProject(client types.HttpClient, project string, token string) types.RasicProject {
 	url := baseUrl + apiPath + "projects/" + project
 
 	res, err := apiCallGet(client, url, token)
 
 	if err != nil {
 		pterm.Error.Println(err)
-		return types.GitlabProject{}
+		return types.RasicProject{}
 	}
 
 	if res.Status == "200 OK" {
 		var project types.GitlabProject
 		if err := json.NewDecoder(res.Body).Decode(&project); err != nil {
 			pterm.Info.Println(res.Body)
-			return types.GitlabProject{}
+			return types.RasicProject{}
 		}
-		return project
+
+		var returnValue types.RasicProject
+		returnValue.Id = project.ID
+		returnValue.WebUrl = project.WebURL
+		returnValue.DefaultBranch = project.DefaultBranch
+
+		return returnValue
+
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			pterm.Error.Println(err)
-			return types.GitlabProject{}
+			return types.RasicProject{}
 		}
-		return types.GitlabProject{}
+		return types.RasicProject{}
 	}
 
 }
 
-func (a *ApiGitlab) GetIssues(client types.HttpClient, project string, token string) types.GitlabIssues {
+func (a *ApiGitlab) GetIssues(client types.HttpClient, project string, token string) []types.RasicIssue {
 	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
 
 	res, err := apiCallGet(client, url, token)
@@ -90,7 +109,21 @@ func (a *ApiGitlab) GetIssues(client types.HttpClient, project string, token str
 		if err := json.NewDecoder(res.Body).Decode(&issuelist); err != nil {
 			return nil
 		}
-		return issuelist
+
+		var returnValue []types.RasicIssue
+
+		for _, issue := range issuelist {
+			ele := types.RasicIssue{
+				Id:          issue.ID,
+				Title:       issue.Title,
+				Description: issue.Description,
+				State:       issue.State,
+			}
+			returnValue = append(returnValue, ele)
+
+		}
+
+		return returnValue
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
@@ -122,34 +155,40 @@ func (a *ApiGitlab) GetFile(client types.HttpClient, project string, filepath st
 	return ""
 }
 
-func (a *ApiGitlab) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.GitlabIssue{
+func (a *ApiGitlab) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.RasicIssue {
 	url := baseUrl + apiPath + "projects/" + project + "/issues"
 
 	body, marshalErr := json.Marshal(issue)
 	if marshalErr != nil {
 		pterm.Error.Println(marshalErr)
-		return types.GitlabIssue{}
+		return types.RasicIssue{}
 	}
 
 	res, err := apiCallPost(client, url, token, string(body))
 	if err != nil {
 		pterm.Error.Println(err)
-		return types.GitlabIssue{}
+		return types.RasicIssue{}
 	}
 
 	if res.Status == "201 Created" {
 		var issue types.GitlabIssue
 		if err := json.NewDecoder(res.Body).Decode(&issue); err != nil {
-			return types.GitlabIssue{}
+			return types.RasicIssue{}
 		}
-		return issue
+		var returnValue types.RasicIssue
+		returnValue.Id = issue.ID
+		returnValue.Title = issue.Title
+		returnValue.Description = issue.Description
+		returnValue.State = issue.State
+
+		return returnValue
 	} else {
 		_, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			pterm.Error.Println(err)
-			return types.GitlabIssue{}
+			return types.RasicIssue{}
 		}
-		return types.GitlabIssue{}
+		return types.RasicIssue{}
 	}
 }
 

@@ -351,7 +351,7 @@ type GitlabIssue struct {
 		ID        int         `json:"id"`
 		Username  string      `json:"username"`
 	} `json:"author"`
-	Description    interface{} `json:"description"`
+	Description    string      `json:"description"`
 	UpdatedAt      time.Time   `json:"updated_at"`
 	ClosedAt       interface{} `json:"closed_at"`
 	ClosedBy       interface{} `json:"closed_by"`

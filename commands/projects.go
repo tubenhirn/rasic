@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"encoding/json"
 	"net/http"
 	"os"
 	"os/exec"
@@ -100,11 +99,7 @@ func Projects() *cli.Command {
 					api := raw.(plugins.Api)
 
 					projects := api.GetProjects(httpClient, group, token)
-					bytes, marshalerror := json.Marshal(projects)
-					if marshalerror != nil {
-						pterm.Error.Println(marshalerror)
-					}
-					pterm.Info.Println(string(bytes))
+					pterm.Info.Println(projects)
 					return nil
 				},
 				OnUsageError: func(context *cli.Context, err error, isSubcommand bool) error {
