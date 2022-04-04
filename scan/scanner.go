@@ -74,16 +74,22 @@ func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProjec
 	// build args
 	args := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=result.json", project.WebUrl}
 
+	// set auth var for trivy - following the docs for scanning a remote repositry
+	// https://aquasecurity.github.io/trivy/v0.25.0/vulnerability/scanning/git-repository/
+	os.Setenv("GITLAB_TOKEN", token)
+
 	// get current environment
 	env := os.Environ()
 
 	// exec trivy with args and env
-	// execErr := syscall.Exec(binary, args, env)
 	cmd := exec.Command(binary, args...)
+
+	// use current env for execution
 	cmd.Env = env
+
 	_, execErr := cmd.Output()
 	if execErr != nil {
-		// pterm.Error.Printfln(execErr.Error())
+		pterm.Error.Printfln(execErr.Error())
 		return execErr
 	}
 
