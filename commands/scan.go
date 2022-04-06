@@ -66,7 +66,7 @@ func Scan() *cli.Command {
 	return &cli.Command{
 		Name:        "scan",
 		Aliases:     []string{"s"},
-		Usage:       "scan project for cve's",
+		Usage:       "scan project for cve's or config flaws",
 		UsageText:   "",
 		Description: "",
 		ArgsUsage:   "",
@@ -80,7 +80,8 @@ func Scan() *cli.Command {
 			return nil
 		},
 		Action: func(c *cli.Context) error {
-			backend := c.String("api")
+			sourceName := c.String("source")
+			reporterName := c.String("reporter")
 			projectId := c.String("project")
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
@@ -93,6 +94,8 @@ func Scan() *cli.Command {
 
 			var pluginMap = map[string]plugin.Plugin{
 				"gitlab": &plugins.ApiPlugin{},
+				"github": &plugins.ApiPlugin{},
+				"trivy":  &plugins.ApiPlugin{},
 			}
 
 			httpClient := &http.Client{}
@@ -102,45 +105,38 @@ func Scan() *cli.Command {
 				Level:  hclog.Error,
 			})
 
-			client := plugin.NewClient(&plugin.ClientConfig{
-				HandshakeConfig: handshakeConfig,
-				Plugins:         pluginMap,
-				Cmd:             exec.Command("./plugins/api/" + backend),
-				Logger:          logger,
-			})
-			defer client.Kill()
+			// load all plugins required for this command
+			plugins, clients := dispensePlugins([]string{sourceName, reporterName}, handshakeConfig, pluginMap, logger)
 
-			rpcClient, err := client.Client()
-			if err != nil {
-				pterm.Error.Println(err)
+			for _, pluginClient := range clients {
+				defer pluginClient.Kill()
 			}
-
-			raw, err := rpcClient.Dispense(backend)
-			if err != nil {
-				pterm.Error.Println(err)
-			}
-			api := raw.(plugins.Api)
 
 			pterm.Info.Println("scan for cve's")
-			projects := api.GetProjects(httpClient, projectId, authToken)
+
+			projects := plugins[sourceName].GetProjects(httpClient, projectId, authToken)
 			if len(projects) < 1 {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 
-				singleProject := api.GetProject(httpClient, projectId, authToken)
+				singleProject := plugins[sourceName].GetProject(httpClient, projectId, authToken)
 				var currentProject types.RasicProject
 				currentProject.Id = singleProject.Id
 				currentProject.WebUrl = singleProject.WebUrl
 				currentProject.DefaultBranch = singleProject.DefaultBranch
-				// passed as argument
 				currentProject.IgnoreFileName = ignoreFileName
 
 				var issues []types.RasicIssue
-				issues = api.GetIssues(httpClient, strconv.Itoa(singleProject.Id), authToken)
+				issues = plugins[sourceName].GetIssues(httpClient, strconv.Itoa(singleProject.Id), authToken)
 				pterm.Info.Printfln("scan: " + currentProject.WebUrl)
 
-				err = scan.Scanner(httpClient, api, currentProject, authToken, issues)
+				issues, err := scan.Scanner(httpClient, plugins[sourceName], plugins[reporterName], currentProject, authToken, issues)
 				if err != nil {
 					pterm.Error.Println(err)
+				}
+
+				for _, issue := range issues {
+					plugins[reporterName].CreateIssue(httpClient, strconv.Itoa(singleProject.Id), authToken, issue)
+					pterm.Info.Println("new issue opened for " + issue.Title)
 				}
 
 				return nil
@@ -155,14 +151,22 @@ func Scan() *cli.Command {
 				currentProject.DefaultBranch = project.DefaultBranch
 				currentProject.IgnoreFileName = ignoreFileName
 
-				issues = api.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
+				issues = plugins[sourceName].GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
 				pterm.Info.Println("scan: " + project.WebUrl)
 
-				err := scan.Scanner(httpClient, api, currentProject, authToken, issues)
+				issues, err := scan.Scanner(httpClient, plugins[sourceName], plugins[reporterName], currentProject, authToken, issues)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
+
+				// TODO issue can be created elsewhere
+				// if we push them to jira we need a different target (project.Id)
+				for _, issue := range issues {
+					plugins[reporterName].CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, issue)
+					pterm.Info.Println("new issue opened for " + issue.Title)
+				}
 			}
+
 			return nil
 		},
 		OnUsageError: func(context *cli.Context, err error, isSubcommand bool) error {
@@ -179,4 +183,35 @@ func Scan() *cli.Command {
 		CustomHelpTemplate:     "",
 	}
 
+}
+
+// dispense a map of plugins and list of client selected by name
+func dispensePlugins(pluginNameList []string, config plugin.HandshakeConfig, pluginMap map[string]plugin.Plugin, logger hclog.Logger) (map[string]plugins.Api, []*plugin.Client) {
+
+	pluginList := make(map[string]plugins.Api)
+	var clientList []*plugin.Client
+
+	for _, pluginName := range pluginNameList {
+		client := plugin.NewClient(&plugin.ClientConfig{
+			HandshakeConfig: config,
+			Plugins:         pluginMap,
+			Cmd:             exec.Command("./plugins/api/" + pluginName),
+			Logger:          logger,
+		})
+
+		rpcClient, err := client.Client()
+		if err != nil {
+			pterm.Error.Println(err)
+		}
+
+		raw, reporterErr := rpcClient.Dispense(pluginName)
+		if reporterErr != nil {
+			pterm.Error.Println(reporterErr)
+		}
+		plug := raw.(plugins.Api)
+		pluginList[pluginName] = plug
+		clientList = append(clientList, client)
+
+	}
+	return pluginList, clientList
 }

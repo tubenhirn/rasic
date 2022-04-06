@@ -17,8 +17,8 @@ import (
 
 // create a local .triviyignore file
 // downloaded from the respective project given
-func createLocalIgnorefile(client types.HttpClient, api plugins.Api, projectId string, ignoreFileName string, defaultBranch string, authToken string) (string, error) {
-	ignorefileString := api.GetFile(client, projectId, ignoreFileName, defaultBranch, authToken)
+func createLocalIgnorefile(client types.HttpClient, source plugins.Api, projectId string, ignoreFileName string, defaultBranch string, authToken string) (string, error) {
+	ignorefileString := source.GetFile(client, projectId, ignoreFileName, defaultBranch, authToken)
 	ignoreFilePath := "/tmp/scan-" + projectId + "/"
 
 	if len(ignorefileString) > 0 {
@@ -59,17 +59,17 @@ func cleanTempFiles(fileName string) error {
   and save the output as result.json
  **/
 
-func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProject, token string, issues []types.RasicIssue) error {
+func Scanner(client types.HttpClient, source plugins.Api, reporter plugins.Api, project types.RasicProject, token string, issues []types.RasicIssue) ([]types.RasicIssue, error) {
 
 	// look for a ignorefile in the project
 	// if it exists download it
-	ignorefilePath, _ := createLocalIgnorefile(client, api, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
+	ignorefilePath, _ := createLocalIgnorefile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
 	defer cleanTempFiles(ignorefilePath)
 
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
-		panic(lookErr)
+		pterm.Error.Println(lookErr)
 	}
 	// build args
 	args := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=result.json", project.WebUrl}
@@ -89,8 +89,7 @@ func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProjec
 
 	_, execErr := cmd.Output()
 	if execErr != nil {
-		pterm.Error.Printfln(execErr.Error())
-		return execErr
+		return nil, execErr
 	}
 
 	result, err := ioutil.ReadFile("result.json")
@@ -102,9 +101,10 @@ func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProjec
 	unmarshalerr := json.Unmarshal(result, &report)
 	if unmarshalerr != nil {
 		pterm.Error.Println(unmarshalerr)
-		return unmarshalerr
+		return nil, unmarshalerr
 	}
 
+	var issueList []types.RasicIssue
 	for _, result := range report.Results {
 		if len(result.Vulnerabilities) > 0 {
 
@@ -125,19 +125,19 @@ func Scanner(client types.HttpClient, api plugins.Api, project types.RasicProjec
 					}
 				}
 				if !exists {
-					// open issue if no issuw present in thes current porject
+					// create new issue and add it to the list we return
 					newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
 
 					// TODO: make this configurable
 					// and better.....
-					if cve.Severity == "HIGH" {
-						api.CreateIssue(client, strconv.Itoa(project.Id), token, newIssue)
-						pterm.Info.Println("new issue opened for " + cve.VulnerabilityID + " - " + cve.Severity)
+					minSeverity := "HIGH"
+					if cve.Severity == minSeverity {
+						issueList = append(issueList, newIssue)
 					}
 				}
 
 			}
 		}
 	}
-	return nil
+	return issueList, nil
 }
