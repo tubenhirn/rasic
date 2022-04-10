@@ -68,7 +68,7 @@ func Issues() *cli.Command {
 					}
 
 					var pluginMap = map[string]plugin.Plugin{
-						"gitlab": &plugins.ApiPlugin{},
+						"gitlab": &plugins.ReporterPlugin{},
 					}
 
 					httpClient := &http.Client{}
@@ -81,7 +81,7 @@ func Issues() *cli.Command {
 					client := plugin.NewClient(&plugin.ClientConfig{
 						HandshakeConfig: handshakeConfig,
 						Plugins:         pluginMap,
-						Cmd:             exec.Command("./plugins/api/" + backend),
+						Cmd:             exec.Command("./plugins/reporter/" + backend),
 						Logger:          logger,
 					})
 					defer client.Kill()
@@ -95,7 +95,7 @@ func Issues() *cli.Command {
 					if err != nil {
 						pterm.Error.Println(err)
 					}
-					api := raw.(plugins.Api)
+					api := raw.(plugins.Reporter)
 
 					issues := api.GetIssues(httpClient, project, token)
 					bytes, marshalerror := json.Marshal(issues)
