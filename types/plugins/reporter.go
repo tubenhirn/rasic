@@ -26,10 +26,7 @@ func (ReporterPlugin) Client(b *plugin.MuxBroker, c *rpc.Client) (interface{}, e
 }
 
 type Reporter interface {
-	GetProjects(client types.HttpClient, group string, token string) []types.RasicProject
-	GetProject(client types.HttpClient, project string, token string) types.RasicProject
 	GetIssues(client types.HttpClient, project string, token string) []types.RasicIssue
-	GetFile(client types.HttpClient, project string, filepath string, fileref string, token string) string
 	CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.RasicIssue
 }
 
@@ -46,31 +43,6 @@ func (g *ReporterRPC) GetProjects(client types.HttpClient, group string, token s
 	}
 
 	return resp
-}
-
-func (s *ReporterRPCServer) GetProjects(args map[string]interface{}, resp *[]types.RasicProject) error {
-	*resp = s.Impl.GetProjects(args["client"].(types.HttpClient), args["group"].(string), args["token"].(string))
-	return nil
-}
-
-//GetProject
-func (g *ReporterRPC) GetProject(client types.HttpClient, project string, token string) types.RasicProject {
-	var resp types.RasicProject
-	err := g.client.Call("Plugin.GetProject", map[string]interface{}{
-		"client":  client,
-		"project": project,
-		"token":   token,
-	}, &resp)
-	if err != nil {
-		panic(err)
-	}
-
-	return resp
-}
-
-func (s *ReporterRPCServer) GetProject(args map[string]interface{}, resp *types.RasicProject) error {
-	*resp = s.Impl.GetProject(args["client"].(types.HttpClient), args["project"].(string), args["token"].(string))
-	return nil
 }
 
 //GetIssues
@@ -90,28 +62,6 @@ func (g *ReporterRPC) GetIssues(client types.HttpClient, project string, token s
 
 func (s *ReporterRPCServer) GetIssues(args map[string]interface{}, resp *[]types.RasicIssue) error {
 	*resp = s.Impl.GetIssues(args["client"].(types.HttpClient), args["project"].(string), args["token"].(string))
-	return nil
-}
-
-//GetFile
-func (g *ReporterRPC) GetFile(client types.HttpClient, project string, filepath string, fileref string, token string) string {
-	var resp string
-	err := g.client.Call("Plugin.GetFile", map[string]interface{}{
-		"client":   client,
-		"project":  project,
-		"filepath": filepath,
-		"fileref":  fileref,
-		"token":    token,
-	}, &resp)
-	if err != nil {
-		panic(err)
-	}
-
-	return resp
-}
-
-func (s *ReporterRPCServer) GetFile(args map[string]interface{}, resp *string) error {
-	*resp = s.Impl.GetFile(args["client"].(types.HttpClient), args["project"].(string), args["filepath"].(string), args["fileref"].(string), args["token"].(string))
 	return nil
 }
 

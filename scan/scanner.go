@@ -59,7 +59,7 @@ func cleanTempFiles(fileName string) error {
   and save the output as result.json
  **/
 
-func Scanner(client types.HttpClient, source plugins.Api, reporter plugins.Api, project types.RasicProject, token string, issues []types.RasicIssue) ([]types.RasicIssue, error) {
+func Scanner(client types.HttpClient, source plugins.Api, reporter plugins.Reporter, project types.RasicProject, token string, issues []types.RasicIssue) ([]types.RasicIssue, error) {
 
 	// look for a ignorefile in the project
 	// if it exists download it
