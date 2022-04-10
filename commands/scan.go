@@ -86,27 +86,49 @@ func Scan() *cli.Command {
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
 
-			var handshakeConfig = plugin.HandshakeConfig{
+			var apihandshakeConfig = plugin.HandshakeConfig{
 				ProtocolVersion:  1,
 				MagicCookieKey:   "API_PLUGIN",
 				MagicCookieValue: "allow",
 			}
+			var reporterhandshakeConfig = plugin.HandshakeConfig{
+				ProtocolVersion:  1,
+				MagicCookieKey:   "REPORTER_PLUGIN",
+				MagicCookieValue: "allow",
+			}
 
-			var pluginMap = map[string]plugin.Plugin{
+			var apiPluginMap = map[string]plugin.Plugin{
 				"gitlab": &plugins.ApiPlugin{},
-				"github": &plugins.ApiPlugin{},
-				"trivy":  &plugins.ApiPlugin{},
+			}
+			var reporterPluginMap = map[string]plugin.Plugin{
+				"gitlab": &plugins.ReporterPlugin{},
 			}
 
 			httpClient := &http.Client{}
+
 			logger := hclog.New(&hclog.LoggerOptions{
 				Name:   "plugin",
 				Output: os.Stdout,
 				Level:  hclog.Error,
 			})
 
+			pluginData := []types.RasicPlugin{
+				{
+					PluginPath:   "api",
+					PluginName:   sourceName,
+					PluginConfig: apihandshakeConfig,
+					PluginMap:    apiPluginMap,
+				},
+				{
+					PluginPath:   "reporter",
+					PluginName:   reporterName,
+					PluginConfig: reporterhandshakeConfig,
+					PluginMap:    reporterPluginMap,
+				},
+			}
+
 			// load all plugins required for this command
-			plugins, clients := dispensePlugins([]string{sourceName, reporterName}, handshakeConfig, pluginMap, logger)
+			apiPlugin, reporterPlugin, clients := dispensePlugins(pluginData, logger)
 
 			for _, pluginClient := range clients {
 				defer pluginClient.Kill()
@@ -114,11 +136,11 @@ func Scan() *cli.Command {
 
 			pterm.Info.Println("scan for cve's")
 
-			projects := plugins[sourceName].GetProjects(httpClient, projectId, authToken)
+			projects := apiPlugin.GetProjects(httpClient, projectId, authToken)
 			if len(projects) < 1 {
 				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
 
-				singleProject := plugins[sourceName].GetProject(httpClient, projectId, authToken)
+				singleProject := apiPlugin.GetProject(httpClient, projectId, authToken)
 				var currentProject types.RasicProject
 				currentProject.Id = singleProject.Id
 				currentProject.WebUrl = singleProject.WebUrl
@@ -126,16 +148,16 @@ func Scan() *cli.Command {
 				currentProject.IgnoreFileName = ignoreFileName
 
 				var issues []types.RasicIssue
-				issues = plugins[sourceName].GetIssues(httpClient, strconv.Itoa(singleProject.Id), authToken)
+				issues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(singleProject.Id), authToken)
 				pterm.Info.Printfln("scan: " + currentProject.WebUrl)
 
-				issues, err := scan.Scanner(httpClient, plugins[sourceName], plugins[reporterName], currentProject, authToken, issues)
+				issues, err := scan.Scanner(httpClient, apiPlugin, reporterPlugin, currentProject, authToken, issues)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
 
 				for _, issue := range issues {
-					plugins[reporterName].CreateIssue(httpClient, strconv.Itoa(singleProject.Id), authToken, issue)
+					reporterPlugin.CreateIssue(httpClient, strconv.Itoa(singleProject.Id), authToken, issue)
 					pterm.Info.Println("new issue opened for " + issue.Title)
 				}
 
@@ -151,10 +173,10 @@ func Scan() *cli.Command {
 				currentProject.DefaultBranch = project.DefaultBranch
 				currentProject.IgnoreFileName = ignoreFileName
 
-				issues = plugins[sourceName].GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
+				issues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
 				pterm.Info.Println("scan: " + project.WebUrl)
 
-				issues, err := scan.Scanner(httpClient, plugins[sourceName], plugins[reporterName], currentProject, authToken, issues)
+				issues, err := scan.Scanner(httpClient, apiPlugin, reporterPlugin, currentProject, authToken, issues)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
@@ -162,7 +184,7 @@ func Scan() *cli.Command {
 				// TODO issue can be created elsewhere
 				// if we push them to jira we need a different target (project.Id)
 				for _, issue := range issues {
-					plugins[reporterName].CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, issue)
+					reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, issue)
 					pterm.Info.Println("new issue opened for " + issue.Title)
 				}
 			}
@@ -185,17 +207,22 @@ func Scan() *cli.Command {
 
 }
 
-// dispense a map of plugins and list of client selected by name
-func dispensePlugins(pluginNameList []string, config plugin.HandshakeConfig, pluginMap map[string]plugin.Plugin, logger hclog.Logger) (map[string]plugins.Api, []*plugin.Client) {
+// dispense a map of plugins (source, scanner, reporter) and list of client selected by name
+// TODO maybe a bit diry - needs rework
+func dispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugins.Api, plugins.Reporter, []*plugin.Client) {
 
-	pluginList := make(map[string]plugins.Api)
+	var returnApiPlugin plugins.Api
+	var returnReporterPlugin plugins.Reporter
+
+	// collect all clients to kill them after use
+	// types does not matter here
 	var clientList []*plugin.Client
 
-	for _, pluginName := range pluginNameList {
+	for _, currentPlugin := range pluginList {
 		client := plugin.NewClient(&plugin.ClientConfig{
-			HandshakeConfig: config,
-			Plugins:         pluginMap,
-			Cmd:             exec.Command("./plugins/api/" + pluginName),
+			HandshakeConfig: currentPlugin.PluginConfig,
+			Plugins:         currentPlugin.PluginMap,
+			Cmd:             exec.Command("./plugins/" + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
 			Logger:          logger,
 		})
 
@@ -204,14 +231,22 @@ func dispensePlugins(pluginNameList []string, config plugin.HandshakeConfig, plu
 			pterm.Error.Println(err)
 		}
 
-		raw, reporterErr := rpcClient.Dispense(pluginName)
-		if reporterErr != nil {
-			pterm.Error.Println(reporterErr)
+		raw, dispenseErr := rpcClient.Dispense(currentPlugin.PluginName)
+		if dispenseErr != nil {
+			pterm.Error.Println(dispenseErr)
 		}
-		plug := raw.(plugins.Api)
-		pluginList[pluginName] = plug
+		switch currentPlugin.PluginPath {
+		case "api":
+			plug := raw.(plugins.Api)
+			returnApiPlugin = plug
+		case "reporter":
+			plug := raw.(plugins.Reporter)
+			returnReporterPlugin = plug
+		default:
+			pterm.Warning.Println("plugin could not be loaded")
+		}
 		clientList = append(clientList, client)
-
 	}
-	return pluginList, clientList
+
+	return returnApiPlugin, returnReporterPlugin, clientList
 }

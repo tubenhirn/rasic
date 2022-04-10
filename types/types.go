@@ -2,6 +2,8 @@ package types
 
 import (
 	"net/http"
+
+	"github.com/hashicorp/go-plugin"
 )
 
 type HttpClient interface {
@@ -20,4 +22,11 @@ type RasicProject struct {
 	WebUrl         string
 	DefaultBranch  string
 	IgnoreFileName string
+}
+
+type RasicPlugin struct {
+	PluginPath   string
+	PluginName   string
+	PluginConfig plugin.HandshakeConfig
+	PluginMap    map[string]plugin.Plugin
 }
