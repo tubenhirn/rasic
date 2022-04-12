@@ -25,6 +25,7 @@ type RasicProject struct {
 }
 
 type RasicPlugin struct {
+	PluginHome   string
 	PluginPath   string
 	PluginName   string
 	PluginConfig plugin.HandshakeConfig

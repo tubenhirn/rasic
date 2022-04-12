@@ -48,7 +48,7 @@ var (
 	ignoreFileFlag = cli.StringFlag{
 		Name:        "ignorefile",
 		Aliases:     []string{},
-		Usage:       "specify a ignorefile. set ignorefile flag or use CVE_IGNORE_FILE env. (default .trivyignore)",
+		Usage:       "specify a cve ignorefile",
 		EnvVars:     []string{"CVE_IGNORE_FILE"},
 		FilePath:    "",
 		Required:    false,
@@ -82,6 +82,7 @@ func Scan() *cli.Command {
 		Action: func(c *cli.Context) error {
 			sourceName := c.String("source")
 			reporterName := c.String("reporter")
+			pluginHome := c.String("pluginhome")
 			projectId := c.String("project")
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
@@ -115,12 +116,14 @@ func Scan() *cli.Command {
 			pluginData := []types.RasicPlugin{
 				{
 					PluginPath:   "api",
+					PluginHome:   pluginHome,
 					PluginName:   sourceName,
 					PluginConfig: apihandshakeConfig,
 					PluginMap:    apiPluginMap,
 				},
 				{
 					PluginPath:   "reporter",
+					PluginHome:   pluginHome,
 					PluginName:   reporterName,
 					PluginConfig: reporterhandshakeConfig,
 					PluginMap:    reporterPluginMap,
@@ -222,7 +225,7 @@ func dispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugi
 		client := plugin.NewClient(&plugin.ClientConfig{
 			HandshakeConfig: currentPlugin.PluginConfig,
 			Plugins:         currentPlugin.PluginMap,
-			Cmd:             exec.Command("./plugins/" + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
+			Cmd:             exec.Command(currentPlugin.PluginHome + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
 			Logger:          logger,
 		})
 
