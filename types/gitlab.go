@@ -386,3 +386,30 @@ type GitlabIssue struct {
 		CompletedCount int `json:"completed_count"`
 	} `json:"task_completion_status"`
 }
+
+type GitlabRepositories []struct {
+	CleanupPolicyStartedAt string `json:"cleanup_policy_started_at"`
+	CreatedAt              string `json:"created_at"`
+	ID                     int    `json:"id"`
+	Location               string `json:"location"`
+	Name                   string `json:"name"`
+	Path                   string `json:"path"`
+	ProjectID              int    `json:"project_id"`
+}
+
+type GitlabRepository struct {
+	CleanupPolicyStartedAt string `json:"cleanup_policy_started_at"`
+	CreatedAt              string `json:"created_at"`
+	ID                     int    `json:"id"`
+	Location               string `json:"location"`
+	Name                   string `json:"name"`
+	Path                   string `json:"path"`
+	ProjectID              int    `json:"project_id"`
+	Size                   int    `json:"size"`
+	Tags                   []struct {
+		Location string `json:"location"`
+		Name     string `json:"name"`
+		Path     string `json:"path"`
+	} `json:"tags"`
+	TagsCount int `json:"tags_count"`
+}

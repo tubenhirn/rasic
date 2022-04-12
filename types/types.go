@@ -24,6 +24,17 @@ type RasicProject struct {
 	IgnoreFileName string
 }
 
+type RasicRepository struct {
+	Id  int
+	Tag RasicTag
+}
+
+type RasicTag struct {
+	Location string
+	Name     string
+	Path     string
+}
+
 type RasicPlugin struct {
 	PluginHome   string
 	PluginPath   string

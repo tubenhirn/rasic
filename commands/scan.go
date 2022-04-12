@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 
 	hclog "github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
@@ -35,7 +36,21 @@ var (
 		Name:        "token",
 		Aliases:     []string{},
 		Usage:       "a oauth token",
-		EnvVars:     []string{"GITLAB_TOKEN"},
+		EnvVars:     []string{"GITLAB_TOKEN", "RASIC_TOKEN"},
+		FilePath:    "",
+		Required:    true,
+		Hidden:      false,
+		TakesFile:   false,
+		Value:       "",
+		DefaultText: "",
+		Destination: new(string),
+		HasBeenSet:  false,
+	}
+	userNameFlag = cli.StringFlag{
+		Name:        "user",
+		Aliases:     []string{},
+		Usage:       "a username used by trivy image scanning",
+		EnvVars:     []string{"RASIC_USERNAME"},
 		FilePath:    "",
 		Required:    true,
 		Hidden:      false,
@@ -57,6 +72,19 @@ var (
 		Value:       ".trivyignore",
 		DefaultText: "",
 		Destination: new(string),
+		HasBeenSet:  false,
+	}
+	containerScannerFlag = cli.BoolFlag{
+		Name:        "container",
+		Aliases:     []string{},
+		Usage:       "enable container scanning",
+		EnvVars:     []string{},
+		FilePath:    "",
+		Required:    false,
+		Hidden:      false,
+		Value:       false,
+		DefaultText: "",
+		Destination: new(bool),
 		HasBeenSet:  false,
 	}
 )
@@ -84,8 +112,11 @@ func Scan() *cli.Command {
 			reporterName := c.String("reporter")
 			pluginHome := c.String("pluginhome")
 			projectId := c.String("project")
+			userName := c.String("user")
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
+
+			scanContainers := c.Bool("container")
 
 			var apihandshakeConfig = plugin.HandshakeConfig{
 				ProtocolVersion:  1,
@@ -150,25 +181,31 @@ func Scan() *cli.Command {
 				currentProject.DefaultBranch = singleProject.DefaultBranch
 				currentProject.IgnoreFileName = ignoreFileName
 
-				var issues []types.RasicIssue
-				issues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(singleProject.Id), authToken)
-				pterm.Info.Printfln("scan: " + currentProject.WebUrl)
+				var newIssues []types.RasicIssue
 
-				issues, err := scan.Scanner(httpClient, apiPlugin, reporterPlugin, currentProject, authToken, issues)
+				// scan current projects repositry (fs)
+				pterm.Info.Printfln("scan repository: " + currentProject.WebUrl)
+				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues)
+				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
 
-				for _, issue := range issues {
-					reporterPlugin.CreateIssue(httpClient, strconv.Itoa(singleProject.Id), authToken, issue)
-					pterm.Info.Println("new issue opened for " + issue.Title)
+				// scan the project contaienr registry if enabled
+				if scanContainers == true {
+					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues)
 				}
+
+				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 
 				return nil
 			}
+
+			// scan a group
 			pterm.Info.Println(strconv.Itoa(len(projects)) + " projects found in group " + projectId)
 			for _, project := range projects {
-				var issues []types.RasicIssue
+
+				var newIssues []types.RasicIssue
 
 				var currentProject types.RasicProject
 				currentProject.Id = project.Id
@@ -176,20 +213,20 @@ func Scan() *cli.Command {
 				currentProject.DefaultBranch = project.DefaultBranch
 				currentProject.IgnoreFileName = ignoreFileName
 
-				issues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
 				pterm.Info.Println("scan: " + project.WebUrl)
 
-				issues, err := scan.Scanner(httpClient, apiPlugin, reporterPlugin, currentProject, authToken, issues)
+				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues)
+				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
 					pterm.Error.Println(err)
 				}
 
-				// TODO issue can be created elsewhere
-				// if we push them to jira we need a different target (project.Id)
-				for _, issue := range issues {
-					reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, issue)
-					pterm.Info.Println("new issue opened for " + issue.Title)
+				// scan the project contaienr registry if enabled
+				if scanContainers == true {
+					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues)
 				}
+
+				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 			}
 
 			return nil
@@ -198,7 +235,7 @@ func Scan() *cli.Command {
 			return nil
 		},
 		Subcommands:            []*cli.Command{},
-		Flags:                  []cli.Flag{&projectFlag, &tokenFlag, &ignoreFileFlag},
+		Flags:                  []cli.Flag{&projectFlag, &tokenFlag, &userNameFlag, &ignoreFileFlag, &containerScannerFlag},
 		SkipFlagParsing:        false,
 		HideHelp:               false,
 		HideHelpCommand:        false,
@@ -252,4 +289,54 @@ func dispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugi
 	}
 
 	return returnApiPlugin, returnReporterPlugin, clientList
+}
+
+// open new issues using the current reporter
+func openNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter, project types.RasicProject, newIssues []types.RasicIssue, authToken string) {
+
+	// get all issues for current project
+	var projectIssues []types.RasicIssue
+	projectIssues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
+
+	// check newIssues against projectIssues
+	// if the issue does not exist in State="opened", create it with the current reporter
+	for _, newIssue := range newIssues {
+		issueExists := false
+		for _, openIssue := range projectIssues {
+			if newIssue.Title == openIssue.Title && openIssue.State == "opened" {
+				issueExists = true
+				break
+			}
+		}
+		if !issueExists {
+			reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, newIssue)
+			pterm.Info.Println("new issue opened for " + newIssue.Title)
+		}
+	}
+}
+
+// scan container registries and collect cves
+// return them afterwards
+func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue) []types.RasicIssue {
+	// look for container registries in the project
+	containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.Id), authToken)
+
+	// scan all registries
+	// exclude /cache ones
+	// append all cves to newIssues
+	for _, reg := range containerRegistries {
+		containerRegistry := apiPlugin.GetRepository(httpClient, strconv.Itoa(reg.Id), authToken)
+
+		// skip cache registires
+		// only valid for kaniko projects
+		if strings.Contains(containerRegistry.Tag.Location, "/cache") {
+			pterm.Info.Printfln("skip cache: " + containerRegistry.Tag.Location)
+			continue
+		}
+
+		pterm.Info.Printfln("scan image: " + containerRegistry.Tag.Location)
+		tmpIssues, _ := scan.ContainerScanner(httpClient, apiPlugin, project, containerRegistry, authToken, userName, newIssues)
+		newIssues = append(newIssues, tmpIssues...)
+	}
+	return newIssues
 }
