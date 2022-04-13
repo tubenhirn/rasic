@@ -192,6 +192,82 @@ func (a *ApiGitlab) CreateIssue(client types.HttpClient, project string, token s
 	}
 }
 
+func (a *ApiGitlab) GetRepositories(client types.HttpClient, project string, token string) []types.RasicRepository {
+	url := baseUrl + apiPath + "projects/" + project + "/registry/repositories"
+
+	res, err := apiCallGet(client, url, token)
+
+	if err != nil {
+		pterm.Error.Println(err)
+		return nil
+	}
+
+	if res.Status == "200 OK" {
+		var repositorylist types.GitlabRepositories
+		if err := json.NewDecoder(res.Body).Decode(&repositorylist); err != nil {
+			return nil
+		}
+
+		var returnValue []types.RasicRepository
+
+		for _, repo := range repositorylist {
+			ele := types.RasicRepository{
+				Id: repo.ID,
+			}
+			returnValue = append(returnValue, ele)
+
+		}
+
+		return returnValue
+	} else {
+		_, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			pterm.Error.Println(err)
+			return nil
+		}
+		return nil
+	}
+}
+
+func (a *ApiGitlab) GetRepository(client types.HttpClient, repository string, token string) types.RasicRepository {
+	url := baseUrl + apiPath + "registry/repositories/" + repository + "?tags=true"
+
+	res, err := apiCallGet(client, url, token)
+
+	if err != nil {
+		pterm.Error.Println(err)
+		return types.RasicRepository{}
+	}
+
+	if res.Status == "200 OK" {
+		var repo types.GitlabRepository
+		if err := json.NewDecoder(res.Body).Decode(&repo); err != nil {
+			return types.RasicRepository{}
+		}
+
+		var latestTag types.RasicTag
+		if len(repo.Tags) > 0 {
+			latestTag.Location = repo.Tags[len(repo.Tags)-1].Location
+			latestTag.Name = repo.Tags[len(repo.Tags)-1].Name
+			latestTag.Path = repo.Tags[len(repo.Tags)-1].Path
+		}
+
+		returnValue := types.RasicRepository{
+			Id:  repo.ID,
+			Tag: latestTag,
+		}
+
+		return returnValue
+	} else {
+		_, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			pterm.Error.Println(err)
+			return types.RasicRepository{}
+		}
+		return types.RasicRepository{}
+	}
+}
+
 var handshakeConfig = plugin.HandshakeConfig{
 	ProtocolVersion:  1,
 	MagicCookieKey:   "API_PLUGIN",
@@ -203,6 +279,7 @@ var handshakeConfig = plugin.HandshakeConfig{
 func init() {
 	gob.Register(http.DefaultClient)
 	gob.Register(types.RasicIssue{})
+	gob.Register(types.RasicRepository{})
 	gob.Register(map[string]interface{}{})
 }
 

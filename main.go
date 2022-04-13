@@ -19,6 +19,7 @@ func init() {
 	gob.Register(http.DefaultClient)
 	gob.Register(types.RasicIssue{})
 	gob.Register(types.RasicProject{})
+	gob.Register(types.RasicRepository{})
 	gob.Register(map[string]interface{}{})
 }
 
@@ -29,7 +30,7 @@ func main() {
 		Usage:       "create issues from known cve's",
 		UsageText:   "",
 		ArgsUsage:   "",
-		Version:     "v0.3.1",
+		Version:     "v0.4.0",
 		Description: "a simple app to create issues for known cve's or config flaws",
 		Commands:    []*cli.Command{},
 		Flags: []cli.Flag{
@@ -71,6 +72,20 @@ func main() {
 				Hidden:      false,
 				TakesFile:   false,
 				Value:       "trivy",
+				DefaultText: "",
+				Destination: new(string),
+				HasBeenSet:  false,
+			},
+			&cli.StringFlag{
+				Name:        "pluginhome",
+				Aliases:     []string{},
+				Usage:       "specify the location your plugins are stored",
+				EnvVars:     []string{"RASIC_PLUGINHOME"},
+				FilePath:    "",
+				Required:    false,
+				Hidden:      false,
+				TakesFile:   false,
+				Value:       "./plugins/",
 				DefaultText: "",
 				Destination: new(string),
 				HasBeenSet:  false,
