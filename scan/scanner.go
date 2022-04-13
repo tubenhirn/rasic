@@ -216,7 +216,7 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 				if !exists {
 					// TODO: make this configurable
 					// and better.....
-					minSeverity := "HIGH"
+					minSeverity := "CRITICAL"
 					if cve.Severity == minSeverity {
 						// create new issue and add it to the list we return
 						newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
