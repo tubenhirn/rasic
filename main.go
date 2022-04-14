@@ -30,7 +30,7 @@ func main() {
 		Usage:       "create issues from known cve's",
 		UsageText:   "",
 		ArgsUsage:   "",
-		Version:     "v0.4.1",
+		Version:     "v0.5.0",
 		Description: "a simple app to create issues for known cve's or config flaws",
 		Commands:    []*cli.Command{},
 		Flags: []cli.Flag{

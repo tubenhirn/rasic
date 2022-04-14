@@ -54,12 +54,8 @@ func cleanTempFiles(fileName string) error {
 	return nil
 }
 
-/**
-  scan with trivy binary
-  and save the output as result.json
- **/
-
-func RepositoryScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, token string, knownIssues []types.RasicIssue) ([]types.RasicIssue, error) {
+// scan a remote repository
+func RepositoryScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity string) ([]types.RasicIssue, error) {
 
 	// look for a ignorefile in the project
 	// if it exists download it
@@ -73,9 +69,6 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 	}
 	// build args for repo scanning
 	repoArgs := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=repo_result.json", project.WebUrl}
-
-	// build args for image scanning
-	// imageArgs := []string{"-q", "image", "--ignorefile=" + ignorefilePath, "--format=json", "--output=image_result.json", project.WebUrl}
 
 	// set auth var for trivy - following the docs for scanning a remote repositry
 	// https://aquasecurity.github.io/trivy/v0.25.0/vulnerability/scanning/git-repository/
@@ -107,45 +100,13 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 		return nil, unmarshalerr
 	}
 
-	var issueList []types.RasicIssue
-	for _, result := range report.Results {
-		if len(result.Vulnerabilities) > 0 {
+	issueList := buildIssueList(report, knownIssues, project, minSeverity)
 
-			pterm.Warning.Println(strconv.Itoa(len(result.Vulnerabilities)) + " " + result.Type + " vulnerabilities found")
-
-			for _, cve := range result.Vulnerabilities {
-				// check for open knownIssues
-				exists := false
-				for i := range knownIssues {
-					if knownIssues[i].Title == cve.VulnerabilityID {
-						// TODO: allow to control State
-						// maybe check for label "wont-fix" on the closed issue - otherwise reopen it
-						if knownIssues[i].State == "opened" {
-							pterm.Info.Println("open issue exists for " + cve.VulnerabilityID)
-							exists = true
-							break
-						}
-					}
-				}
-				if !exists {
-					// create new issue and add it to the list we return
-					newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
-
-					// TODO: make this configurable
-					// and better.....
-					minSeverity := "CRITICAL"
-					if cve.Severity == minSeverity {
-						issueList = append(issueList, newIssue)
-					}
-				}
-
-			}
-		}
-	}
 	return issueList, nil
 }
 
-func ContainerScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue) ([]types.RasicIssue, error) {
+// scan containers in the project - if present
+func ContainerScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity string) ([]types.RasicIssue, error) {
 
 	// look for a ignorefile in the project
 	// if it exists download it
@@ -192,13 +153,20 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 		return nil, unmarshalerr
 	}
 
-	// build a list of isses
-	// check for known ones to dont add them twice
-	// this need to be done if a porject containts multiple images
-	// or if the fs scan and the image scan have found similiar cve's
-	// maybe this can be removed in the future
-	// we also only add cve's with a give severity
+	issueList := buildIssueList(report, knownIssues, project, minSeverity)
+
+	return issueList, nil
+}
+
+// build a list of isses
+// check for known ones to dont add them twice
+// this need to be done if a porject containts multiple images
+// or if the fs scan and the image scan have found similiar cve's
+// maybe this can be removed in the future
+// we also only add cve's with a give severity
+func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, project types.RasicProject, minSeverity string) []types.RasicIssue {
 	var issueList []types.RasicIssue
+
 	for _, result := range report.Results {
 		if len(result.Vulnerabilities) > 0 {
 
@@ -208,15 +176,12 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 				exists := false
 				for i := range knownIssues {
 					if knownIssues[i].Title == cve.VulnerabilityID {
-						pterm.Info.Println("open issue exists for " + cve.VulnerabilityID)
+						// pterm.Info.Println(cve.VulnerabilityID + " already in list - skip")
 						exists = true
 						break
 					}
 				}
 				if !exists {
-					// TODO: make this configurable
-					// and better.....
-					minSeverity := "CRITICAL"
 					if cve.Severity == minSeverity {
 						// create new issue and add it to the list we return
 						newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
@@ -227,5 +192,5 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 			}
 		}
 	}
-	return issueList, nil
+	return issueList
 }
