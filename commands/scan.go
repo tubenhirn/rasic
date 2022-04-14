@@ -18,6 +18,20 @@ import (
 )
 
 var (
+	severityFlag = cli.StringFlag{
+		Name:        "severity",
+		Aliases:     []string{},
+		Usage:       "the minimum severity a cve needs to be reported",
+		EnvVars:     []string{"RASIC_SEVERITY"},
+		FilePath:    "",
+		Required:    false,
+		Hidden:      false,
+		TakesFile:   false,
+		Value:       "CRITICAL",
+		DefaultText: "",
+		Destination: new(string),
+		HasBeenSet:  false,
+	}
 	projectFlag = cli.StringFlag{
 		Name:        "project",
 		Aliases:     []string{"group"},
@@ -64,7 +78,7 @@ var (
 		Name:        "ignorefile",
 		Aliases:     []string{},
 		Usage:       "specify a cve ignorefile",
-		EnvVars:     []string{"CVE_IGNORE_FILE"},
+		EnvVars:     []string{"CVE_IGNORE_FILE, RASIC_IGNOREFILE"},
 		FilePath:    "",
 		Required:    false,
 		Hidden:      false,
@@ -115,6 +129,7 @@ func Scan() *cli.Command {
 			userName := c.String("user")
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
+			severity := c.String("severity")
 
 			scanContainers := c.Bool("container")
 
@@ -185,7 +200,7 @@ func Scan() *cli.Command {
 
 				// scan current projects repositry (fs)
 				pterm.Info.Printfln("scan repository: " + currentProject.WebUrl)
-				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues)
+				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
 				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
 					pterm.Error.Println(err)
@@ -193,7 +208,7 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues)
+					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity)
 				}
 
 				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
@@ -215,7 +230,7 @@ func Scan() *cli.Command {
 
 				pterm.Info.Println("scan: " + project.WebUrl)
 
-				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues)
+				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
 				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
 					pterm.Error.Println(err)
@@ -223,7 +238,7 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues)
+					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity)
 				}
 
 				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
@@ -235,7 +250,7 @@ func Scan() *cli.Command {
 			return nil
 		},
 		Subcommands:            []*cli.Command{},
-		Flags:                  []cli.Flag{&projectFlag, &tokenFlag, &userNameFlag, &ignoreFileFlag, &containerScannerFlag},
+		Flags:                  []cli.Flag{&projectFlag, &tokenFlag, &userNameFlag, &ignoreFileFlag, &containerScannerFlag, &severityFlag},
 		SkipFlagParsing:        false,
 		HideHelp:               false,
 		HideHelpCommand:        false,
@@ -317,7 +332,7 @@ func openNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter,
 
 // scan container registries and collect cves
 // return them afterwards
-func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue) []types.RasicIssue {
+func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity string) []types.RasicIssue {
 	// look for container registries in the project
 	containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.Id), authToken)
 
@@ -335,7 +350,7 @@ func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, p
 		}
 
 		pterm.Info.Printfln("scan image: " + containerRegistry.Tag.Location)
-		tmpIssues, _ := scan.ContainerScanner(httpClient, apiPlugin, project, containerRegistry, authToken, userName, newIssues)
+		tmpIssues, _ := scan.ContainerScanner(httpClient, apiPlugin, project, containerRegistry, authToken, userName, newIssues, severity)
 		newIssues = append(newIssues, tmpIssues...)
 	}
 	return newIssues
