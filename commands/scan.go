@@ -18,6 +18,20 @@ import (
 )
 
 var (
+	registryExcludeFlage = cli.StringFlag{
+		Name:        "registryexclude",
+		Aliases:     []string{},
+		Usage:       "exclude string to match against registry path",
+		EnvVars:     []string{},
+		FilePath:    "",
+		Required:    false,
+		Hidden:      false,
+		TakesFile:   false,
+		Value:       "/cache",
+		DefaultText: "",
+		Destination: new(string),
+		HasBeenSet:  false,
+	}
 	severityFlag = cli.StringFlag{
 		Name:        "severity",
 		Aliases:     []string{},
@@ -130,6 +144,7 @@ func Scan() *cli.Command {
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
 			severity := c.String("severity")
+			registryExclude := c.String("registryExcludeFlage")
 
 			scanContainers := c.Bool("container")
 
@@ -208,7 +223,7 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity)
+					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
 				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
@@ -238,7 +253,7 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity)
+					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
 				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
@@ -250,7 +265,7 @@ func Scan() *cli.Command {
 			return nil
 		},
 		Subcommands:            []*cli.Command{},
-		Flags:                  []cli.Flag{&projectFlag, &tokenFlag, &userNameFlag, &ignoreFileFlag, &containerScannerFlag, &severityFlag},
+		Flags:                  []cli.Flag{&projectFlag, &tokenFlag, &userNameFlag, &ignoreFileFlag, &containerScannerFlag, &severityFlag, &registryExcludeFlage},
 		SkipFlagParsing:        false,
 		HideHelp:               false,
 		HideHelpCommand:        false,
@@ -332,7 +347,7 @@ func openNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter,
 
 // scan container registries and collect cves
 // return them afterwards
-func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity string) []types.RasicIssue {
+func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity string, registryExcudePattern string) []types.RasicIssue {
 	// look for container registries in the project
 	containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.Id), authToken)
 
@@ -343,9 +358,8 @@ func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, p
 		containerRegistry := apiPlugin.GetRepository(httpClient, strconv.Itoa(reg.Id), authToken)
 
 		// skip cache registires
-		// only valid for kaniko projects
-		if strings.Contains(containerRegistry.Tag.Location, "/cache") {
-			pterm.Info.Printfln("skip cache: " + containerRegistry.Tag.Location)
+		if strings.Contains(containerRegistry.Tag.Location, registryExcudePattern) {
+			pterm.Info.Printfln("skip registry: " + containerRegistry.Tag.Location)
 			continue
 		}
 
