@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/pterm/pterm"
+	"golang.org/x/exp/slices"
 
 	"gitlab.com/jstang/rasic/issue"
 	"gitlab.com/jstang/rasic/types"
@@ -167,21 +168,26 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, project types.RasicProject, minSeverity string) []types.RasicIssue {
 	var issueList []types.RasicIssue
 
+	var cveSlice []string
+	// create a list of known cves
+	// used for dublication check
+	for _, issue := range knownIssues {
+		cveSlice = append(cveSlice, issue.Title)
+	}
+
+	// loop packages in the report
 	for _, result := range report.Results {
 		if len(result.Vulnerabilities) > 0 {
 
-			pterm.Warning.Println(strconv.Itoa(len(result.Vulnerabilities)) + " " + result.Type + " vulnerabilities found")
+			pterm.Info.Println(strconv.Itoa(len(result.Vulnerabilities)) + " " + result.Type + " vulnerabilities found")
 
+			// loop cves in the current package
 			for _, cve := range result.Vulnerabilities {
-				exists := false
-				for i := range knownIssues {
-					if knownIssues[i].Title == cve.VulnerabilityID {
-						// pterm.Info.Println(cve.VulnerabilityID + " already in list - skip")
-						exists = true
-						break
-					}
-				}
-				if !exists {
+
+				// add cve if unknown
+				// and if its severity >= minSeverity
+				if !slices.Contains(cveSlice, cve.VulnerabilityID) {
+					// if !exists {
 					if cve.Severity == minSeverity {
 						// create new issue and add it to the list we return
 						newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
