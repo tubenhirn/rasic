@@ -3,7 +3,6 @@ package commands
 import (
 	"net/http"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 
@@ -12,6 +11,8 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
+	"gitlab.com/jstang/rasic/core"
+	"gitlab.com/jstang/rasic/issue"
 	"gitlab.com/jstang/rasic/scan"
 	"gitlab.com/jstang/rasic/types"
 	"gitlab.com/jstang/rasic/types/plugins"
@@ -193,7 +194,8 @@ func Scan() *cli.Command {
 			}
 
 			// load all plugins required for this command
-			apiPlugin, reporterPlugin, clients := dispensePlugins(pluginData, logger)
+			apiPlugin, reporterPlugin, clients := core.DispensePlugins(pluginData, logger)
+
 
 			for _, pluginClient := range clients {
 				defer pluginClient.Kill()
@@ -224,10 +226,10 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
+					newIssues = scan.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				issue.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 
 				return nil
 			}
@@ -254,10 +256,10 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = containerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
+					newIssues = scan.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				openNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				issue.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 			}
 
 			return nil
@@ -276,97 +278,4 @@ func Scan() *cli.Command {
 		CustomHelpTemplate:     "",
 	}
 
-}
-
-// dispense a map of plugins (source, scanner, reporter) and list of client selected by name
-// TODO maybe a bit diry - needs rework
-func dispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugins.Api, plugins.Reporter, []*plugin.Client) {
-
-	var returnApiPlugin plugins.Api
-	var returnReporterPlugin plugins.Reporter
-
-	// collect all clients to kill them after use
-	// types does not matter here
-	var clientList []*plugin.Client
-
-	for _, currentPlugin := range pluginList {
-		client := plugin.NewClient(&plugin.ClientConfig{
-			HandshakeConfig: currentPlugin.PluginConfig,
-			Plugins:         currentPlugin.PluginMap,
-			Cmd:             exec.Command(currentPlugin.PluginHome + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
-			Logger:          logger,
-		})
-
-		rpcClient, err := client.Client()
-		if err != nil {
-			pterm.Error.Println(err)
-		}
-
-		raw, dispenseErr := rpcClient.Dispense(currentPlugin.PluginName)
-		if dispenseErr != nil {
-			pterm.Error.Println(dispenseErr)
-		}
-		switch currentPlugin.PluginPath {
-		case "api":
-			plug := raw.(plugins.Api)
-			returnApiPlugin = plug
-		case "reporter":
-			plug := raw.(plugins.Reporter)
-			returnReporterPlugin = plug
-		default:
-			pterm.Warning.Println("plugin could not be loaded")
-		}
-		clientList = append(clientList, client)
-	}
-
-	return returnApiPlugin, returnReporterPlugin, clientList
-}
-
-// open new issues using the current reporter
-func openNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter, project types.RasicProject, newIssues []types.RasicIssue, authToken string) {
-
-	// get all issues for current project
-	var projectIssues []types.RasicIssue
-	projectIssues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
-
-	// check newIssues against projectIssues
-	// if the issue does not exist in State="opened", create it with the current reporter
-	for _, newIssue := range newIssues {
-		issueExists := false
-		for _, openIssue := range projectIssues {
-			if newIssue.Title == openIssue.Title && openIssue.State == "opened" {
-				issueExists = true
-				break
-			}
-		}
-		if !issueExists {
-			reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, newIssue)
-			pterm.Info.Println("new issue opened for " + newIssue.Title + " - " + newIssue.Severity.String())
-		}
-	}
-}
-
-// scan container registries and collect cves
-// return them afterwards
-func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
-	// look for container registries in the project
-	containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.Id), authToken)
-
-	// scan all registries
-	// exclude /cache ones
-	// append all cves to newIssues
-	for _, reg := range containerRegistries {
-		containerRegistry := apiPlugin.GetRepository(httpClient, strconv.Itoa(reg.Id), authToken)
-
-		// skip cache registires
-		if strings.Contains(containerRegistry.Tag.Location, registryExcudePattern) {
-			pterm.Info.Printfln("skip registry: " + containerRegistry.Tag.Location + " found " + registryExcudePattern)
-			continue
-		}
-
-		pterm.Info.Printfln("scan image: " + containerRegistry.Tag.Location)
-		tmpIssues, _ := scan.ContainerScanner(httpClient, apiPlugin, project, containerRegistry, authToken, userName, newIssues, severity)
-		newIssues = append(newIssues, tmpIssues...)
-	}
-	return newIssues
 }

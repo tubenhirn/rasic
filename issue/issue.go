@@ -3,7 +3,9 @@ package issue
 import (
 	"strconv"
 
+	"github.com/pterm/pterm"
 	"gitlab.com/jstang/rasic/types"
+	"gitlab.com/jstang/rasic/types/plugins"
 )
 
 // open a new issue in the given project
@@ -58,4 +60,28 @@ func consoleStart() string {
 // end a code-style bash block
 func consoleEnd() string {
 	return "\n```"
+}
+
+// open new issues using the current reporter
+func OpenNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter, project types.RasicProject, newIssues []types.RasicIssue, authToken string) {
+
+	// get all issues for current project
+	var projectIssues []types.RasicIssue
+	projectIssues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
+
+	// check newIssues against projectIssues
+	// if the issue does not exist in State="opened", create it with the current reporter
+	for _, newIssue := range newIssues {
+		issueExists := false
+		for _, openIssue := range projectIssues {
+			if newIssue.Title == openIssue.Title && openIssue.State == "opened" {
+				issueExists = true
+				break
+			}
+		}
+		if !issueExists {
+			reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, newIssue)
+			pterm.Info.Println("new issue opened for " + newIssue.Title + " - " + newIssue.Severity.String())
+		}
+	}
 }
