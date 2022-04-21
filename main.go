@@ -24,6 +24,13 @@ func init() {
 }
 
 func main() {
+	// determine current user dir
+	// this is required for the pluginhome directory
+	userHome, homeErr := os.UserHomeDir()
+	if homeErr != nil {
+		pterm.Error.Println(homeErr)
+	}
+
 	app := &cli.App{
 		Name:        "rasic",
 		HelpName:    "",
@@ -85,7 +92,7 @@ func main() {
 				Required:    false,
 				Hidden:      false,
 				TakesFile:   false,
-				Value:       "./plugins/",
+				Value:       userHome + "/.rasic/plugins/",
 				DefaultText: "",
 				Destination: new(string),
 				HasBeenSet:  false,
