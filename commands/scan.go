@@ -12,8 +12,6 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"gitlab.com/jstang/rasic/core"
-	"gitlab.com/jstang/rasic/issue"
-	"gitlab.com/jstang/rasic/scan"
 	"gitlab.com/jstang/rasic/types"
 	"gitlab.com/jstang/rasic/types/plugins"
 )
@@ -218,7 +216,7 @@ func Scan() *cli.Command {
 
 				// scan current projects repositry (fs)
 				pterm.Info.Printfln("scan repository: " + currentProject.WebUrl)
-				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
+				tmpIssues, err := core.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
 				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
 					pterm.Error.Println(err)
@@ -226,10 +224,10 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = scan.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
+					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				issue.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 
 				return nil
 			}
@@ -248,7 +246,7 @@ func Scan() *cli.Command {
 
 				pterm.Info.Println("scan: " + project.WebUrl)
 
-				tmpIssues, err := scan.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
+				tmpIssues, err := core.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
 				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
 					pterm.Error.Println(err)
@@ -256,10 +254,10 @@ func Scan() *cli.Command {
 
 				// scan the project contaienr registry if enabled
 				if scanContainers == true {
-					newIssues = scan.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
+					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				issue.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 			}
 
 			return nil
