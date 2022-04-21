@@ -143,7 +143,7 @@ func Scan() *cli.Command {
 			userName := c.String("user")
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
-			registryExclude := c.String("registryExcludeFlage")
+			registryExclude := c.String("registryexclude")
 			var severity types.Severity
 			severity = severity.FromString(strings.ToTitle(c.String("severity")))
 
@@ -360,7 +360,7 @@ func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, p
 
 		// skip cache registires
 		if strings.Contains(containerRegistry.Tag.Location, registryExcudePattern) {
-			pterm.Info.Printfln("skip registry: " + containerRegistry.Tag.Location)
+			pterm.Info.Printfln("skip registry: " + containerRegistry.Tag.Location + " found " + registryExcudePattern)
 			continue
 		}
 
