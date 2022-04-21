@@ -190,7 +190,10 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 					if cveSeverity >= minSeverity {
 						// create new issue and add it to the list we return
 						newIssue, _ := Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
+						// add newIssue to the result list
 						issueList = append(issueList, newIssue)
+						// add issue title to the cveSlice for dublication checking
+						cveSlice = append(cveSlice, newIssue.Title)
 					}
 				}
 
