@@ -61,6 +61,7 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 	// look for a ignorefile in the project
 	// if it exists download it
 	ignorefilePath, _ := createLocalIgnorefile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
+	resultfilePath := strconv.Itoa(project.Id) + "_repo_result.json"
 	defer cleanTempFiles(ignorefilePath)
 
 	// find path to trivy binary
@@ -69,7 +70,7 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 		pterm.Error.Println(lookErr)
 	}
 	// build args for repo scanning
-	repoArgs := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=repo_result.json", project.WebUrl}
+	repoArgs := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=" + resultfilePath, project.WebUrl}
 
 	// set auth var for trivy - following the docs for scanning a remote repositry
 	// https://aquasecurity.github.io/trivy/v0.25.0/vulnerability/scanning/git-repository/
@@ -89,7 +90,7 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 		return nil, execErr
 	}
 
-	repoResult, err := ioutil.ReadFile("repo_result.json")
+	repoResult, err := ioutil.ReadFile(resultfilePath)
 	if err != nil {
 		pterm.Error.Printf("Status: %s\n", "file read error")
 	}
@@ -110,6 +111,7 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 	// look for a ignorefile in the project
 	// if it exists download it
 	ignorefilePath, _ := createLocalIgnorefile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
+	resultfilePath := strconv.Itoa(project.Id) + "_image_result.json"
 	defer cleanTempFiles(ignorefilePath)
 
 	// find path to trivy binary
@@ -119,7 +121,7 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 	}
 
 	// build args for image scanning
-	imageArgs := []string{"-q", "image", "--ignorefile=" + ignorefilePath, "--format=json", "--output=image_result.json", repository.Tag.Location}
+	imageArgs := []string{"-q", "image", "--ignorefile=" + ignorefilePath, "--format=json", "--output=" + resultfilePath, repository.Tag.Location}
 
 	// set auth vars for trivy - following the docs for scanning a private container registry
 	// https://aquasecurity.github.io/trivy/v0.25.4/docs/advanced/private-registries/docker-hub/
@@ -140,7 +142,7 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 		return nil, execErr
 	}
 
-	repoResult, err := ioutil.ReadFile("image_result.json")
+	repoResult, err := ioutil.ReadFile(resultfilePath)
 	if err != nil {
 		pterm.Error.Printf("Status: %s\n", "file read error")
 	}
