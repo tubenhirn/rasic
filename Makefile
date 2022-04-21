@@ -30,6 +30,7 @@ compile: ## 🔨 Compile for the local architecture
 install: compile ## 💣 install rasic
 	@echo "Installing..."
 	sudo cp rasic /usr/local/bin/rasic
+	(mkdir ~/.rasic || true) && cp -rf ./plugins ~/.rasic
 
 test: ## 😁 test your stuff
 	@echo "Testing..."
