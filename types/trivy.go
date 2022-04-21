@@ -61,7 +61,7 @@ type Vulnerabilities struct {
 	PrimaryURL       string    `json:"PrimaryURL"`
 	Title            string    `json:"Title"`
 	Description      string    `json:"Description"`
-	Severity         string    `json:"Severity"`
+	Severity         Severity  `json:"Severity"`
 	Cvss             Cvss      `json:"CVSS"`
 	References       []string  `json:"References"`
 	PublishedDate    time.Time `json:"PublishedDate"`

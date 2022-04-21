@@ -7,9 +7,11 @@ import (
 )
 
 // open a new issue in the given project
-func Template(project string, vuln types.Vulnerabilities, packagetarget string, packagetype string) (types.RasicIssue, error) {
+func Template(project string, cve types.Vulnerabilities, packagetarget string, packagetype string) (types.RasicIssue, error) {
 	projectId, _ := strconv.Atoi(project)
-	newIssue := types.RasicIssue{Title: vuln.VulnerabilityID, Description: generateMarkdown(vuln, packagetarget, packagetype), Id: projectId}
+	var cveSeverity types.Severity
+	cveSeverity = cve.Severity
+	newIssue := types.RasicIssue{Title: cve.VulnerabilityID, Description: generateMarkdown(cve, packagetarget, packagetype), Id: projectId, Severity: cveSeverity}
 
 	return newIssue, nil
 }
@@ -21,7 +23,7 @@ func generateMarkdown(issue types.Vulnerabilities, packagetarget string, package
 	markdown += newline(dobreak(issue.Description))
 	markdown += newline(dobreak(issue.PrimaryURL))
 	markdown += newline("### Severity")
-	markdown += newline(dobreak(bold(issue.Severity)))
+	markdown += newline(dobreak(bold(issue.Severity.String())))
 	markdown += newline("### Package-Information")
 	markdown += consoleStart()
 	markdown += newline("target=" + packagetarget)

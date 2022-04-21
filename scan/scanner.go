@@ -56,7 +56,7 @@ func cleanTempFiles(fileName string) error {
 }
 
 // scan a remote repository
-func RepositoryScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity string) ([]types.RasicIssue, error) {
+func RepositoryScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
 
 	// look for a ignorefile in the project
 	// if it exists download it
@@ -98,16 +98,14 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 	unmarshalerr := json.Unmarshal(repoResult, &report)
 	if unmarshalerr != nil {
 		pterm.Error.Println(unmarshalerr)
-		return nil, unmarshalerr
 	}
-
 	issueList := buildIssueList(report, knownIssues, project, minSeverity)
 
 	return issueList, nil
 }
 
 // scan containers in the project - if present
-func ContainerScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity string) ([]types.RasicIssue, error) {
+func ContainerScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
 
 	// look for a ignorefile in the project
 	// if it exists download it
@@ -151,9 +149,7 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 	unmarshalerr := json.Unmarshal(repoResult, &report)
 	if unmarshalerr != nil {
 		pterm.Error.Println(unmarshalerr)
-		return nil, unmarshalerr
 	}
-
 	issueList := buildIssueList(report, knownIssues, project, minSeverity)
 
 	return issueList, nil
@@ -165,7 +161,7 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 // or if the fs scan and the image scan have found similiar cve's
 // maybe this can be removed in the future
 // we also only add cve's with a give severity
-func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, project types.RasicProject, minSeverity string) []types.RasicIssue {
+func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, project types.RasicProject, minSeverity types.Severity) []types.RasicIssue {
 	var issueList []types.RasicIssue
 
 	var cveSlice []string
@@ -187,8 +183,9 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 				// add cve if unknown
 				// and if its severity >= minSeverity
 				if !slices.Contains(cveSlice, cve.VulnerabilityID) {
-					// if !exists {
-					if cve.Severity == minSeverity {
+					var cveSeverity types.Severity
+					cveSeverity = cve.Severity
+					if cveSeverity >= minSeverity {
 						// create new issue and add it to the list we return
 						newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
 						issueList = append(issueList, newIssue)

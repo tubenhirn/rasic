@@ -143,8 +143,9 @@ func Scan() *cli.Command {
 			userName := c.String("user")
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
-			severity := c.String("severity")
 			registryExclude := c.String("registryExcludeFlage")
+			var severity types.Severity
+			severity = severity.FromString(strings.ToTitle(c.String("severity")))
 
 			scanContainers := c.Bool("container")
 
@@ -340,14 +341,14 @@ func openNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter,
 		}
 		if !issueExists {
 			reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, newIssue)
-			pterm.Info.Println("new issue opened for " + newIssue.Title)
+			pterm.Info.Println("new issue opened for " + newIssue.Title + " - " + newIssue.Severity.String())
 		}
 	}
 }
 
 // scan container registries and collect cves
 // return them afterwards
-func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity string, registryExcudePattern string) []types.RasicIssue {
+func containerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
 	// look for container registries in the project
 	containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.Id), authToken)
 
