@@ -94,46 +94,6 @@ func (a *ApiGitlab) GetProject(client types.HttpClient, project string, token st
 
 }
 
-func (a *ApiGitlab) GetIssues(client types.HttpClient, project string, token string) []types.RasicIssue {
-	url := baseUrl + apiPath + "projects/" + project + "/issues?per_page=100"
-
-	res, err := apiCallGet(client, url, token)
-
-	if err != nil {
-		pterm.Error.Println(err)
-		return nil
-	}
-
-	if res.Status == "200 OK" {
-		var issuelist types.GitlabIssues
-		if err := json.NewDecoder(res.Body).Decode(&issuelist); err != nil {
-			return nil
-		}
-
-		var returnValue []types.RasicIssue
-
-		for _, issue := range issuelist {
-			ele := types.RasicIssue{
-				Id:          issue.ID,
-				Title:       issue.Title,
-				Description: issue.Description,
-				State:       issue.State,
-			}
-			returnValue = append(returnValue, ele)
-
-		}
-
-		return returnValue
-	} else {
-		_, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			pterm.Error.Println(err)
-			return nil
-		}
-		return nil
-	}
-}
-
 func (a *ApiGitlab) GetFile(client types.HttpClient, project string, filepath string, fileref string, token string) string {
 	url := baseUrl + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
 
@@ -153,43 +113,6 @@ func (a *ApiGitlab) GetFile(client types.HttpClient, project string, filepath st
 	}
 
 	return ""
-}
-
-func (a *ApiGitlab) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.RasicIssue {
-	url := baseUrl + apiPath + "projects/" + project + "/issues"
-
-	body, marshalErr := json.Marshal(issue)
-	if marshalErr != nil {
-		pterm.Error.Println(marshalErr)
-		return types.RasicIssue{}
-	}
-
-	res, err := apiCallPost(client, url, token, string(body))
-	if err != nil {
-		pterm.Error.Println(err)
-		return types.RasicIssue{}
-	}
-
-	if res.Status == "201 Created" {
-		var issue types.GitlabIssue
-		if err := json.NewDecoder(res.Body).Decode(&issue); err != nil {
-			return types.RasicIssue{}
-		}
-		var returnValue types.RasicIssue
-		returnValue.Id = issue.ID
-		returnValue.Title = issue.Title
-		returnValue.Description = issue.Description
-		returnValue.State = issue.State
-
-		return returnValue
-	} else {
-		_, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			pterm.Error.Println(err)
-			return types.RasicIssue{}
-		}
-		return types.RasicIssue{}
-	}
 }
 
 func (a *ApiGitlab) GetRepositories(client types.HttpClient, project string, token string) []types.RasicRepository {
