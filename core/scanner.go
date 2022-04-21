@@ -1,4 +1,4 @@
-package scan
+package core
 
 import (
 	"encoding/json"
@@ -12,7 +12,6 @@ import (
 	"github.com/pterm/pterm"
 	"golang.org/x/exp/slices"
 
-	"gitlab.com/jstang/rasic/issue"
 	"gitlab.com/jstang/rasic/types"
 	"gitlab.com/jstang/rasic/types/plugins"
 )
@@ -190,7 +189,7 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 					cveSeverity = cve.Severity
 					if cveSeverity >= minSeverity {
 						// create new issue and add it to the list we return
-						newIssue, _ := issue.Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
+						newIssue, _ := Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
 						issueList = append(issueList, newIssue)
 					}
 				}
