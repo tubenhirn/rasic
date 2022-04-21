@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path"
 	"strconv"
+	"strings"
 
 	"github.com/pterm/pterm"
 	"golang.org/x/exp/slices"
@@ -198,4 +199,29 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 		}
 	}
 	return issueList
+}
+
+// scan container registries and collect cves
+// return them afterwards
+func ContainerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
+	// look for container registries in the project
+	containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.Id), authToken)
+
+	// scan all registries
+	// exclude /cache ones
+	// append all cves to newIssues
+	for _, reg := range containerRegistries {
+		containerRegistry := apiPlugin.GetRepository(httpClient, strconv.Itoa(reg.Id), authToken)
+
+		// skip cache registires
+		if strings.Contains(containerRegistry.Tag.Location, registryExcudePattern) {
+			pterm.Info.Printfln("skip registry: " + containerRegistry.Tag.Location + " found " + registryExcudePattern)
+			continue
+		}
+
+		pterm.Info.Printfln("scan image: " + containerRegistry.Tag.Location)
+		tmpIssues, _ := ContainerScanner(httpClient, apiPlugin, project, containerRegistry, authToken, userName, newIssues, severity)
+		newIssues = append(newIssues, tmpIssues...)
+	}
+	return newIssues
 }
