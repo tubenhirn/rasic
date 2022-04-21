@@ -3,7 +3,6 @@ package commands
 import (
 	"net/http"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 
+	"gitlab.com/jstang/rasic/core"
 	"gitlab.com/jstang/rasic/scan"
 	"gitlab.com/jstang/rasic/types"
 	"gitlab.com/jstang/rasic/types/plugins"
@@ -193,7 +193,8 @@ func Scan() *cli.Command {
 			}
 
 			// load all plugins required for this command
-			apiPlugin, reporterPlugin, clients := dispensePlugins(pluginData, logger)
+			apiPlugin, reporterPlugin, clients := core.DispensePlugins(pluginData, logger)
+
 
 			for _, pluginClient := range clients {
 				defer pluginClient.Kill()
@@ -276,50 +277,6 @@ func Scan() *cli.Command {
 		CustomHelpTemplate:     "",
 	}
 
-}
-
-// dispense a map of plugins (source, scanner, reporter) and list of client selected by name
-// TODO maybe a bit diry - needs rework
-func dispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugins.Api, plugins.Reporter, []*plugin.Client) {
-
-	var returnApiPlugin plugins.Api
-	var returnReporterPlugin plugins.Reporter
-
-	// collect all clients to kill them after use
-	// types does not matter here
-	var clientList []*plugin.Client
-
-	for _, currentPlugin := range pluginList {
-		client := plugin.NewClient(&plugin.ClientConfig{
-			HandshakeConfig: currentPlugin.PluginConfig,
-			Plugins:         currentPlugin.PluginMap,
-			Cmd:             exec.Command(currentPlugin.PluginHome + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
-			Logger:          logger,
-		})
-
-		rpcClient, err := client.Client()
-		if err != nil {
-			pterm.Error.Println(err)
-		}
-
-		raw, dispenseErr := rpcClient.Dispense(currentPlugin.PluginName)
-		if dispenseErr != nil {
-			pterm.Error.Println(dispenseErr)
-		}
-		switch currentPlugin.PluginPath {
-		case "api":
-			plug := raw.(plugins.Api)
-			returnApiPlugin = plug
-		case "reporter":
-			plug := raw.(plugins.Reporter)
-			returnReporterPlugin = plug
-		default:
-			pterm.Warning.Println("plugin could not be loaded")
-		}
-		clientList = append(clientList, client)
-	}
-
-	return returnApiPlugin, returnReporterPlugin, clientList
 }
 
 // open new issues using the current reporter
