@@ -11,12 +11,14 @@ type HttpClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
+// json name required for gitlab.com api
 type RasicIssue struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	State       string
 	Severity    Severity
+	Labels      []string `json:"labels"`
 }
 
 type RasicProject struct {
@@ -45,6 +47,14 @@ type RasicPlugin struct {
 	PluginMap    map[string]plugin.Plugin
 }
 
+// json name required for gitlab.com api
+type RasicLabel struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Color       string `json:"color"`
+	Priority    int64
+}
+
 type Severity int64
 
 const (
@@ -57,6 +67,10 @@ const (
 
 func (s Severity) String() string {
 	return [...]string{"UNKNOWN", "LOW", "MEDIUM", "HIGH", "CRITICAL"}[s]
+}
+
+func (s Severity) Color() string {
+	return [...]string{"#36454F", "#0000FF", "#EEE600", "#ED9121", "#FF0000"}[s]
 }
 
 func (s *Severity) FromString(severity string) Severity {

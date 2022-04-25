@@ -11,9 +11,11 @@ import (
 // open a new issue in the given project
 func Template(project string, cve types.Vulnerabilities, packagetarget string, packagetype string) (types.RasicIssue, error) {
 	projectId, _ := strconv.Atoi(project)
+
 	var cveSeverity types.Severity
 	cveSeverity = cve.Severity
-	newIssue := types.RasicIssue{Title: cve.VulnerabilityID, Description: generateMarkdown(cve, packagetarget, packagetype), Id: projectId, Severity: cveSeverity}
+
+	newIssue := types.RasicIssue{Title: cve.VulnerabilityID, Description: generateMarkdown(cve, packagetarget, packagetype), Id: projectId, Severity: cveSeverity, Labels: []string{cve.Severity.String()}}
 
 	return newIssue, nil
 }

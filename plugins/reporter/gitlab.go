@@ -192,6 +192,81 @@ func (a *ReporterGitlab) CreateIssue(client types.HttpClient, project string, to
 	}
 }
 
+func (a *ReporterGitlab) GetLabels(client types.HttpClient, project string, token string) []types.RasicLabel {
+	url := baseUrl + apiPath + "projects/" + project + "/labels"
+
+	res, err := apiCallGet(client, url, token)
+
+	if err != nil {
+		pterm.Error.Println(err)
+		return nil
+	}
+
+	if res.Status == "200 OK" {
+		var labelList []types.GitlabLabel
+		if err := json.NewDecoder(res.Body).Decode(&labelList); err != nil {
+			return nil
+		}
+
+		var returnValue []types.RasicLabel
+
+		for _, label := range labelList {
+			ele := types.RasicLabel{
+				Name:        label.Name,
+				Description: label.Description,
+				Color:       label.Color,
+				Priority:    0,
+			}
+			returnValue = append(returnValue, ele)
+
+		}
+
+		return returnValue
+	} else {
+		_, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			pterm.Error.Println(err)
+			return nil
+		}
+		return nil
+	}
+}
+
+func (a *ReporterGitlab) CreateLabel(client types.HttpClient, project string, token string, label types.RasicLabel) types.RasicLabel {
+	url := baseUrl + apiPath + "projects/" + project + "/labels"
+
+	body, marshalErr := json.Marshal(label)
+	if marshalErr != nil {
+		pterm.Error.Println(marshalErr)
+		return types.RasicLabel{}
+	}
+
+	res, err := apiCallPost(client, url, token, string(body))
+	if err != nil {
+		pterm.Error.Println(err)
+		return types.RasicLabel{}
+	}
+
+	if res.Status == "201 Created" {
+		var label types.GitlabLabel
+		if err := json.NewDecoder(res.Body).Decode(&label); err != nil {
+			return types.RasicLabel{}
+		}
+		var returnValue types.RasicLabel
+		returnValue.Name = label.Name
+		returnValue.Color = label.Color
+
+		return returnValue
+	} else {
+		_, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			pterm.Error.Println(err)
+			return types.RasicLabel{}
+		}
+		return types.RasicLabel{}
+	}
+}
+
 var handshakeConfig = plugin.HandshakeConfig{
 	ProtocolVersion:  1,
 	MagicCookieKey:   "REPORTER_PLUGIN",
@@ -203,6 +278,7 @@ var handshakeConfig = plugin.HandshakeConfig{
 func init() {
 	gob.Register(http.DefaultClient)
 	gob.Register(types.RasicIssue{})
+	gob.Register(types.RasicLabel{})
 	gob.Register(map[string]interface{}{})
 }
 
