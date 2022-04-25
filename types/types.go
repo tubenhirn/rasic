@@ -13,12 +13,12 @@ type HttpClient interface {
 
 // json name required for gitlab.com api
 type RasicIssue struct {
-	Id          int    `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	Id          int
+	Title       string
+	Description string
 	State       string
 	Severity    Severity
-	Labels      []string `json:"labels"`
+	Labels      []string
 }
 
 type RasicProject struct {
@@ -47,11 +47,10 @@ type RasicPlugin struct {
 	PluginMap    map[string]plugin.Plugin
 }
 
-// json name required for gitlab.com api
 type RasicLabel struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Color       string `json:"color"`
+	Name        string
+	Description string
+	Color       string
 	Priority    int64
 }
 

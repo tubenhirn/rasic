@@ -158,7 +158,12 @@ func (a *ReporterGitlab) GetFile(client types.HttpClient, project string, filepa
 func (a *ReporterGitlab) CreateIssue(client types.HttpClient, project string, token string, issue types.RasicIssue) types.RasicIssue {
 	url := baseUrl + apiPath + "projects/" + project + "/issues"
 
-	body, marshalErr := json.Marshal(issue)
+	newGitlabIssue := types.GitlabIssue{
+		Title: issue.Title,
+		Description: issue.Description,
+		Labels: issue.Labels,
+	}
+	body, marshalErr := json.Marshal(newGitlabIssue)
 	if marshalErr != nil {
 		pterm.Error.Println(marshalErr)
 		return types.RasicIssue{}
@@ -235,7 +240,11 @@ func (a *ReporterGitlab) GetLabels(client types.HttpClient, project string, toke
 func (a *ReporterGitlab) CreateLabel(client types.HttpClient, project string, token string, label types.RasicLabel) types.RasicLabel {
 	url := baseUrl + apiPath + "projects/" + project + "/labels"
 
-	body, marshalErr := json.Marshal(label)
+	newGitlabLabel := types.GitlabLabel{
+		Name: label.Name,
+		Color: label.Color,
+	}
+	body, marshalErr := json.Marshal(newGitlabLabel)
 	if marshalErr != nil {
 		pterm.Error.Println(marshalErr)
 		return types.RasicLabel{}
