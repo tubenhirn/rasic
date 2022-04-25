@@ -11,7 +11,7 @@ type GitlabProjects []struct {
 	NameWithNamespace                         string                    `json:"name_with_namespace,omitempty"`
 	Path                                      string                    `json:"path,omitempty"`
 	PathWithNamespace                         string                    `json:"path_with_namespace,omitempty"`
-	CreatedAt                                 time.Time                 `json:"created_at,omitempty"`
+	CreatedAt                                 time.Time                 `json:"created_at"`
 	DefaultBranch                             string                    `json:"default_branch,omitempty"`
 	TagList                                   []interface{}             `json:"tag_list,omitempty"`
 	Topics                                    []interface{}             `json:"topics,omitempty"`
@@ -22,7 +22,7 @@ type GitlabProjects []struct {
 	AvatarURL                                 string                    `json:"avatar_url,omitempty"`
 	ForksCount                                int                       `json:"forks_count,omitempty"`
 	StarCount                                 int                       `json:"star_count,omitempty"`
-	LastActivityAt                            time.Time                 `json:"last_activity_at,omitempty"`
+	LastActivityAt                            time.Time                 `json:"last_activity_at"`
 	Namespace                                 Namespace                 `json:"namespace,omitempty"`
 	ContainerRegistryImagePrefix              string                    `json:"container_registry_image_prefix,omitempty"`
 	Links                                     LinksMergeRequest         `json:"_links,omitempty"`
@@ -125,7 +125,7 @@ type ContainerExpirationPolicy struct {
 	OlderThan     string      `json:"older_than,omitempty"`
 	NameRegex     string      `json:"name_regex,omitempty"`
 	NameRegexKeep interface{} `json:"name_regex_keep,omitempty"`
-	NextRunAt     time.Time   `json:"next_run_at,omitempty"`
+	NextRunAt     time.Time   `json:"next_run_at"`
 }
 
 type GitlabIssues []struct {
@@ -135,8 +135,8 @@ type GitlabIssues []struct {
 	Title                string               `json:"title,omitempty"`
 	Description          string               `json:"description,omitempty"`
 	State                string               `json:"state,omitempty"`
-	CreatedAt            time.Time            `json:"created_at,omitempty"`
-	UpdatedAt            time.Time            `json:"updated_at,omitempty"`
+	CreatedAt            time.Time            `json:"created_at"`
+	UpdatedAt            time.Time            `json:"updated_at"`
 	ClosedAt             interface{}          `json:"closed_at,omitempty"`
 	ClosedBy             interface{}          `json:"closed_by,omitempty"`
 	Labels               []string             `json:"labels,omitempty"`
@@ -208,7 +208,7 @@ type GitlabProject struct {
 	NameWithNamespace string        `json:"name_with_namespace,omitempty"`
 	Path              string        `json:"path,omitempty"`
 	PathWithNamespace string        `json:"path_with_namespace,omitempty"`
-	CreatedAt         time.Time     `json:"created_at,omitempty"`
+	CreatedAt         time.Time     `json:"created_at"`
 	DefaultBranch     string        `json:"default_branch,omitempty"`
 	TagList           []interface{} `json:"tag_list,omitempty"`
 	Topics            []interface{} `json:"topics,omitempty"`
@@ -219,7 +219,7 @@ type GitlabProject struct {
 	AvatarURL         string        `json:"avatar_url,omitempty"`
 	ForksCount        int           `json:"forks_count,omitempty"`
 	StarCount         int           `json:"star_count,omitempty"`
-	LastActivityAt    time.Time     `json:"last_activity_at,omitempty"`
+	LastActivityAt    time.Time     `json:"last_activity_at"`
 	Namespace         struct {
 		ID        int    `json:"id,omitempty"`
 		Name      string `json:"name,omitempty"`
@@ -252,7 +252,7 @@ type GitlabProject struct {
 		OlderThan     string    `json:"older_than,omitempty"`
 		NameRegex     string    `json:"name_regex,omitempty"`
 		NameRegexKeep string    `json:"name_regex_keep,omitempty"`
-		NextRunAt     time.Time `json:"next_run_at,omitempty"`
+		NextRunAt     time.Time `json:"next_run_at"`
 	} `json:"container_expiration_policy,omitempty"`
 	IssuesEnabled                             bool          `json:"issues_enabled,omitempty"`
 	MergeRequestsEnabled                      bool          `json:"merge_requests_enabled,omitempty"`
@@ -332,7 +332,7 @@ type GitlabProject struct {
 type GitlabIssue struct {
 	ProjectID          int           `json:"project_id,omitempty"`
 	ID                 int           `json:"id,omitempty"`
-	CreatedAt          time.Time     `json:"created_at,omitempty"`
+	CreatedAt          time.Time     `json:"created_at"`
 	Iid                int           `json:"iid,omitempty"`
 	Title              string        `json:"title,omitempty"`
 	State              string        `json:"state,omitempty"`
@@ -352,7 +352,7 @@ type GitlabIssue struct {
 		Username  string      `json:"username,omitempty"`
 	} `json:"author,omitempty"`
 	Description    string      `json:"description,omitempty"`
-	UpdatedAt      time.Time   `json:"updated_at,omitempty"`
+	UpdatedAt      time.Time   `json:"updated_at"`
 	ClosedAt       interface{} `json:"closed_at,omitempty"`
 	ClosedBy       interface{} `json:"closed_by,omitempty"`
 	Milestone      interface{} `json:"milestone,omitempty"`

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/go-plugin"
 	"github.com/pterm/pterm"
@@ -162,6 +163,7 @@ func (a *ReporterGitlab) CreateIssue(client types.HttpClient, project string, to
 		Title: issue.Title,
 		Description: issue.Description,
 		Labels: issue.Labels,
+		CreatedAt: time.Now(),
 	}
 	body, marshalErr := json.Marshal(newGitlabIssue)
 	if marshalErr != nil {
