@@ -12,11 +12,12 @@ type HttpClient interface {
 }
 
 type RasicIssue struct {
-	Id          int    `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	Id          int
+	Title       string
+	Description string
 	State       string
 	Severity    Severity
+	Labels      []string
 }
 
 type RasicProject struct {
@@ -45,6 +46,13 @@ type RasicPlugin struct {
 	PluginMap    map[string]plugin.Plugin
 }
 
+type RasicLabel struct {
+	Name        string
+	Description string
+	Color       string
+	Priority    int64
+}
+
 type Severity int64
 
 const (
@@ -57,6 +65,10 @@ const (
 
 func (s Severity) String() string {
 	return [...]string{"UNKNOWN", "LOW", "MEDIUM", "HIGH", "CRITICAL"}[s]
+}
+
+func (s Severity) Color() string {
+	return [...]string{"#36454F", "#0000FF", "#EEE600", "#ED9121", "#FF0000"}[s]
 }
 
 func (s *Severity) FromString(severity string) Severity {
