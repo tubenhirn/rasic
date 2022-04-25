@@ -11,6 +11,7 @@ type HttpClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
+// json name required for gitlab.com api
 type RasicIssue struct {
 	Id          int
 	Title       string
