@@ -194,7 +194,6 @@ func Scan() *cli.Command {
 			// load all plugins required for this command
 			apiPlugin, reporterPlugin, clients := core.DispensePlugins(pluginData, logger)
 
-
 			for _, pluginClient := range clients {
 				defer pluginClient.Kill()
 			}
@@ -227,8 +226,11 @@ func Scan() *cli.Command {
 					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
-
+				if len(newIssues) > 0 {
+					pterm.Warning.Println("new issues found, creating them...")
+					core.CheckLabels(httpClient, reporterPlugin, currentProject, authToken)
+					core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				}
 				return nil
 			}
 
@@ -257,7 +259,11 @@ func Scan() *cli.Command {
 					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				if len(newIssues) > 0 {
+					pterm.Warning.Println("new issues found, creating them...")
+					core.CheckLabels(httpClient, reporterPlugin, currentProject, authToken)
+					core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				}
 			}
 
 			return nil

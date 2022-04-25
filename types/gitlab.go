@@ -413,3 +413,18 @@ type GitlabRepository struct {
 	} `json:"tags"`
 	TagsCount int `json:"tags_count"`
 }
+
+type GitlabLabel struct {
+	ClosedIssuesCount      int64  `json:"closed_issues_count"`
+	Color                  string `json:"color"`
+	Description            string `json:"description"`
+	DescriptionHTML        string `json:"description_html"`
+	ID                     int64  `json:"id"`
+	IsProjectLabel         bool   `json:"is_project_label"`
+	Name                   string `json:"name"`
+	OpenIssuesCount        int64  `json:"open_issues_count"`
+	OpenMergeRequestsCount int64  `json:"open_merge_requests_count"`
+	Priority               int64  `json:"priority"`
+	Subscribed             bool   `json:"subscribed"`
+	TextColor              string `json:"text_color"`
+}

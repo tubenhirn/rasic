@@ -18,6 +18,7 @@ import (
 func init() {
 	gob.Register(http.DefaultClient)
 	gob.Register(types.RasicIssue{})
+	gob.Register(types.RasicLabel{})
 	gob.Register(types.RasicProject{})
 	gob.Register(types.RasicRepository{})
 	gob.Register(map[string]interface{}{})
