@@ -47,11 +47,10 @@ type RasicPlugin struct {
 	PluginMap    map[string]plugin.Plugin
 }
 
-// json name required for gitlab.com api
 type RasicLabel struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Color       string `json:"color"`
+	Name        string
+	Description string
+	Color       string
 	Priority    int64
 }
 
