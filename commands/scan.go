@@ -79,7 +79,7 @@ var (
 		Usage:       "a username used by trivy image scanning",
 		EnvVars:     []string{"RASIC_USERNAME"},
 		FilePath:    "",
-		Required:    true,
+		Required:    false,
 		Hidden:      false,
 		TakesFile:   false,
 		Value:       "",
