@@ -1,7 +1,0 @@
-{
-    "repository": {
-        "tag": {
-            "location": "eu.gcr.io/emp-emma-workspace/aplus-data-resolver-baurde@sha256:e4d705cb2aff6ae250de2f505d44bc0b480a70493323d75cfffa3f7f1054970b"
-        }
-    }
-}
