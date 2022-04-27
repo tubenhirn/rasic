@@ -16,23 +16,23 @@ import (
 	"gitlab.com/jstang/rasic/types/plugins"
 )
 
-// create a local .triviyignore file
+// create a local files for additional configuration for projects
 // downloaded from the respective project given
-func createLocalIgnorefile(client types.HttpClient, source plugins.Api, projectId string, ignoreFileName string, defaultBranch string, authToken string) (string, error) {
-	ignorefileString := source.GetFile(client, projectId, ignoreFileName, defaultBranch, authToken)
-	ignoreFilePath := "/tmp/scan-" + projectId + "/"
+func createLocalTempfile(client types.HttpClient, source plugins.Api, projectId string, fileName string, defaultBranch string, authToken string) (string, error) {
+	fileString := source.GetFile(client, projectId, fileName, defaultBranch, authToken)
+	filePath := "/tmp/scan-" + projectId + "/"
 
-	if len(ignorefileString) > 0 {
-		pterm.Info.Println("found " + ignoreFileName + "file in project")
-		dirErr := os.Mkdir(ignoreFilePath, 0755)
+	if len(fileString) > 0 {
+		pterm.Info.Println("found " + fileName + " file in project")
+		dirErr := os.Mkdir(filePath, 0755)
 		if dirErr != nil {
 			pterm.Warning.Println(dirErr)
 		}
-		file, fileCreateError := os.Create(ignoreFilePath + ignoreFileName)
+		file, fileCreateError := os.Create(filePath + fileName)
 		if fileCreateError != nil {
 			return "", fileCreateError
 		}
-		_, err := file.WriteString(ignorefileString)
+		_, err := file.WriteString(fileString)
 		if err != nil {
 			file.Close()
 			return "", err
@@ -42,7 +42,7 @@ func createLocalIgnorefile(client types.HttpClient, source plugins.Api, projectI
 			return "", err
 		}
 	}
-	return (ignoreFilePath + ignoreFileName), nil
+	return (filePath + fileName), nil
 }
 
 // remove temp dir used for project ignorefile
@@ -60,7 +60,7 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 
 	// look for a ignorefile in the project
 	// if it exists download it
-	ignorefilePath, _ := createLocalIgnorefile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
+	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
 	resultfilePath := strconv.Itoa(project.Id) + "_repo_result.json"
 	defer cleanTempFiles(ignorefilePath)
 
@@ -110,7 +110,7 @@ func ContainerScanner(client types.HttpClient, source plugins.Api, project types
 
 	// look for a ignorefile in the project
 	// if it exists download it
-	ignorefilePath, _ := createLocalIgnorefile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
+	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
 	resultfilePath := strconv.Itoa(project.Id) + "_image_result.json"
 	defer cleanTempFiles(ignorefilePath)
 
