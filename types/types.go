@@ -29,14 +29,14 @@ type RasicProject struct {
 }
 
 type RasicRepository struct {
-	Id  int
-	Tag RasicTag
+	Id  int      `json:"id,omitempty"`
+	Tag RasicTag `json:"tag,omitempty"`
 }
 
 type RasicTag struct {
-	Location string
-	Name     string
-	Path     string
+	Location string `json:"location,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Path     string `json:"path,omitempty"`
 }
 
 type RasicPlugin struct {
@@ -52,6 +52,10 @@ type RasicLabel struct {
 	Description string
 	Color       string
 	Priority    int64
+}
+
+type RasicConfiguration struct {
+	Repository RasicRepository `json:"repository,omitempty"`
 }
 
 type Severity int64

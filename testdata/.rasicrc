@@ -1,0 +1,7 @@
+{
+    "repository": {
+        "tag": {
+            "location": "eu.gcr.io/some-project/a-image@sha256:e4d705cb2aff6ae250de2f505d44bc0b480a70493323d75cfffa3f7f1054970b"
+        }
+    }
+}
