@@ -226,8 +226,9 @@ func Scan() *cli.Command {
 					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				if len(newIssues) > 0 {
-					pterm.Warning.Println("new issues found, creating them...")
+				newIssueCount := len(newIssues)
+				if newIssueCount > 0 {
+					pterm.Warning.Println(strconv.Itoa(newIssueCount) + " " + severity.String() + " new issues found, creating them...")
 					core.CheckLabels(httpClient, reporterPlugin, currentProject, authToken)
 					core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 				}
@@ -259,8 +260,9 @@ func Scan() *cli.Command {
 					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
-				if len(newIssues) > 0 {
-					pterm.Warning.Println("new issues found, creating them...")
+				newIssueCount := len(newIssues)
+				if newIssueCount > 0 {
+					pterm.Warning.Println(strconv.Itoa(newIssueCount) + " " + severity.String() + " new issues found, creating them...")
 					core.CheckLabels(httpClient, reporterPlugin, currentProject, authToken)
 					core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
 				}
