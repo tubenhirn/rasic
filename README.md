@@ -2,7 +2,8 @@
 
 rapid security incident creation
 
-a simple cli for cve scanning with trivy and issue creation on gitlab.com (and more to come).
+a simple cli for cve scanning with trivy and
+issue creation on gitlab.com (and more to come).
 
 ## requirements
 
@@ -20,6 +21,12 @@ make test
 
 ```sh
 make compile
+```
+
+### build with dagger
+
+``` bash
+dagger do build
 ```
 
 ## install
