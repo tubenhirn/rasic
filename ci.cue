@@ -17,14 +17,31 @@ dagger.#Plan & {
 		build: {
 			"rasic": go.#Build & {
 				source: _source
+				os:     client.platform.os
+				arch:   client.platform.arch
+				env: {
+					CGO_ENABLED: "0"
+				}
 			}
 			"api": go.#Build & {
 				source:  _source
 				package: "./plugins/api/gitlab.go"
+				os:      client.platform.os
+				arch:    client.platform.arch
+				env: {
+					CGO_ENABLED: "0"
+				}
+
 			}
 			"reporter": go.#Build & {
 				source:  _source
 				package: "./plugins/reporter/gitlab.go"
+				os:      client.platform.os
+				arch:    client.platform.arch
+				env: {
+					CGO_ENABLED: "0"
+				}
+
 			}
 
 		}
