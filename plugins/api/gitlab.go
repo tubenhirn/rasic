@@ -14,13 +14,15 @@ import (
 	"gitlab.com/jstang/rasic/types/plugins"
 )
 
-var baseUrl = "https://gitlab.com"
+var baseURL = "https://gitlab.com"
 var apiPath = "/api/v4/"
 
-type ApiGitlab struct{}
+const OK = "200 OK"
 
-func (a *ApiGitlab) GetProjects(client types.HttpClient, group string, token string) []types.RasicProject {
-	url := baseUrl + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
+type APIGitlab struct{}
+
+func (a *APIGitlab) GetProjects(client types.HTTPClient, group string, token string) []types.RasicProject {
+	url := baseURL + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
 	res, err := apiCallGet(client, url, token)
 
@@ -29,7 +31,7 @@ func (a *ApiGitlab) GetProjects(client types.HttpClient, group string, token str
 		return nil
 	}
 
-	if res.Status == "200 OK" {
+	if res.Status == OK {
 		var projectlist types.GitlabProjects
 		if err := json.NewDecoder(res.Body).Decode(&projectlist); err != nil {
 			pterm.Error.Println(err)
@@ -39,28 +41,24 @@ func (a *ApiGitlab) GetProjects(client types.HttpClient, group string, token str
 		var returnValue []types.RasicProject
 		for _, pro := range projectlist {
 			ele := types.RasicProject{
-				Id:            pro.ID,
-				WebUrl:        pro.WebURL,
+				ID:            pro.ID,
+				WebURL:        pro.WebURL,
 				DefaultBranch: pro.DefaultBranch,
 			}
 			returnValue = append(returnValue, ele)
-
 		}
 
 		return returnValue
-	} else {
-		_, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			pterm.Error.Println(err)
-			return nil
-		}
-		return nil
 	}
-
+	_, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		pterm.Error.Println(err)
+	}
+	return nil
 }
 
-func (a *ApiGitlab) GetProject(client types.HttpClient, project string, token string) types.RasicProject {
-	url := baseUrl + apiPath + "projects/" + project
+func (a *APIGitlab) GetProject(client types.HTTPClient, project string, token string) types.RasicProject {
+	url := baseURL + apiPath + "projects/" + project
 
 	res, err := apiCallGet(client, url, token)
 
@@ -69,7 +67,7 @@ func (a *ApiGitlab) GetProject(client types.HttpClient, project string, token st
 		return types.RasicProject{}
 	}
 
-	if res.Status == "200 OK" {
+	if res.Status == OK {
 		var project types.GitlabProject
 		if err := json.NewDecoder(res.Body).Decode(&project); err != nil {
 			pterm.Info.Println(res.Body)
@@ -77,25 +75,21 @@ func (a *ApiGitlab) GetProject(client types.HttpClient, project string, token st
 		}
 
 		var returnValue types.RasicProject
-		returnValue.Id = project.ID
-		returnValue.WebUrl = project.WebURL
+		returnValue.ID = project.ID
+		returnValue.WebURL = project.WebURL
 		returnValue.DefaultBranch = project.DefaultBranch
 
 		return returnValue
-
-	} else {
-		_, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			pterm.Error.Println(err)
-			return types.RasicProject{}
-		}
-		return types.RasicProject{}
 	}
-
+	_, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		pterm.Error.Println(err)
+	}
+	return types.RasicProject{}
 }
 
-func (a *ApiGitlab) GetFile(client types.HttpClient, project string, filepath string, fileref string, token string) string {
-	url := baseUrl + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
+func (a *APIGitlab) GetFile(client types.HTTPClient, project string, filepath string, fileref string, token string) string {
+	url := baseURL + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
 
 	res, err := apiCallGet(client, url, token)
 
@@ -104,7 +98,7 @@ func (a *ApiGitlab) GetFile(client types.HttpClient, project string, filepath st
 		return ""
 	}
 
-	if res.Status == "200 OK" {
+	if res.Status == OK {
 		fileContent, readErr := ioutil.ReadAll(res.Body)
 		if readErr != nil {
 			return ""
@@ -115,8 +109,8 @@ func (a *ApiGitlab) GetFile(client types.HttpClient, project string, filepath st
 	return ""
 }
 
-func (a *ApiGitlab) GetRepositories(client types.HttpClient, project string, token string) []types.RasicRepository {
-	url := baseUrl + apiPath + "projects/" + project + "/registry/repositories"
+func (a *APIGitlab) GetRepositories(client types.HTTPClient, project string, token string) []types.RasicRepository {
+	url := baseURL + apiPath + "projects/" + project + "/registry/repositories"
 
 	res, err := apiCallGet(client, url, token)
 
@@ -125,7 +119,7 @@ func (a *ApiGitlab) GetRepositories(client types.HttpClient, project string, tok
 		return nil
 	}
 
-	if res.Status == "200 OK" {
+	if res.Status == OK {
 		var repositorylist types.GitlabRepositories
 		if err := json.NewDecoder(res.Body).Decode(&repositorylist); err != nil {
 			return nil
@@ -135,25 +129,21 @@ func (a *ApiGitlab) GetRepositories(client types.HttpClient, project string, tok
 
 		for _, repo := range repositorylist {
 			ele := types.RasicRepository{
-				Id: repo.ID,
+				ID: repo.ID,
 			}
 			returnValue = append(returnValue, ele)
-
 		}
-
 		return returnValue
-	} else {
-		_, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			pterm.Error.Println(err)
-			return nil
-		}
-		return nil
 	}
+	_, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		pterm.Error.Println(err)
+	}
+	return nil
 }
 
-func (a *ApiGitlab) GetRepository(client types.HttpClient, repository string, token string) types.RasicRepository {
-	url := baseUrl + apiPath + "registry/repositories/" + repository + "?tags=true"
+func (a *APIGitlab) GetRepository(client types.HTTPClient, repository string, token string) types.RasicRepository {
+	url := baseURL + apiPath + "registry/repositories/" + repository + "?tags=true"
 
 	res, err := apiCallGet(client, url, token)
 
@@ -162,7 +152,7 @@ func (a *ApiGitlab) GetRepository(client types.HttpClient, repository string, to
 		return types.RasicRepository{}
 	}
 
-	if res.Status == "200 OK" {
+	if res.Status == OK {
 		var repo types.GitlabRepository
 		if err := json.NewDecoder(res.Body).Decode(&repo); err != nil {
 			return types.RasicRepository{}
@@ -176,19 +166,17 @@ func (a *ApiGitlab) GetRepository(client types.HttpClient, repository string, to
 		}
 
 		returnValue := types.RasicRepository{
-			Id:  repo.ID,
+			ID:  repo.ID,
 			Tag: latestTag,
 		}
 
 		return returnValue
-	} else {
-		_, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			pterm.Error.Println(err)
-			return types.RasicRepository{}
-		}
-		return types.RasicRepository{}
 	}
+	_, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		pterm.Error.Println(err)
+	}
+	return types.RasicRepository{}
 }
 
 var handshakeConfig = plugin.HandshakeConfig{
@@ -207,10 +195,10 @@ func init() {
 }
 
 func main() {
-	gitlab := &ApiGitlab{}
+	gitlab := &APIGitlab{}
 
 	var pluginMap = map[string]plugin.Plugin{
-		"gitlab": &plugins.ApiPlugin{Impl: gitlab},
+		"gitlab": &plugins.APIPlugin{Impl: gitlab},
 	}
 
 	plugin.Serve(&plugin.ServeConfig{
@@ -220,7 +208,7 @@ func main() {
 }
 
 // do a get api call against gitlab.com
-func apiCallGet(client types.HttpClient, url string, token string) (*http.Response, error) {
+func apiCallGet(client types.HTTPClient, url string, token string) (*http.Response, error) {
 	req, reqerr := http.NewRequest("GET", url, nil)
 
 	if reqerr != nil {
@@ -241,7 +229,7 @@ func apiCallGet(client types.HttpClient, url string, token string) (*http.Respon
 }
 
 // do a post api call against gitlab.com
-func apiCallPost(client types.HttpClient, url string, token string, body string) (*http.Response, error) {
+func apiCallPost(client types.HTTPClient, url string, token string, body string) (*http.Response, error) {
 	req, reqerr := http.NewRequest("POST", url, strings.NewReader(body))
 
 	if reqerr != nil {

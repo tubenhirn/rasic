@@ -10,9 +10,8 @@ import (
 	"gitlab.com/jstang/rasic/types/plugins"
 )
 
-func DispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugins.Api, plugins.Reporter, []*plugin.Client) {
-
-	var returnApiPlugin plugins.Api
+func DispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugins.API, plugins.Reporter, []*plugin.Client) {
+	var returnAPIPlugin plugins.API
 	var returnReporterPlugin plugins.Reporter
 
 	// collect all clients to kill them after use
@@ -38,8 +37,8 @@ func DispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugi
 		}
 		switch currentPlugin.PluginPath {
 		case "api":
-			plug := raw.(plugins.Api)
-			returnApiPlugin = plug
+			plug := raw.(plugins.API)
+			returnAPIPlugin = plug
 		case "reporter":
 			plug := raw.(plugins.Reporter)
 			returnReporterPlugin = plug
@@ -49,7 +48,5 @@ func DispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugi
 		clientList = append(clientList, client)
 	}
 
-	return returnApiPlugin, returnReporterPlugin, clientList
+	return returnAPIPlugin, returnReporterPlugin, clientList
 }
-
-

@@ -12,11 +12,10 @@ import (
 // if they dont exist, create them
 // labels are severities here. we create them with a name and a color
 // labels are added to issues (e.g. CRITICAL, HIGHT, MEDIUM....)
-func CheckLabels(httpClient types.HttpClient, reporterPlugin plugins.Reporter, project types.RasicProject, authToken string) {
-
+func CheckLabels(httpClient types.HTTPClient, reporterPlugin plugins.Reporter, project types.RasicProject, authToken string) {
 	// get all labels for current project
 	var projectLabels []types.RasicLabel
-	projectLabels = reporterPlugin.GetLabels(httpClient, strconv.Itoa(project.Id), authToken)
+	projectLabels = reporterPlugin.GetLabels(httpClient, strconv.Itoa(project.ID), authToken)
 
 	var labelSlice []string
 	// check if all required labels do exist
@@ -38,7 +37,7 @@ func CheckLabels(httpClient types.HttpClient, reporterPlugin plugins.Reporter, p
 			newLabel.Name = required
 			newLabel.Color = severity.Color()
 
-			reporterPlugin.CreateLabel(httpClient, strconv.Itoa(project.Id), authToken, newLabel)
+			reporterPlugin.CreateLabel(httpClient, strconv.Itoa(project.ID), authToken, newLabel)
 		}
 	}
 }
