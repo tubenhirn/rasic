@@ -3,3 +3,4 @@ rasic
 /blubb.json
 /plugins/*/**/*
 !/plugins/*/**/*.go
+/bin
