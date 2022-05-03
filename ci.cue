@@ -4,6 +4,7 @@ import (
 	"dagger.io/dagger"
 	"universe.dagger.io/go"
 
+	"rasic.io/ci/golangci"
 )
 
 dagger.#Plan & {
@@ -42,6 +43,13 @@ dagger.#Plan & {
 					CGO_ENABLED: "0"
 				}
 
+			}
+
+		}
+		lint: {
+			go: golangci.#Lint & {
+				source:  _source
+				version: "1.45"
 			}
 
 		}

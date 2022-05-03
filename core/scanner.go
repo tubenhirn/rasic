@@ -18,9 +18,9 @@ import (
 
 // create a local files for additional configuration for projects
 // downloaded from the respective project given
-func createLocalTempfile(client types.HttpClient, source plugins.Api, projectId string, fileName string, defaultBranch string, authToken string) (string, error) {
-	fileString := source.GetFile(client, projectId, fileName, defaultBranch, authToken)
-	filePath := "/tmp/scan-" + projectId + "/"
+func createLocalTempfile(client types.HTTPClient, source plugins.API, projectID string, fileName string, defaultBranch string, authToken string) (string, error) {
+	fileString := source.GetFile(client, projectID, fileName, defaultBranch, authToken)
+	filePath := "/tmp/scan-" + projectID + "/"
 
 	if len(fileString) > 0 {
 		pterm.Info.Println("found " + fileName + " file in project")
@@ -48,22 +48,17 @@ func createLocalTempfile(client types.HttpClient, source plugins.Api, projectId 
 }
 
 // remove temp dir used for project ignorefile
-func cleanTempFiles(fileName string) error {
+func cleanTempFiles(fileName string) {
 	tempDir, _ := path.Split(fileName)
-	rmErr := os.RemoveAll(tempDir)
-	if rmErr != nil {
-		return rmErr
-	}
-	return nil
+	os.RemoveAll(tempDir)
 }
 
 // scan a remote repository
-func RepositoryScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
-
+func RepositoryScanner(client types.HTTPClient, source plugins.API, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
 	// look for a ignorefile in the project
 	// if it exists download it
-	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
-	resultfilePath := strconv.Itoa(project.Id) + "_repo_result.json"
+	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
+	resultfilePath := strconv.Itoa(project.ID) + "_repo_result.json"
 	defer cleanTempFiles(ignorefilePath)
 
 	// find path to trivy binary
@@ -72,7 +67,7 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 		pterm.Error.Println(lookErr)
 	}
 	// build args for repo scanning
-	repoArgs := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=" + resultfilePath, project.WebUrl}
+	repoArgs := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=" + resultfilePath, project.WebURL}
 
 	// set auth var for trivy - following the docs for scanning a remote repositry
 	// https://aquasecurity.github.io/trivy/v0.25.0/vulnerability/scanning/git-repository/
@@ -108,13 +103,12 @@ func RepositoryScanner(client types.HttpClient, source plugins.Api, project type
 }
 
 // scan containers in the project - if present
-func containerScanner(client types.HttpClient, source plugins.Api, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
-
+func containerScanner(client types.HTTPClient, source plugins.API, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
 	// look for a ignorefile in the project
 	// if it exists download it
-	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.Id), project.IgnoreFileName, project.DefaultBranch, token)
+	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
 
-	resultfilePath := strconv.Itoa(project.Id) + "_image_result.json"
+	resultfilePath := strconv.Itoa(project.ID) + "_image_result.json"
 	defer cleanTempFiles(ignorefilePath)
 
 	// find path to trivy binary
@@ -128,7 +122,7 @@ func containerScanner(client types.HttpClient, source plugins.Api, project types
 
 	// set auth vars for trivy - following the docs for scanning a private container registry
 	// https://aquasecurity.github.io/trivy/v0.25.4/docs/advanced/private-registries/docker-hub/
-	if (token != "") {
+	if token != "" {
 		os.Setenv("TRIVY_PASSWORD", token)
 	}
 	// set an empty username if give
@@ -167,8 +161,8 @@ func containerScanner(client types.HttpClient, source plugins.Api, project types
 
 // build a list of isses
 // check for known ones to dont add them twice
-// this need to be done if a porject containts multiple images
-// or if the fs scan and the image scan have found similiar cve's
+// this need to be done if a porject contains multiple images
+// or if the fs scan and the image scan have found similar cve's
 // maybe this can be removed in the future
 // we also only add cve's with a give severity
 func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, project types.RasicProject, minSeverity types.Severity) []types.RasicIssue {
@@ -184,12 +178,10 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 	// loop packages in the report
 	for _, result := range report.Results {
 		if len(result.Vulnerabilities) > 0 {
-
 			pterm.Info.Println(strconv.Itoa(len(result.Vulnerabilities)) + " " + result.Type + " vulnerabilities found")
 
 			// loop cves in the current package
 			for _, cve := range result.Vulnerabilities {
-
 				// add cve if unknown
 				// and if its severity >= minSeverity
 				if !slices.Contains(cveSlice, cve.VulnerabilityID) {
@@ -197,14 +189,13 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 					cveSeverity = cve.Severity
 					if cveSeverity >= minSeverity {
 						// create new issue and add it to the list we return
-						newIssue, _ := Template(strconv.Itoa(project.Id), cve, result.Target, result.Type)
+						newIssue, _ := Template(strconv.Itoa(project.ID), cve, result.Target, result.Type)
 						// add newIssue to the result list
 						issueList = append(issueList, newIssue)
 						// add issue title to the cveSlice for dublication checking
 						cveSlice = append(cveSlice, newIssue.Title)
 					}
 				}
-
 			}
 		}
 	}
@@ -213,12 +204,11 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 
 // scan container registries and collect cves
 // return them afterwards
-func ContainerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
-
+func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.API, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
 	// look for a rasic config file in the project
 	// if it exists download it
 	configfileName := ".rasicrc"
-	configfilePath, _ := createLocalTempfile(httpClient, apiPlugin, strconv.Itoa(project.Id), configfileName, project.DefaultBranch, authToken)
+	configfilePath, _ := createLocalTempfile(httpClient, apiPlugin, strconv.Itoa(project.ID), configfileName, project.DefaultBranch, authToken)
 
 	projectConfiguration, err := buildRepositoryConfiguration(configfilePath)
 	if err != nil {
@@ -228,17 +218,17 @@ func ContainerRegistryScan(httpClient types.HttpClient, apiPlugin plugins.Api, p
 	// if a custom registry is configured (e.g. gcr)
 	// use it instead of looking for attached ones
 	if projectConfiguration.Repository.Tag.Location != "" {
-			tmpIssues, _ := containerScanner(httpClient, apiPlugin, project, projectConfiguration.Repository, "", "", newIssues, severity)
-			newIssues = append(newIssues, tmpIssues...)
+		tmpIssues, _ := containerScanner(httpClient, apiPlugin, project, projectConfiguration.Repository, "", "", newIssues, severity)
+		newIssues = append(newIssues, tmpIssues...)
 	} else {
 		// look for container registries attached to the project (gitlab)
-		containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.Id), authToken)
+		containerRegistries := apiPlugin.GetRepositories(httpClient, strconv.Itoa(project.ID), authToken)
 
 		// scan all registries
 		// exclude /cache ones
 		// append all cves to newIssues
 		for _, reg := range containerRegistries {
-			containerRegistry := apiPlugin.GetRepository(httpClient, strconv.Itoa(reg.Id), authToken)
+			containerRegistry := apiPlugin.GetRepository(httpClient, strconv.Itoa(reg.ID), authToken)
 
 			// skip cache registires
 			if strings.Contains(containerRegistry.Tag.Location, registryExcudePattern) {
@@ -261,16 +251,16 @@ func buildRepositoryConfiguration(configFilePath string) (types.RasicConfigurati
 
 	// open config file from given path
 	configFile, err := os.Open(configFilePath)
-    if err != nil {
+	if err != nil {
 		pterm.Error.Println(err)
 		return types.RasicConfiguration{}, err
-    }
+	}
 
 	// decode the jsonfile to a
 	if err := json.NewDecoder(configFile).Decode(&config); err != nil {
 		pterm.Error.Println(err)
 		return types.RasicConfiguration{}, err
-    }
+	}
 
 	return config, nil
 }

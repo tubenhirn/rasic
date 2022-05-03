@@ -138,7 +138,7 @@ func Scan() *cli.Command {
 			sourceName := c.String("source")
 			reporterName := c.String("reporter")
 			pluginHome := c.String("pluginhome")
-			projectId := c.String("project")
+			projectID := c.String("project")
 			userName := c.String("user")
 			authToken := c.String("token")
 			ignoreFileName := c.String("ignorefile")
@@ -160,7 +160,7 @@ func Scan() *cli.Command {
 			}
 
 			var apiPluginMap = map[string]plugin.Plugin{
-				"gitlab": &plugins.ApiPlugin{},
+				"gitlab": &plugins.APIPlugin{},
 			}
 			var reporterPluginMap = map[string]plugin.Plugin{
 				"gitlab": &plugins.ReporterPlugin{},
@@ -200,21 +200,21 @@ func Scan() *cli.Command {
 
 			pterm.Info.Println("scan for cve's")
 
-			projects := apiPlugin.GetProjects(httpClient, projectId, authToken)
+			projects := apiPlugin.GetProjects(httpClient, projectID, authToken)
 			if len(projects) < 1 {
-				pterm.Info.Println("no projects found in group " + projectId + "(maybe it is a project?)")
+				pterm.Info.Println("no projects found in group " + projectID + "(maybe it is a project?)")
 
-				singleProject := apiPlugin.GetProject(httpClient, projectId, authToken)
+				singleProject := apiPlugin.GetProject(httpClient, projectID, authToken)
 				var currentProject types.RasicProject
-				currentProject.Id = singleProject.Id
-				currentProject.WebUrl = singleProject.WebUrl
+				currentProject.ID = singleProject.ID
+				currentProject.WebURL = singleProject.WebURL
 				currentProject.DefaultBranch = singleProject.DefaultBranch
 				currentProject.IgnoreFileName = ignoreFileName
 
 				var newIssues []types.RasicIssue
 
 				// scan current projects repositry (fs)
-				pterm.Info.Printfln("scan repository: " + currentProject.WebUrl)
+				pterm.Info.Printfln("scan repository: " + currentProject.WebURL)
 				tmpIssues, err := core.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
 				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
@@ -236,18 +236,17 @@ func Scan() *cli.Command {
 			}
 
 			// scan a group
-			pterm.Info.Println(strconv.Itoa(len(projects)) + " projects found in group " + projectId)
+			pterm.Info.Println(strconv.Itoa(len(projects)) + " projects found in group " + projectID)
 			for _, project := range projects {
-
 				var newIssues []types.RasicIssue
 
 				var currentProject types.RasicProject
-				currentProject.Id = project.Id
-				currentProject.WebUrl = project.WebUrl
+				currentProject.ID = project.ID
+				currentProject.WebURL = project.WebURL
 				currentProject.DefaultBranch = project.DefaultBranch
 				currentProject.IgnoreFileName = ignoreFileName
 
-				pterm.Info.Println("scan: " + project.WebUrl)
+				pterm.Info.Println("scan: " + project.WebURL)
 
 				tmpIssues, err := core.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
 				newIssues = append(newIssues, tmpIssues...)
@@ -283,5 +282,4 @@ func Scan() *cli.Command {
 		HelpName:               "",
 		CustomHelpTemplate:     "",
 	}
-
 }

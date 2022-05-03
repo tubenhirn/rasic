@@ -10,12 +10,12 @@ import (
 
 // open a new issue in the given project
 func Template(project string, cve types.Vulnerabilities, packagetarget string, packagetype string) (types.RasicIssue, error) {
-	projectId, _ := strconv.Atoi(project)
+	projectID, _ := strconv.Atoi(project)
 
 	var cveSeverity types.Severity
 	cveSeverity = cve.Severity
 
-	newIssue := types.RasicIssue{Title: cve.VulnerabilityID, Description: generateMarkdown(cve, packagetarget, packagetype), Id: projectId, Severity: cveSeverity, Labels: []string{cve.Severity.String()}}
+	newIssue := types.RasicIssue{Title: cve.VulnerabilityID, Description: generateMarkdown(cve, packagetarget, packagetype), ID: projectID, Severity: cveSeverity, Labels: []string{cve.Severity.String()}}
 
 	return newIssue, nil
 }
@@ -65,11 +65,10 @@ func consoleEnd() string {
 }
 
 // open new issues using the current reporter
-func OpenNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter, project types.RasicProject, newIssues []types.RasicIssue, authToken string) {
-
+func OpenNewIssues(httpClient types.HTTPClient, reporterPlugin plugins.Reporter, project types.RasicProject, newIssues []types.RasicIssue, authToken string) {
 	// get all issues for current project
 	var projectIssues []types.RasicIssue
-	projectIssues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.Id), authToken)
+	projectIssues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.ID), authToken)
 
 	// check newIssues against projectIssues
 	// if the issue does not exist in State="opened", create it with the current reporter
@@ -82,7 +81,7 @@ func OpenNewIssues(httpClient types.HttpClient, reporterPlugin plugins.Reporter,
 			}
 		}
 		if !issueExists {
-			reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.Id), authToken, newIssue)
+			reporterPlugin.CreateIssue(httpClient, strconv.Itoa(project.ID), authToken, newIssue)
 			pterm.Info.Println("new issue opened for " + newIssue.Title + " - " + newIssue.Severity.String())
 		}
 	}

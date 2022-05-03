@@ -34,7 +34,10 @@ func Issues() *cli.Command {
 		Action: func(c *cli.Context) error {
 			// show default help since this is only a group command
 			// see subcommands for details
-			cli.ShowAppHelp(c)
+			err := cli.ShowAppHelp(c)
+			if err != nil {
+				pterm.Error.Println(err)
+			}
 			return nil
 		},
 		OnUsageError: func(context *cli.Context, err error, isSubcommand bool) error {
@@ -158,5 +161,4 @@ func Issues() *cli.Command {
 		HelpName:               "",
 		CustomHelpTemplate:     "",
 	}
-
 }

@@ -59,7 +59,7 @@ func main() {
 			&cli.StringFlag{
 				Name:        "reporter",
 				Aliases:     []string{},
-				Usage:       "specifiy the platform to create issues in (gitlab, github, jira)",
+				Usage:       "specify the platform to create issues in (gitlab, github, jira)",
 				EnvVars:     []string{"RASIC_REPORTER"},
 				FilePath:    "",
 				Required:    false,
@@ -73,7 +73,7 @@ func main() {
 			&cli.StringFlag{
 				Name:        "scanner",
 				Aliases:     []string{},
-				Usage:       "specifiy the scanner tool (trivy, tfsec...)",
+				Usage:       "specify the scanner tool (trivy, tfsec...)",
 				EnvVars:     []string{"RASIC_SCANNER"},
 				FilePath:    "",
 				Required:    false,
@@ -142,7 +142,10 @@ func main() {
 	app.EnableBashCompletion = true
 
 	app.Action = func(c *cli.Context) error {
-		cli.ShowAppHelp(c)
+		err := cli.ShowAppHelp(c)
+		if err != nil {
+			pterm.Error.Println(err)
+		}
 		return nil
 	}
 

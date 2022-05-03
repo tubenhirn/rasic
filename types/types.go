@@ -7,13 +7,13 @@ import (
 	"github.com/hashicorp/go-plugin"
 )
 
-type HttpClient interface {
+type HTTPClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
 // json name required for gitlab.com api
 type RasicIssue struct {
-	Id          int
+	ID          int
 	Title       string
 	Description string
 	State       string
@@ -22,14 +22,14 @@ type RasicIssue struct {
 }
 
 type RasicProject struct {
-	Id             int
-	WebUrl         string
+	ID             int
+	WebURL         string
 	DefaultBranch  string
 	IgnoreFileName string
 }
 
 type RasicRepository struct {
-	Id  int      `json:"id,omitempty"`
+	ID  int      `json:"id,omitempty"`
 	Tag RasicTag `json:"tag,omitempty"`
 }
 

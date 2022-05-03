@@ -34,7 +34,10 @@ func Projects() *cli.Command {
 		Action: func(c *cli.Context) error {
 			// show default help since this is only a group command
 			// see subcommands for details
-			cli.ShowAppHelp(c)
+			err := cli.ShowAppHelp(c)
+			if err != nil {
+				pterm.Error.Println(err)
+			}
 			return nil
 		},
 		OnUsageError: func(context *cli.Context, err error, isSubcommand bool) error {
@@ -68,7 +71,7 @@ func Projects() *cli.Command {
 					}
 
 					var pluginMap = map[string]plugin.Plugin{
-						"gitlab": &plugins.ApiPlugin{},
+						"gitlab": &plugins.APIPlugin{},
 					}
 
 					httpClient := &http.Client{}
@@ -96,7 +99,7 @@ func Projects() *cli.Command {
 					if err != nil {
 						pterm.Error.Println(err)
 					}
-					api := raw.(plugins.Api)
+					api := raw.(plugins.API)
 
 					projects := api.GetProjects(httpClient, group, token)
 					pterm.Info.Println(projects)
@@ -153,5 +156,4 @@ func Projects() *cli.Command {
 		HelpName:               "",
 		CustomHelpTemplate:     "",
 	}
-
 }
