@@ -14,8 +14,8 @@ import (
 	"gitlab.com/jstang/rasic/types/plugins"
 )
 
-var baseURL = "https://gitlab.com"
-var apiPath = "/api/v4/"
+const baseURL = "https://gitlab.com"
+const apiPath = "/api/v4/"
 
 const OK = "200 OK"
 
