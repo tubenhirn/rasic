@@ -1,7 +1,6 @@
 package releasing
 
 import (
-	// "dagger.io/dagger/core"
 	"dagger.io/dagger"
 
 	"universe.dagger.io/docker"
@@ -9,7 +8,7 @@ import (
 
 // create a release using semenatic-release
 #Release: {
-	imagepullsecret: dagger.#Secret
+	authToken: dagger.#Secret
 	sourcecode: dagger.#FS
 
 	_image: docker.#Pull & {
@@ -24,7 +23,7 @@ import (
 		}
 		workdir: "/src"
 		env: {
-			GITLAB_TOKEN: imagepullsecret
+			GITLAB_TOKEN: authToken
 		}
 	}
 }

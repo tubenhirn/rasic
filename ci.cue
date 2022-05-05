@@ -65,7 +65,7 @@ dagger.#Plan & {
 		release: {
 			new: releasing.#Release & {
 				sourcecode:      _source
-				imagepullsecret: client.env.GITLAB_TOKEN
+				authToken: client.env.GITLAB_TOKEN
 			}
 		}
 	}
