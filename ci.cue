@@ -19,10 +19,10 @@ dagger.#Plan & {
 	}
 
 	actions: {
-		_source: client.filesystem["."].read.contents
+		_source:  client.filesystem["."].read.contents
 		_version: core.#ReadFile & {
 			input: _source
-			path: "version"
+			path:  "version"
 		}
 		build: {
 			"rasic": go.#Build & {
@@ -62,11 +62,9 @@ dagger.#Plan & {
 				version: "1.45"
 			}
 		}
-		release: {
-			new: releasing.#Release & {
-				sourcecode:      _source
-				authToken: client.env.GITLAB_TOKEN
-			}
+		release: releasing.#Release & {
+			sourcecode: _source
+			authToken:  client.env.GITLAB_TOKEN
 		}
 	}
 }
