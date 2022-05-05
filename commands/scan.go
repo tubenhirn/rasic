@@ -62,7 +62,7 @@ var (
 	tokenFlag = cli.StringFlag{
 		Name:        "token",
 		Aliases:     []string{},
-		Usage:       "a oauth token",
+		Usage:       "a oauth token for the source provider",
 		EnvVars:     []string{"GITLAB_TOKEN", "RASIC_TOKEN"},
 		FilePath:    "",
 		Required:    true,
@@ -76,7 +76,7 @@ var (
 	userNameFlag = cli.StringFlag{
 		Name:        "user",
 		Aliases:     []string{},
-		Usage:       "a username used by trivy image scanning",
+		Usage:       "a username used by trivy container-image scanning",
 		EnvVars:     []string{"RASIC_USERNAME"},
 		FilePath:    "",
 		Required:    false,
@@ -91,7 +91,7 @@ var (
 		Name:        "ignorefile",
 		Aliases:     []string{},
 		Usage:       "specify a cve ignorefile",
-		EnvVars:     []string{"CVE_IGNORE_FILE, RASIC_IGNOREFILE"},
+		EnvVars:     []string{"RASIC_IGNOREFILE"},
 		FilePath:    "",
 		Required:    false,
 		Hidden:      false,

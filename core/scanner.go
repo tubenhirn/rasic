@@ -55,19 +55,29 @@ func cleanTempFiles(fileName string) {
 
 // scan a remote repository
 func RepositoryScanner(client types.HTTPClient, source plugins.API, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
-	// look for a ignorefile in the project
-	// if it exists download it
-	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
-	resultfilePath := strconv.Itoa(project.ID) + "_repo_result.json"
-	defer cleanTempFiles(ignorefilePath)
-
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
 		pterm.Error.Println(lookErr)
 	}
+
+	resultfilePath := strconv.Itoa(project.ID) + "_repo_result.json"
+
 	// build args for repo scanning
-	repoArgs := []string{"-q", "repo", "--ignorefile=" + ignorefilePath, "--format=json", "--output=" + resultfilePath, project.WebURL}
+	commandArgs := []string{"-q", "repo", "--format=json", "--output=" + resultfilePath}
+
+	// look for a ignorefile in the project
+	// if it exists download it
+	if project.IgnoreFileName != "" {
+		ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
+		ignorefileArg := "--ignorefile=" + ignorefilePath
+		commandArgs = append(commandArgs, ignorefileArg)
+
+		defer cleanTempFiles(ignorefilePath)
+	}
+
+	// append project to args
+	commandArgs = append(commandArgs, project.WebURL)
 
 	// set auth var for trivy - following the docs for scanning a remote repositry
 	// https://aquasecurity.github.io/trivy/v0.25.0/vulnerability/scanning/git-repository/
@@ -76,8 +86,8 @@ func RepositoryScanner(client types.HTTPClient, source plugins.API, project type
 	// get current environment
 	env := os.Environ()
 
-	// exec trivy with repoArgs and env
-	cmd := exec.Command(binary, repoArgs...)
+	// exec trivy with commandArgs and env
+	cmd := exec.Command(binary, commandArgs...)
 
 	// use current env for execution
 	cmd.Env = env
@@ -104,21 +114,29 @@ func RepositoryScanner(client types.HTTPClient, source plugins.API, project type
 
 // scan containers in the project - if present
 func containerScanner(client types.HTTPClient, source plugins.API, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
-	// look for a ignorefile in the project
-	// if it exists download it
-	ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
-
-	resultfilePath := strconv.Itoa(project.ID) + "_image_result.json"
-	defer cleanTempFiles(ignorefilePath)
-
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
 		pterm.Error.Println(lookErr)
 	}
 
+	resultfilePath := strconv.Itoa(project.ID) + "_image_result.json"
+
 	// build args for image scanning
-	imageArgs := []string{"-q", "image", "--ignorefile=" + ignorefilePath, "--format=json", "--output=" + resultfilePath, repository.Tag.Location}
+	commandArgs := []string{"-q", "image", "--format=json", "--output=" + resultfilePath}
+
+	// look for a ignorefile in the project
+	// if it exists download it
+	if project.IgnoreFileName != "" {
+		ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
+		ignorefileArg := "--ignorefile=" + ignorefilePath
+		commandArgs = append(commandArgs, ignorefileArg)
+
+		defer cleanTempFiles(ignorefilePath)
+	}
+
+	// append project to args
+	commandArgs = append(commandArgs, repository.Tag.Location)
 
 	// set auth vars for trivy - following the docs for scanning a private container registry
 	// https://aquasecurity.github.io/trivy/v0.25.4/docs/advanced/private-registries/docker-hub/
@@ -133,8 +151,8 @@ func containerScanner(client types.HTTPClient, source plugins.API, project types
 	// get current environment
 	env := os.Environ()
 
-	// exec trivy with repoArgs and env
-	cmd := exec.Command(binary, imageArgs...)
+	// exec trivy with commandArgs and env
+	cmd := exec.Command(binary, commandArgs...)
 
 	// use current env for execution
 	cmd.Env = env
@@ -210,9 +228,9 @@ func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.API, p
 	configfileName := ".rasicrc"
 	configfilePath, _ := createLocalTempfile(httpClient, apiPlugin, strconv.Itoa(project.ID), configfileName, project.DefaultBranch, authToken)
 
-	projectConfiguration, err := buildRepositoryConfiguration(configfilePath)
-	if err != nil {
-		pterm.Error.Println(err)
+	var projectConfiguration types.RasicConfiguration
+	if configfilePath != "" {
+		projectConfiguration, _ = buildRepositoryConfiguration(configfilePath)
 	}
 
 	// if a custom registry is configured (e.g. gcr)
