@@ -2,6 +2,15 @@
   "extends": "/opt/base.config.js",
   "branches": ["main"],
   "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+
     [
       "@google/semantic-release-replace-plugin",
       {
@@ -26,10 +35,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": [
-          "main.go",
-          "CHANGELOG.md"
-        ]
+        "assets": ["main.go", "CHANGELOG.md"]
       }
     ]
   ]
