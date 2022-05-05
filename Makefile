@@ -27,7 +27,7 @@ compile: ## 🔨 Compile for the local architecture
 	go build -o ./bin/plugins/reporter/gitlab ./plugins/reporter/gitlab.go
 	go build -o ./bin/rasic
 
-install: compile ## 💣 install rasic
+install: ## 💣 install rasic
 	@echo "Installing..."
 	sudo cp ./bin/rasic /usr/local/bin/rasic
 	(mkdir ~/.rasic || true) && cp -rf ./bin/plugins ~/.rasic
