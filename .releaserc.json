@@ -9,7 +9,7 @@
           {
             "files": ["main.go"],
             "from": "\tVersion:.*",
-            "to": "\tVersion: \"${nextRelease.version}\"",
+            "to": "\tVersion: \"${nextRelease.version}\",",
             "results": [
               {
                 "file": "main.go",
