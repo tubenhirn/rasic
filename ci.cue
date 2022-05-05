@@ -17,13 +17,6 @@ dagger.#Plan & {
 	client: env: {
 		GITLAB_TOKEN: dagger.#Secret
 	}
-	client: commands: {
-		tags: {
-			name: "git"
-			args: ["describe", "--tags"]
-			stdout: string
-		}
-	}
 
 	actions: {
 		_source: client.filesystem["."].read.contents
