@@ -1,4 +1,25 @@
 {
   "extends": "/opt/base.config.js",
-  "branches": ["main"]
+  "branches": ["main"],
+  "plugins": [
+    "@google/semantic-release-replace-plugin",
+    {
+      "replacements": [
+        {
+          "files": ["README.md"],
+          "from": "version: .*",
+          "to": "version: ${nextRelease.version}",
+          "results": [
+            {
+              "file": "",
+              "hasChanged": true,
+              "numMatches": 1,
+              "numReplacements": 1
+            }
+          ],
+          "countMatches": true
+        }
+      ]
+    }
+  ]
 }

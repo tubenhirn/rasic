@@ -1,5 +1,7 @@
 # rasic
 
+version: v1.0.0
+
 rapid security incident creation
 
 a simple cli for cve scanning with trivy and
