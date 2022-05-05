@@ -2,9 +2,11 @@ package ci
 
 import (
 	"dagger.io/dagger"
+	// "dagger.io/dagger/core"
 	"universe.dagger.io/go"
 
 	"rasic.io/ci/golangci"
+	"rasic.io/ci/releasing"
 )
 
 dagger.#Plan & {
@@ -12,6 +14,9 @@ dagger.#Plan & {
 	client: filesystem: "./bin": write: contents:                  actions.build."rasic".output
 	client: filesystem: "./bin/plugins/api": write: contents:      actions.build."api".output
 	client: filesystem: "./bin/plugins/reporter": write: contents: actions.build."reporter".output
+	client: env: {
+		GITLAB_TOKEN: dagger.#Secret
+	}
 
 	actions: {
 		_source: client.filesystem["."].read.contents
@@ -51,7 +56,12 @@ dagger.#Plan & {
 				source:  _source
 				version: "1.45"
 			}
-
+		}
+		release: {
+			new: releasing.#Release & {
+				sourcecode: _source
+				imagepullsecret: client.env.GITLAB_TOKEN
+			}
 		}
 	}
 }

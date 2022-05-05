@@ -1,0 +1,4 @@
+{
+  "extends": "/opt/base.config.js",
+  "branches": ["main"]
+}
