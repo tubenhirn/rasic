@@ -9,7 +9,7 @@
           {
             "files": ["main.go"],
             "from": "\tVersion:.*",
-            "to": "\tVersion: \"${nextRelease.version}\",",
+            "to": "\tVersion:     \"${nextRelease.version}\",",
             "results": [
               {
                 "file": "main.go",
@@ -26,9 +26,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": [
-          "main.go"
-        ]
+        "assets": ["main.go"]
       }
     ]
   ]
