@@ -1,3 +1,10 @@
+## [1.2.5](https://gitlab.com/jstang/rasic/compare/v1.2.4...v1.2.5) (2022-05-05)
+
+
+### Bug Fixes
+
+* add changelogs generation again ([8709bfe](https://gitlab.com/jstang/rasic/commit/8709bfe242d736586afea1c6bb252b8102455223))
+
 # [1.1.0](https://gitlab.com/jstang/rasic/compare/v1.0.0...v1.1.0) (2022-05-05)
 
 
