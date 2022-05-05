@@ -1,6 +1,6 @@
 # rasic
 
-version: v1.0.0
+Version-1.0.0
 
 rapid security incident creation
 

@@ -7,8 +7,8 @@
       "replacements": [
         {
           "files": ["README.md"],
-          "from": "version: .*",
-          "to": "version: ${nextRelease.version}",
+          "from": "Version-.*",
+          "to": "Version-${nextRelease.version}",
           "results": [
             {
               "file": "README.md",
@@ -17,7 +17,7 @@
               "numReplacements": 1
             }
           ],
-          "countMatches": false
+          "countMatches": true
         }
       ]
     }
