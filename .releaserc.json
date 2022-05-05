@@ -26,7 +26,10 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["main.go"]
+        "assets": [
+          "main.go",
+          "CHANGELOG.md"
+        ]
       }
     ]
   ]
