@@ -37,6 +37,13 @@
       {
         "assets": ["main.go", "CHANGELOG.md"]
       }
+    ],
+    [
+      "@semantic-release/gitlab",
+      {
+        "gitlabUrl": "https://gitlab.com",
+        "assets": []
+      }
     ]
   ]
 }
