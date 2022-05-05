@@ -23,14 +23,14 @@ all: compile
 
 compile: ## 🔨 Compile for the local architecture
 	@echo "Compiling..."
-	go build -o ./plugins/api/gitlab ./plugins/api/gitlab.go
-	go build -o ./plugins/reporter/gitlab ./plugins/reporter/gitlab.go
-	go build -o rasic
+	go build -o ./bin/plugins/api/gitlab ./plugins/api/gitlab.go
+	go build -o ./bin/plugins/reporter/gitlab ./plugins/reporter/gitlab.go
+	go build -o ./bin/rasic
 
 install: compile ## 💣 install rasic
 	@echo "Installing..."
-	sudo cp rasic /usr/local/bin/rasic
-	(mkdir ~/.rasic || true) && cp -rf ./plugins ~/.rasic
+	sudo cp ./bin/rasic /usr/local/bin/rasic
+	(mkdir ~/.rasic || true) && cp -rf ./bin/plugins ~/.rasic
 
 test: ## 😁 test your stuff
 	@echo "Testing..."
