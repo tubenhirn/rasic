@@ -2,7 +2,7 @@ package ci
 
 import (
 	"dagger.io/dagger"
-	// "dagger.io/dagger/core"
+	"dagger.io/dagger/core"
 	"universe.dagger.io/go"
 
 	"rasic.io/ci/golangci"
@@ -17,14 +17,26 @@ dagger.#Plan & {
 	client: env: {
 		GITLAB_TOKEN: dagger.#Secret
 	}
+	client: commands: {
+		tags: {
+			name: "git"
+			args: ["describe", "--tags"]
+			stdout: string
+		}
+	}
 
 	actions: {
 		_source: client.filesystem["."].read.contents
+		_version: core.#ReadFile & {
+			input: _source
+			path: "version"
+		}
 		build: {
 			"rasic": go.#Build & {
-				source: _source
-				os:     client.platform.os
-				arch:   client.platform.arch
+				source:  _source
+				os:      client.platform.os
+				arch:    client.platform.arch
+				ldflags: "-X main.appVersion=\(_version.contents)"
 				env: {
 					CGO_ENABLED: "0"
 				}
@@ -59,7 +71,7 @@ dagger.#Plan & {
 		}
 		release: {
 			new: releasing.#Release & {
-				sourcecode: _source
+				sourcecode:      _source
 				imagepullsecret: client.env.GITLAB_TOKEN
 			}
 		}

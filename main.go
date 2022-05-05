@@ -13,6 +13,8 @@ import (
 	"gitlab.com/jstang/rasic/types"
 )
 
+var appVersion string
+
 // register types to gob
 // this is required to proper serialize and deserialize the data
 func init() {
@@ -38,7 +40,7 @@ func main() {
 		Usage:       "create issues from known cve's",
 		UsageText:   "",
 		ArgsUsage:   "",
-		Version:     "1.2.6",
+		Version:     appVersion,
 		Description: "a simple app to create issues for known cve's or config flaws",
 		Commands:    []*cli.Command{},
 		Flags: []cli.Flag{

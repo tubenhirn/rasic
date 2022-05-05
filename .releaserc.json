@@ -16,12 +16,12 @@
       {
         "replacements": [
           {
-            "files": ["main.go"],
-            "from": "\tVersion:.*",
-            "to": "\tVersion:     \"${nextRelease.version}\",",
+            "files": ["version"],
+            "from": "v.*",
+            "to": "v${nextRelease.version}",
             "results": [
               {
-                "file": "main.go",
+                "file": "version",
                 "hasChanged": true,
                 "numMatches": 1,
                 "numReplacements": 1
@@ -35,7 +35,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["main.go", "CHANGELOG.md"]
+        "assets": ["version", "CHANGELOG.md"]
       }
     ],
     [
