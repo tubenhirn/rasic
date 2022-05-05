@@ -1,3 +1,10 @@
+# [1.1.0](https://gitlab.com/jstang/rasic/compare/v1.0.0...v1.1.0) (2022-05-05)
+
+
+### Features
+
+* add ci pipeline with dagger ([c6af51a](https://gitlab.com/jstang/rasic/commit/c6af51ae16b241b70e27f156193337862eaffee0))
+
 # 1.0.0 (2022-05-05)
 
 
