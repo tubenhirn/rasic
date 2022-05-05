@@ -1,3 +1,10 @@
+# [1.3.0](https://gitlab.com/jstang/rasic/compare/v1.2.6...v1.3.0) (2022-05-05)
+
+
+### Features
+
+* add verion flag for go compiler ([6f89e9b](https://gitlab.com/jstang/rasic/commit/6f89e9b11dc65f2203827eb617ceceeb1df41060))
+
 ## [1.2.6](https://gitlab.com/jstang/rasic/compare/v1.2.5...v1.2.6) (2022-05-05)
 
 
