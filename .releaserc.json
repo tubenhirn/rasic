@@ -11,7 +11,7 @@
           "to": "version: ${nextRelease.version}",
           "results": [
             {
-              "file": "",
+              "file": "README.md",
               "hasChanged": true,
               "numMatches": 1,
               "numReplacements": 1
