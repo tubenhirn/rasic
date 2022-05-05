@@ -22,6 +22,14 @@
           }
         ]
       }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "main.go"
+        ]
+      }
     ]
   ]
 }
