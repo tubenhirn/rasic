@@ -1,3 +1,10 @@
+## [1.2.6](https://gitlab.com/jstang/rasic/compare/v1.2.5...v1.2.6) (2022-05-05)
+
+
+### Bug Fixes
+
+* add gitlab release creation ([3a08ab5](https://gitlab.com/jstang/rasic/commit/3a08ab523d604c1118e3801e1e18603bc5c2fc2a))
+
 ## [1.2.5](https://gitlab.com/jstang/rasic/compare/v1.2.4...v1.2.5) (2022-05-05)
 
 
