@@ -1,3 +1,10 @@
+## [1.3.2](https://gitlab.com/jstang/rasic/compare/v1.3.1...v1.3.2) (2022-05-06)
+
+
+### Miscellaneous Chores
+
+* add a full release.config.js file instead of extending the base ([bacfcaf](https://gitlab.com/jstang/rasic/commit/bacfcaffc271c5068b855db18463aebae3bf958c))
+
 # [1.3.0](https://gitlab.com/jstang/rasic/compare/v1.2.6...v1.3.0) (2022-05-05)
 
 
