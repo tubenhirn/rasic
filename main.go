@@ -13,6 +13,7 @@ import (
 	"gitlab.com/jstang/rasic/types"
 )
 
+// passed with ldflag
 var appVersion string
 
 // register types to gob
