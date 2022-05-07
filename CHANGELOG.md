@@ -1,3 +1,15 @@
+## [1.3.4](https://gitlab.com/jstang/rasic/compare/v1.3.3...v1.3.4) (2022-05-07)
+
+
+### Code Refactoring
+
+* rename plugin api to source ([1e17e58](https://gitlab.com/jstang/rasic/commit/1e17e585b65e304cf0fbbcbfcbf2d1f2a0ab82fa))
+
+
+### Documentation
+
+* add ldflag comment for version ([318389d](https://gitlab.com/jstang/rasic/commit/318389d85c7ce93f7331c904bc44b689ae7a71e8))
+
 ## [1.3.3](https://gitlab.com/jstang/rasic/compare/v1.3.2...v1.3.3) (2022-05-07)
 
 
