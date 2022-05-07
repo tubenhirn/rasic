@@ -25,7 +25,7 @@ all: compile
 
 compile: ## 🔨 Compile for the local architecture
 	@echo "Compiling..."
-	go build -o ./bin/plugins/api/gitlab ./plugins/api/gitlab.go
+	go build -o ./bin/plugins/source/gitlab ./plugins/source/gitlab.go
 	go build -o ./bin/plugins/reporter/gitlab ./plugins/reporter/gitlab.go
 	go build -o ./bin/rasic -ldflags "-X main.appVersion=${VERSION_STRING}"
 

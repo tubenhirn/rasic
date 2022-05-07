@@ -66,7 +66,7 @@ func Issues() *cli.Command {
 					token := c.String("token")
 					var handshakeConfig = plugin.HandshakeConfig{
 						ProtocolVersion:  1,
-						MagicCookieKey:   "API_PLUGIN",
+						MagicCookieKey:   "SOURCE_PLUGIN",
 						MagicCookieValue: "allow",
 					}
 

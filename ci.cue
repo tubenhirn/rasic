@@ -12,7 +12,7 @@ import (
 dagger.#Plan & {
 	client: filesystem: ".": read: contents:                       dagger.#FS
 	client: filesystem: "./bin": write: contents:                  actions.build."rasic".output
-	client: filesystem: "./bin/plugins/api": write: contents:      actions.build."api".output
+	client: filesystem: "./bin/plugins/source": write: contents:      actions.build."source".output
 	client: filesystem: "./bin/plugins/reporter": write: contents: actions.build."reporter".output
 	client: env: {
 		GITLAB_TOKEN: dagger.#Secret
@@ -34,9 +34,9 @@ dagger.#Plan & {
 					CGO_ENABLED: "0"
 				}
 			}
-			"api": go.#Build & {
+			"source": go.#Build & {
 				source:  _source
-				package: "./plugins/api/gitlab.go"
+				package: "./plugins/source/gitlab.go"
 				os:      client.platform.os
 				arch:    client.platform.arch
 				env: {

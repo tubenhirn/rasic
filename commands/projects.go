@@ -66,12 +66,12 @@ func Projects() *cli.Command {
 					token := c.String("token")
 					var handshakeConfig = plugin.HandshakeConfig{
 						ProtocolVersion:  1,
-						MagicCookieKey:   "API_PLUGIN",
+						MagicCookieKey:   "SOURCE_PLUGIN",
 						MagicCookieValue: "allow",
 					}
 
 					var pluginMap = map[string]plugin.Plugin{
-						"gitlab": &plugins.APIPlugin{},
+						"gitlab": &plugins.SourcePlugin{},
 					}
 
 					httpClient := &http.Client{}
@@ -99,7 +99,7 @@ func Projects() *cli.Command {
 					if err != nil {
 						pterm.Error.Println(err)
 					}
-					api := raw.(plugins.API)
+					api := raw.(plugins.Source)
 
 					projects := api.GetProjects(httpClient, group, token)
 					pterm.Info.Println(projects)

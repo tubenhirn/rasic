@@ -18,7 +18,7 @@ import (
 
 // create a local files for additional configuration for projects
 // downloaded from the respective project given
-func createLocalTempfile(client types.HTTPClient, source plugins.API, projectID string, fileName string, defaultBranch string, authToken string) (string, error) {
+func createLocalTempfile(client types.HTTPClient, source plugins.Source, projectID string, fileName string, defaultBranch string, authToken string) (string, error) {
 	fileString := source.GetFile(client, projectID, fileName, defaultBranch, authToken)
 	filePath := "/tmp/scan-" + projectID + "/"
 
@@ -54,7 +54,7 @@ func cleanTempFiles(fileName string) {
 }
 
 // scan a remote repository
-func RepositoryScanner(client types.HTTPClient, source plugins.API, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
+func RepositoryScanner(client types.HTTPClient, source plugins.Source, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
@@ -113,7 +113,7 @@ func RepositoryScanner(client types.HTTPClient, source plugins.API, project type
 }
 
 // scan containers in the project - if present
-func containerScanner(client types.HTTPClient, source plugins.API, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
+func containerScanner(client types.HTTPClient, source plugins.Source, project types.RasicProject, repository types.RasicRepository, token string, user string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
@@ -222,7 +222,7 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 
 // scan container registries and collect cves
 // return them afterwards
-func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.API, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
+func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.Source, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
 	// look for a rasic config file in the project
 	// if it exists download it
 	configfileName := ".rasicrc"

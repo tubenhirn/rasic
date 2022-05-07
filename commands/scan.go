@@ -148,9 +148,9 @@ func Scan() *cli.Command {
 
 			scanContainers := c.Bool("container")
 
-			var apihandshakeConfig = plugin.HandshakeConfig{
+			var sourcehandshakeConfig = plugin.HandshakeConfig{
 				ProtocolVersion:  1,
-				MagicCookieKey:   "API_PLUGIN",
+				MagicCookieKey:   "SOURCE_PLUGIN",
 				MagicCookieValue: "allow",
 			}
 			var reporterhandshakeConfig = plugin.HandshakeConfig{
@@ -159,8 +159,8 @@ func Scan() *cli.Command {
 				MagicCookieValue: "allow",
 			}
 
-			var apiPluginMap = map[string]plugin.Plugin{
-				"gitlab": &plugins.APIPlugin{},
+			var sourcePluginMap = map[string]plugin.Plugin{
+				"gitlab": &plugins.SourcePlugin{},
 			}
 			var reporterPluginMap = map[string]plugin.Plugin{
 				"gitlab": &plugins.ReporterPlugin{},
@@ -176,11 +176,11 @@ func Scan() *cli.Command {
 
 			pluginData := []types.RasicPlugin{
 				{
-					PluginPath:   "api",
+					PluginPath:   "source",
 					PluginHome:   pluginHome,
 					PluginName:   sourceName,
-					PluginConfig: apihandshakeConfig,
-					PluginMap:    apiPluginMap,
+					PluginConfig: sourcehandshakeConfig,
+					PluginMap:    sourcePluginMap,
 				},
 				{
 					PluginPath:   "reporter",

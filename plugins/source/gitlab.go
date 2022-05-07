@@ -19,9 +19,9 @@ const apiPath = "/api/v4/"
 
 const OK = "200 OK"
 
-type APIGitlab struct{}
+type SourceGitlab struct{}
 
-func (a *APIGitlab) GetProjects(client types.HTTPClient, group string, token string) []types.RasicProject {
+func (a *SourceGitlab) GetProjects(client types.HTTPClient, group string, token string) []types.RasicProject {
 	url := baseURL + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
 
 	res, err := apiCallGet(client, url, token)
@@ -57,7 +57,7 @@ func (a *APIGitlab) GetProjects(client types.HTTPClient, group string, token str
 	return nil
 }
 
-func (a *APIGitlab) GetProject(client types.HTTPClient, project string, token string) types.RasicProject {
+func (a *SourceGitlab) GetProject(client types.HTTPClient, project string, token string) types.RasicProject {
 	url := baseURL + apiPath + "projects/" + project
 
 	res, err := apiCallGet(client, url, token)
@@ -88,7 +88,7 @@ func (a *APIGitlab) GetProject(client types.HTTPClient, project string, token st
 	return types.RasicProject{}
 }
 
-func (a *APIGitlab) GetFile(client types.HTTPClient, project string, filepath string, fileref string, token string) string {
+func (a *SourceGitlab) GetFile(client types.HTTPClient, project string, filepath string, fileref string, token string) string {
 	url := baseURL + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
 
 	res, err := apiCallGet(client, url, token)
@@ -109,7 +109,7 @@ func (a *APIGitlab) GetFile(client types.HTTPClient, project string, filepath st
 	return ""
 }
 
-func (a *APIGitlab) GetRepositories(client types.HTTPClient, project string, token string) []types.RasicRepository {
+func (a *SourceGitlab) GetRepositories(client types.HTTPClient, project string, token string) []types.RasicRepository {
 	url := baseURL + apiPath + "projects/" + project + "/registry/repositories"
 
 	res, err := apiCallGet(client, url, token)
@@ -142,7 +142,7 @@ func (a *APIGitlab) GetRepositories(client types.HTTPClient, project string, tok
 	return nil
 }
 
-func (a *APIGitlab) GetRepository(client types.HTTPClient, repository string, token string) types.RasicRepository {
+func (a *SourceGitlab) GetRepository(client types.HTTPClient, repository string, token string) types.RasicRepository {
 	url := baseURL + apiPath + "registry/repositories/" + repository + "?tags=true"
 
 	res, err := apiCallGet(client, url, token)
@@ -181,7 +181,7 @@ func (a *APIGitlab) GetRepository(client types.HTTPClient, repository string, to
 
 var handshakeConfig = plugin.HandshakeConfig{
 	ProtocolVersion:  1,
-	MagicCookieKey:   "API_PLUGIN",
+	MagicCookieKey:   "SOURCE_PLUGIN",
 	MagicCookieValue: "allow",
 }
 
@@ -195,10 +195,10 @@ func init() {
 }
 
 func main() {
-	gitlab := &APIGitlab{}
+	gitlab := &SourceGitlab{}
 
 	var pluginMap = map[string]plugin.Plugin{
-		"gitlab": &plugins.APIPlugin{Impl: gitlab},
+		"gitlab": &plugins.SourcePlugin{Impl: gitlab},
 	}
 
 	plugin.Serve(&plugin.ServeConfig{
