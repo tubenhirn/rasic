@@ -1,7 +1,8 @@
 run:
   skip-dirs:
     # progressui is a modified 3rd party library from buildkit
-    - util/progressui
+    # - util/progressui
+    - testdata
 
 linters:
   disable-all: true
