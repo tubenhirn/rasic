@@ -237,7 +237,6 @@ func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.Source
 	// if a custom registry is configured (e.g. gcr)
 	// use it instead of looking for attached ones
 	if projectConfiguration.Repository.Tag.Location != "" {
-
 		pterm.Info.Printfln("scan image: " + projectConfiguration.Repository.Tag.Location)
 		tmpIssues, _ := containerScanner(httpClient, apiPlugin, project, projectConfiguration.Repository, "", "", newIssues, severity)
 		newIssues = append(newIssues, tmpIssues...)
