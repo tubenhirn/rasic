@@ -1,3 +1,16 @@
+## [1.3.6](https://gitlab.com/jstang/rasic/compare/v1.3.5...v1.3.6) (2022-05-08)
+
+
+### Code Refactoring
+
+* apply linting rules ([a8f8c24](https://gitlab.com/jstang/rasic/commit/a8f8c2466ea8ab669a8b3b741ac018aa5366cfc2))
+
+
+### Continuous Integration
+
+* edit lint config ([fafc8ed](https://gitlab.com/jstang/rasic/commit/fafc8ed845c4411492a466e0eb898362847383f3))
+* update golint config ([dd5993b](https://gitlab.com/jstang/rasic/commit/dd5993b89d9fc23a3573791e69881fb989b91725))
+
 ## [1.3.5](https://gitlab.com/jstang/rasic/compare/v1.3.4...v1.3.5) (2022-05-08)
 
 
