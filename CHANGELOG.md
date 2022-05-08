@@ -1,3 +1,10 @@
+## [1.3.5](https://gitlab.com/jstang/rasic/compare/v1.3.4...v1.3.5) (2022-05-08)
+
+
+### Bug Fixes
+
+* dont pass username if empty ([37f59f0](https://gitlab.com/jstang/rasic/commit/37f59f08bff86d490a51fc7bdc8c8ead99c472ae))
+
 ## [1.3.4](https://gitlab.com/jstang/rasic/compare/v1.3.3...v1.3.4) (2022-05-07)
 
 
