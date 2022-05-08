@@ -146,8 +146,9 @@ func containerScanner(client types.HTTPClient, source plugins.Source, project ty
 	// set an empty username if give
 	// this is required for trivy repo scanning with gcr TRIVY_USERNAME=""
 	// https://aquasecurity.github.io/trivy/v0.27.1/docs/advanced/private-registries/gcr/
-	os.Setenv("TRIVY_USERNAME", user)
-
+	if user != "" {
+		os.Setenv("TRIVY_USERNAME", user)
+	}
 	// get current environment
 	env := os.Environ()
 
@@ -236,6 +237,8 @@ func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.Source
 	// if a custom registry is configured (e.g. gcr)
 	// use it instead of looking for attached ones
 	if projectConfiguration.Repository.Tag.Location != "" {
+
+		pterm.Info.Printfln("scan image: " + projectConfiguration.Repository.Tag.Location)
 		tmpIssues, _ := containerScanner(httpClient, apiPlugin, project, projectConfiguration.Repository, "", "", newIssues, severity)
 		newIssues = append(newIssues, tmpIssues...)
 	} else {
