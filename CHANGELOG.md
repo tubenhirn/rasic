@@ -1,3 +1,5 @@
+## [1.3.7](https://gitlab.com/jstang/rasic/compare/v1.3.6...v1.3.7) (2022-05-09)
+
 ## [1.3.6](https://gitlab.com/jstang/rasic/compare/v1.3.5...v1.3.6) (2022-05-08)
 
 
