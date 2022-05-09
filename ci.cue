@@ -5,8 +5,8 @@ import (
 	"dagger.io/dagger/core"
 	"universe.dagger.io/go"
 
-	"rasic.io/ci/golangci"
-	"rasic.io/ci/releasing"
+	"tubenhirn.com/ci/golangci"
+	"tubenhirn.com/ci/releasing"
 )
 
 dagger.#Plan & {
