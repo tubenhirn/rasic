@@ -1,13 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "baseBranches": [
-    "main"
-  ],
-  "extends": [
-    "config:base",
-    ":semanticCommits",
-    ":disableDependencyDashboard"
-  ],
+  "baseBranches": ["main"],
+  "extends": ["config:base", ":semanticCommits", ":disableDependencyDashboard"],
+  "ignorePaths": ["**/cue.mod/**"],
   "packageRules": [
     {
       "description": "Trigger breaking release for major updates",
@@ -26,24 +21,15 @@
       "semanticCommitType": "fix"
     },
     {
-      "updateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "updateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true,
       "gitLabAutomerge": true,
       "gitLabIgnoreApprovals": true
     },
     {
       "description": "add skip release for build-tools updates",
-      "matchPackagePatterns": [
-        ".*build-tools.*"
-      ],
-      "matchPackageNames": [
-        "jstang/build-tools"
-      ],
+      "matchPackagePatterns": [".*build-tools.*"],
+      "matchPackageNames": ["jstang/build-tools"],
       "commitBody": "[skip release]"
     }
   ]
