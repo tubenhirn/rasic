@@ -7,15 +7,17 @@ import (
 
 	"tubenhirn.com/ci/golangci"
 	"tubenhirn.com/ci/releasing"
+	"tubenhirn.com/ci/renovate"
 )
 
 dagger.#Plan & {
 	client: filesystem: ".": read: contents:                       dagger.#FS
 	client: filesystem: "./bin": write: contents:                  actions.build."rasic".output
-	client: filesystem: "./bin/plugins/source": write: contents:      actions.build."source".output
+	client: filesystem: "./bin/plugins/source": write: contents:   actions.build."source".output
 	client: filesystem: "./bin/plugins/reporter": write: contents: actions.build."reporter".output
 	client: env: {
 		GITLAB_TOKEN: dagger.#Secret
+		GITHUB_TOKEN: dagger.#Secret
 	}
 
 	actions: {
@@ -65,6 +67,11 @@ dagger.#Plan & {
 		release: releasing.#Release & {
 			sourcecode: _source
 			authToken:  client.env.GITLAB_TOKEN
+		}
+		"renovate": renovate.#Run & {
+			project:     "jstang/rasic"
+			gitlabToken: client.env.GITLAB_TOKEN
+			githubToken: client.env.GITHUB_TOKEN
 		}
 	}
 }

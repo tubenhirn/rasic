@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "baseBranches": [
+    "main"
+  ],
+  "extends": [
+    "config:base",
+    ":semanticCommits",
+    ":disableDependencyDashboard"
+  ],
+  "packageRules": [
+    {
+      "description": "Trigger breaking release for major updates",
+      "matchUpdateTypes": ["major"],
+      "semanticCommitType": "feat",
+      "commitBody": "BREAKING CHANGE: Major update"
+    },
+    {
+      "description": "Trigger feature release for minor updates",
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat"
+    },
+    {
+      "description": "Trigger fix release for patch updates",
+      "matchUpdateTypes": ["patch", "digest"],
+      "semanticCommitType": "fix"
+    },
+    {
+      "updateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true,
+      "gitLabAutomerge": true,
+      "gitLabIgnoreApprovals": true
+    },
+    {
+      "description": "add skip release for build-tools updates",
+      "matchPackagePatterns": [
+        ".*build-tools.*"
+      ],
+      "matchPackageNames": [
+        "jstang/build-tools"
+      ],
+      "commitBody": "[skip release]"
+    }
+  ]
+}
