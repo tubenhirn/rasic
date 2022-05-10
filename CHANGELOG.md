@@ -1,3 +1,10 @@
+# [1.4.0](https://gitlab.com/jstang/rasic/compare/v1.3.8...v1.4.0) (2022-05-10)
+
+
+### Features
+
+* **deps:** update dependency bats to v1.6.0 ([f29cfd4](https://gitlab.com/jstang/rasic/commit/f29cfd455d55abaffc3268c7a3d90ada77c114e8))
+
 ## [1.3.8](https://gitlab.com/jstang/rasic/compare/v1.3.7...v1.3.8) (2022-05-09)
 
 ## [1.3.7](https://gitlab.com/jstang/rasic/compare/v1.3.6...v1.3.7) (2022-05-09)
