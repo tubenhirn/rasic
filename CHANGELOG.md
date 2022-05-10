@@ -1,3 +1,10 @@
+## [1.4.1](https://gitlab.com/jstang/rasic/compare/v1.4.0...v1.4.1) (2022-05-10)
+
+
+### Miscellaneous Chores
+
+* update semantic-release to v2.1.0 ([061badd](https://gitlab.com/jstang/rasic/commit/061badd0f28f53f872a48340b1425e73d69f5582))
+
 # [1.4.0](https://gitlab.com/jstang/rasic/compare/v1.3.8...v1.4.0) (2022-05-10)
 
 
