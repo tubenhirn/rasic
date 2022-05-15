@@ -1,3 +1,17 @@
+## [1.4.2](https://gitlab.com/jstang/rasic/compare/v1.4.1...v1.4.2) (2022-05-15)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/net digest to 9564170 ([ab8560d](https://gitlab.com/jstang/rasic/commit/ab8560d071c6fa7bda44eb025a259ebb435dbcf6))
+* **deps:** update golang.org/x/sys digest to 45d2b45 ([6773308](https://gitlab.com/jstang/rasic/commit/67733086f291ccd2ba3661e001390b8428c40d12))
+* **deps:** update module google.golang.org/grpc to v1.46.2 ([5f8c1a1](https://gitlab.com/jstang/rasic/commit/5f8c1a109fa3d1931d74ab5b19e4451b225754ab))
+
+
+### Miscellaneous Chores
+
+* update dagger ([4da834b](https://gitlab.com/jstang/rasic/commit/4da834b36ecc76edf225fd5a42aef06fb0ec1a79))
+
 ## [1.4.1](https://gitlab.com/jstang/rasic/compare/v1.4.0...v1.4.1) (2022-05-10)
 
 
