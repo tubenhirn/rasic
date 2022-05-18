@@ -25,7 +25,7 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/shurcooL/sanitized_anchor_name v1.0.0
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778
-	golang.org/x/exp v0.0.0-20220428152302-39d4317da171
+	golang.org/x/exp v0.0.0-20220516143420-24438e51023a
 	golang.org/x/net v0.0.0-20220513224357-95641704303c
 	golang.org/x/sys v0.0.0-20220513210249-45d2b4557a2a
 	golang.org/x/term v0.0.0-20220411215600-e5f449aeb171
