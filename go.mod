@@ -27,7 +27,7 @@ require (
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778
 	golang.org/x/exp v0.0.0-20220428152302-39d4317da171
 	golang.org/x/net v0.0.0-20220513224357-95641704303c
-	golang.org/x/sys v0.0.0-20220513210249-45d2b4557a2a
+	golang.org/x/sys v0.0.0-20220517195934-5e4e11fc645e
 	golang.org/x/term v0.0.0-20220411215600-e5f449aeb171
 	golang.org/x/text v0.3.7
 	google.golang.org/genproto v0.0.0-20220505152158-f39f71e6c8f3
