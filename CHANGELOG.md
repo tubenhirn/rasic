@@ -1,3 +1,15 @@
+# [1.5.0](https://gitlab.com/jstang/rasic/compare/v1.4.3...v1.5.0) (2022-05-23)
+
+
+### Bug Fixes
+
+* **deps:** update google.golang.org/genproto digest to 3a47de7 ([8ba58e1](https://gitlab.com/jstang/rasic/commit/8ba58e12008ea049ac2c70f79fc4f170746d05b2))
+
+
+### Features
+
+* **deps:** update module github.com/urfave/cli/v2 to v2.8.0 ([29baf87](https://gitlab.com/jstang/rasic/commit/29baf87c68bdebb6dbfd770f6c0242a778a0c8e6))
+
 ## [1.4.3](https://gitlab.com/jstang/rasic/compare/v1.4.2...v1.4.3) (2022-05-22)
 
 
