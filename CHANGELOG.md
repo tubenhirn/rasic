@@ -1,3 +1,24 @@
+## [1.5.1](https://gitlab.com/jstang/rasic/compare/v1.5.0...v1.5.1) (2022-05-30)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/net digest to 5463443 ([edacc8e](https://gitlab.com/jstang/rasic/commit/edacc8e8db592caa6aa64e3a948d0afea63a1109))
+* **deps:** update golang.org/x/term digest to 065cf7b ([3886f72](https://gitlab.com/jstang/rasic/commit/3886f72dc66a7a6d54a7dae3c3780691970ee170))
+* **deps:** update google.golang.org/genproto digest to 00d5c0f ([e265136](https://gitlab.com/jstang/rasic/commit/e265136a35ed5053a7a58759b8516e97e3bfa8dc))
+* **deps:** update module github.com/urfave/cli/v2 to v2.8.1 ([5ceac29](https://gitlab.com/jstang/rasic/commit/5ceac297f5bc9bae4ece9431a844a6de04433672))
+
+
+### Code Refactoring
+
+* remove yaml dep ([f085793](https://gitlab.com/jstang/rasic/commit/f0857938817714e4e9c82594ab2578094d76dd1e))
+
+
+### Miscellaneous Chores
+
+* update dagger ([ba87c18](https://gitlab.com/jstang/rasic/commit/ba87c18fd6318ba5cecd20bee8b5664f18a61bc4))
+* update dagger files ([9ec9199](https://gitlab.com/jstang/rasic/commit/9ec9199d999bce149611945e84fea11952613e7b))
+
 # [1.5.0](https://gitlab.com/jstang/rasic/compare/v1.4.3...v1.5.0) (2022-05-23)
 
 
