@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/go-hclog v1.2.0
 	github.com/hashicorp/go-plugin v1.4.4
 	github.com/pterm/pterm v0.12.41
-	github.com/urfave/cli/v2 v2.8.0
+	github.com/urfave/cli/v2 v2.8.1
 )
 
 require (
@@ -36,4 +36,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
-require github.com/antzucaro/matchr v0.0.0-20210222213004-b04723ef80f0 // indirect
+require (
+	github.com/antzucaro/matchr v0.0.0-20210222213004-b04723ef80f0 // indirect
+	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
+)
