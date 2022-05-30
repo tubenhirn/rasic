@@ -33,7 +33,6 @@ require (
 	google.golang.org/genproto v0.0.0-20220527130721-00d5c0f3be58
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
