@@ -1,3 +1,10 @@
+## [1.5.2](https://gitlab.com/jstang/rasic/compare/v1.5.1...v1.5.2) (2022-06-03)
+
+
+### Miscellaneous Chores
+
+* update dagger ([64eb003](https://gitlab.com/jstang/rasic/commit/64eb00385b48e1fa7b1bbb36cfcd56158fba2957))
+
 ## [1.5.1](https://gitlab.com/jstang/rasic/compare/v1.5.0...v1.5.1) (2022-05-30)
 
 
