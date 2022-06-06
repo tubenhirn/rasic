@@ -10,7 +10,6 @@ require (
 )
 
 require (
-	github.com/atomicgo/cursor v0.0.1
 	github.com/cpuguy83/go-md2man/v2 v2.0.2
 	github.com/fatih/color v1.13.0
 	github.com/golang/protobuf v1.5.2
@@ -37,5 +36,6 @@ require (
 
 require (
 	github.com/antzucaro/matchr v0.0.0-20210222213004-b04723ef80f0 // indirect
+	github.com/atomicgo/cursor v0.0.1 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 )
