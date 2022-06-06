@@ -1,3 +1,14 @@
+## [1.5.3](https://gitlab.com/jstang/rasic/compare/v1.5.2...v1.5.3) (2022-06-06)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 4a0574d ([302249c](https://gitlab.com/jstang/rasic/commit/302249c35c99a781e8636cfe6b369e1356f32c1f))
+* **deps:** update golang.org/x/net digest to c960675 ([4398abc](https://gitlab.com/jstang/rasic/commit/4398abcddd6943d6e04ebbbec45dd1aaef7d7752))
+* **deps:** update google.golang.org/genproto digest to e326c6e ([480001d](https://gitlab.com/jstang/rasic/commit/480001db5b76684604eea8749b6c769257de1c9b))
+* go mod tidy ([63eeef1](https://gitlab.com/jstang/rasic/commit/63eeef1fa3cf53362d14f51873a23b1e6ddbfb5f))
+* move dep to indirect block ([d47df7b](https://gitlab.com/jstang/rasic/commit/d47df7b908289a82db742c993deb053c07a37073))
+
 ## [1.5.2](https://gitlab.com/jstang/rasic/compare/v1.5.1...v1.5.2) (2022-06-03)
 
 
