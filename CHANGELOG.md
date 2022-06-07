@@ -1,3 +1,15 @@
+## [1.5.4](https://gitlab.com/jstang/rasic/compare/v1.5.3...v1.5.4) (2022-06-07)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/hashicorp/go-hclog to v1.2.1 ([e428549](https://gitlab.com/jstang/rasic/commit/e42854916970b05321a96c10457baf762393a6c4))
+
+
+### Miscellaneous Chores
+
+* update dagger ([d0871e4](https://gitlab.com/jstang/rasic/commit/d0871e4042c32d1be5c1af5abc87deed5d483695))
+
 ## [1.5.3](https://gitlab.com/jstang/rasic/compare/v1.5.2...v1.5.3) (2022-06-06)
 
 
