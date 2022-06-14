@@ -1,3 +1,10 @@
+## [1.5.7](https://gitlab.com/jstang/rasic/compare/v1.5.6...v1.5.7) (2022-06-14)
+
+
+### Bug Fixes
+
+* fix getIssues method ([5e98c9d](https://gitlab.com/jstang/rasic/commit/5e98c9de55db2ef069b114b96a7ac99acbc20bca))
+
 ## [1.5.6](https://gitlab.com/jstang/rasic/compare/v1.5.5...v1.5.6) (2022-06-14)
 
 
