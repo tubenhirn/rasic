@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"os/exec"
 
 	hclog "github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
+	"gitlab.com/jstang/rasic/core"
+	"gitlab.com/jstang/rasic/types"
 	"gitlab.com/jstang/rasic/types/plugins"
 )
 
@@ -61,16 +62,17 @@ func Issues() *cli.Command {
 					return nil
 				},
 				Action: func(c *cli.Context) error {
-					backend := c.String("api")
-					project := c.String("project")
-					token := c.String("token")
-					var handshakeConfig = plugin.HandshakeConfig{
+					reporterName := c.String("reporter")
+					pluginHome := c.String("pluginhome")
+					projectID := c.String("project")
+					authToken := c.String("token")
+
+					var reporterhandshakeConfig = plugin.HandshakeConfig{
 						ProtocolVersion:  1,
-						MagicCookieKey:   "SOURCE_PLUGIN",
+						MagicCookieKey:   "REPORTER_PLUGIN",
 						MagicCookieValue: "allow",
 					}
-
-					var pluginMap = map[string]plugin.Plugin{
+					var reporterPluginMap = map[string]plugin.Plugin{
 						"gitlab": &plugins.ReporterPlugin{},
 					}
 
@@ -81,26 +83,24 @@ func Issues() *cli.Command {
 						Level:  hclog.Error,
 					})
 
-					client := plugin.NewClient(&plugin.ClientConfig{
-						HandshakeConfig: handshakeConfig,
-						Plugins:         pluginMap,
-						Cmd:             exec.Command("./plugins/reporter/" + backend),
-						Logger:          logger,
-					})
-					defer client.Kill()
-
-					rpcClient, err := client.Client()
-					if err != nil {
-						pterm.Error.Println(err)
+					pluginData := []types.RasicPlugin{
+						{
+							PluginPath:   "reporter",
+							PluginHome:   pluginHome,
+							PluginName:   reporterName,
+							PluginConfig: reporterhandshakeConfig,
+							PluginMap:    reporterPluginMap,
+						},
 					}
 
-					raw, err := rpcClient.Dispense(backend)
-					if err != nil {
-						pterm.Error.Println(err)
-					}
-					api := raw.(plugins.Reporter)
+					// load all plugins required for this command
+					_, reporterPlugin, clients := core.DispensePlugins(pluginData, logger)
 
-					issues := api.GetIssues(httpClient, project, token)
+					for _, pluginClient := range clients {
+						defer pluginClient.Kill()
+					}
+
+					issues := reporterPlugin.GetIssues(httpClient, projectID, authToken)
 					bytes, marshalerror := json.Marshal(issues)
 					if marshalerror != nil {
 						pterm.Error.Println(marshalerror)
