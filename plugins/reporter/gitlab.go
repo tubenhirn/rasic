@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -88,11 +89,10 @@ func (a *ReporterGitlab) GetProject(client types.HTTPClient, project string, tok
 	return types.RasicProject{}
 }
 
-func (a *ReporterGitlab) GetIssues(client types.HTTPClient, project string, token string) []types.RasicIssue {
-	url := baseURL + apiPath + "projects/" + project + "/issues?per_page=100"
+func pagination(client types.HTTPClient, url string, token string, collectedIssues []types.RasicIssue, page int) []types.RasicIssue {
+	url = url + "&page=" + strconv.Itoa(page)
 
 	res, err := apiCallGet(client, url, token)
-
 	if err != nil {
 		pterm.Error.Println(err)
 		return nil
@@ -104,8 +104,6 @@ func (a *ReporterGitlab) GetIssues(client types.HTTPClient, project string, toke
 			return nil
 		}
 
-		var returnValue []types.RasicIssue
-
 		for _, issue := range issuelist {
 			ele := types.RasicIssue{
 				ID:          issue.ID,
@@ -113,16 +111,44 @@ func (a *ReporterGitlab) GetIssues(client types.HTTPClient, project string, toke
 				Description: issue.Description,
 				State:       issue.State,
 			}
-			returnValue = append(returnValue, ele)
+			collectedIssues = append(collectedIssues, ele)
 		}
 
-		return returnValue
+		// look for next page header
+		// if set call function again
+		// X-Next-Page is a gitlab.com specific pagination header
+		if res.Header.Get("X-Next-Page") != "" {
+			nextPage := page + 1
+			pagination(client, url, token, collectedIssues, nextPage)
+		}
+
+		return collectedIssues
 	}
+
 	_, err = ioutil.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
 	return nil
+}
+
+// get issues of a group or project
+func (a *ReporterGitlab) GetIssues(client types.HTTPClient, subject string, subjectID string, token string) []types.RasicIssue {
+	pageSize := 20
+	startPage := 1
+
+	// filter issues by attributes
+	// TODO: make those filters a config
+	state := "opened"
+	labels := "cve"
+
+	url := baseURL + apiPath + subject +"/" + subjectID + "/issues?per_page=" + strconv.Itoa(pageSize) + "&labels=" + labels + "&state=" + state
+
+	var collectedIssues []types.RasicIssue
+	collectedIssues = pagination(client, url, token, collectedIssues, startPage)
+
+	return collectedIssues
 }
 
 func (a *ReporterGitlab) GetFile(client types.HTTPClient, project string, filepath string, fileref string, token string) string {

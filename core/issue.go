@@ -68,7 +68,7 @@ func consoleEnd() string {
 func OpenNewIssues(httpClient types.HTTPClient, reporterPlugin plugins.Reporter, project types.RasicProject, newIssues []types.RasicIssue, authToken string) {
 	// get all issues for current project
 	var projectIssues []types.RasicIssue
-	projectIssues = reporterPlugin.GetIssues(httpClient, strconv.Itoa(project.ID), authToken)
+	projectIssues = reporterPlugin.GetIssues(httpClient, "projects", strconv.Itoa(project.ID), authToken)
 
 	// check newIssues against projectIssues
 	// if the issue does not exist in State="opened", create it with the current reporter
