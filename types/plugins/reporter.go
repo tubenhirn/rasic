@@ -26,7 +26,7 @@ func (ReporterPlugin) Client(b *plugin.MuxBroker, c *rpc.Client) (interface{}, e
 }
 
 type Reporter interface {
-	GetIssues(client types.HTTPClient, project string, token string) []types.RasicIssue
+	GetIssues(client types.HTTPClient, subject string, subjectID string, token string) []types.RasicIssue
 	CreateIssue(client types.HTTPClient, project string, token string, issue types.RasicIssue) types.RasicIssue
 	GetLabels(client types.HTTPClient, project string, token string) []types.RasicLabel
 	CreateLabel(client types.HTTPClient, project string, token string, label types.RasicLabel) types.RasicLabel
@@ -48,12 +48,13 @@ func (g *ReporterRPC) GetProjects(client types.HTTPClient, group string, token s
 }
 
 // GetIssues
-func (g *ReporterRPC) GetIssues(client types.HTTPClient, project string, token string) []types.RasicIssue {
+func (g *ReporterRPC) GetIssues(client types.HTTPClient, subject string, subjectID string, token string) []types.RasicIssue {
 	var resp []types.RasicIssue
 	err := g.client.Call("Plugin.GetIssues", map[string]interface{}{
-		"client":  client,
-		"project": project,
-		"token":   token,
+		"client":    client,
+		"subject":   subject,
+		"subjectID": subjectID,
+		"token":     token,
 	}, &resp)
 	if err != nil {
 		panic(err)
@@ -63,7 +64,7 @@ func (g *ReporterRPC) GetIssues(client types.HTTPClient, project string, token s
 }
 
 func (s *ReporterRPCServer) GetIssues(args map[string]interface{}, resp *[]types.RasicIssue) error {
-	*resp = s.Impl.GetIssues(args["client"].(types.HTTPClient), args["project"].(string), args["token"].(string))
+	*resp = s.Impl.GetIssues(args["client"].(types.HTTPClient), args["subject"].(string), args["subjectID"].(string), args["token"].(string))
 	return nil
 }
 

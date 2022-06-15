@@ -24,7 +24,7 @@ func CheckLabels(httpClient types.HTTPClient, reporterPlugin plugins.Reporter, p
 		labelSlice = append(labelSlice, label.Name)
 	}
 
-	requiredLabels := []string{types.Critical.String(), types.High.String(), types.Medium.String(), types.Low.String(), types.Unknown.String()}
+	requiredLabels := []string{types.Critical.String(), types.High.String(), types.Medium.String(), types.Low.String(), types.Unknown.String(), "cve", "rasic"}
 
 	for _, required := range requiredLabels {
 		if !slices.Contains(labelSlice, required) {
@@ -35,7 +35,11 @@ func CheckLabels(httpClient types.HTTPClient, reporterPlugin plugins.Reporter, p
 
 			var newLabel types.RasicLabel
 			newLabel.Name = required
-			newLabel.Color = severity.Color()
+			if severity > -1 {
+				newLabel.Color = severity.Color()
+			} else {
+				newLabel.Color = "grey"
+			}
 
 			reporterPlugin.CreateLabel(httpClient, strconv.Itoa(project.ID), authToken, newLabel)
 		}

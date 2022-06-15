@@ -50,7 +50,7 @@ func Issues() *cli.Command {
 				Aliases:     []string{},
 				Usage:       "",
 				UsageText:   "",
-				Description: "",
+				Description: "list issues of a single project or a group",
 				ArgsUsage:   "",
 				Category:    "",
 				BashComplete: func(*cli.Context) {
@@ -64,7 +64,8 @@ func Issues() *cli.Command {
 				Action: func(c *cli.Context) error {
 					reporterName := c.String("reporter")
 					pluginHome := c.String("pluginhome")
-					projectID := c.String("project")
+					subjectID := c.String("subjectID")
+					subject := c.String("subject")
 					authToken := c.String("token")
 
 					var reporterhandshakeConfig = plugin.HandshakeConfig{
@@ -100,8 +101,8 @@ func Issues() *cli.Command {
 						defer pluginClient.Kill()
 					}
 
-					issues := reporterPlugin.GetIssues(httpClient, projectID, authToken)
-					bytes, marshalerror := json.Marshal(issues)
+					issues := reporterPlugin.GetIssues(httpClient, subject, subjectID, authToken)
+					bytes, marshalerror := json.MarshalIndent(issues, "", "  ")
 					if marshalerror != nil {
 						pterm.Error.Println(marshalerror)
 					}
@@ -115,15 +116,29 @@ func Issues() *cli.Command {
 				Subcommands: []*cli.Command{},
 				Flags: []cli.Flag{
 					&cli.StringFlag{
-						Name:        "project",
+						Name:        "subjectID",
 						Aliases:     []string{},
-						Usage:       "a project id",
+						Usage:       "a project or group id",
 						EnvVars:     []string{},
 						FilePath:    "",
 						Required:    true,
 						Hidden:      false,
 						TakesFile:   false,
 						Value:       "",
+						DefaultText: "",
+						Destination: new(string),
+						HasBeenSet:  false,
+					},
+					&cli.StringFlag{
+						Name:        "subject",
+						Aliases:     []string{},
+						Usage:       "set projects or groups",
+						EnvVars:     []string{},
+						FilePath:    "",
+						Required:    false,
+						Hidden:      false,
+						TakesFile:   false,
+						Value:       "projects",
 						DefaultText: "",
 						Destination: new(string),
 						HasBeenSet:  false,
