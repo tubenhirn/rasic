@@ -1,3 +1,10 @@
+# [1.6.0](https://gitlab.com/jstang/rasic/compare/v1.5.7...v1.6.0) (2022-06-15)
+
+
+### Features
+
+* get issues with pagination ([f75faeb](https://gitlab.com/jstang/rasic/commit/f75faeb6d113262c43532fe2a6b7bc78e0b381ba))
+
 ## [1.5.7](https://gitlab.com/jstang/rasic/compare/v1.5.6...v1.5.7) (2022-06-14)
 
 
