@@ -13,13 +13,13 @@ you need to have **trivy installed** on your system to use this cli.
 
 ## test
 
-```sh
+``` sh
 make test
 ```
 
 ## build
 
-```sh
+``` sh
 make compile
 ```
 
@@ -31,11 +31,30 @@ dagger do build
 
 ## install
 
-```sh
+``` sh
 make install
 ```
 
-## TODO
+## usage
 
-- add jira issue creation
-- add a dry-run mode
+### scan a project
+
+simple project or group scan.\
+rasic will find all projects inside a group.
+
+``` sh
+rasic scan \
+    --project <PROJECT_OR_GROUP_ID> \
+    --token <A_OAUTH_TOKEN>
+```
+
+### scan a project or group including its container images
+
+include container images.
+
+``` sh
+rasic scan \
+    --container \
+    --project <PROJECT_OR_GROUP_ID> \
+    --token <A_OAUTH_TOKEN>
+```
