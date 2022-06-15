@@ -1,3 +1,10 @@
+## [1.6.1](https://gitlab.com/jstang/rasic/compare/v1.6.0...v1.6.1) (2022-06-15)
+
+
+### Miscellaneous Chores
+
+* update copyright year ([266cf01](https://gitlab.com/jstang/rasic/commit/266cf018c595e99b23f4f0e11e8e6ad21a1add16))
+
 # [1.6.0](https://gitlab.com/jstang/rasic/compare/v1.5.7...v1.6.0) (2022-06-15)
 
 
