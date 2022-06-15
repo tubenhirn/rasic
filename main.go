@@ -124,7 +124,7 @@ func main() {
 		},
 		Compiled:  time.Now(),
 		Authors:   []*cli.Author{{Name: "Johannes Stang", Email: "tubenhirn@gmail.com"}},
-		Copyright: "(c) 2021 tubenhirn.com",
+		Copyright: "(c) 2022 tubenhirn.com",
 		Reader:    nil,
 		Writer:    nil,
 		ErrWriter: nil,
