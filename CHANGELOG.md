@@ -1,3 +1,15 @@
+# [1.7.0](https://gitlab.com/jstang/rasic/compare/v1.6.1...v1.7.0) (2022-06-19)
+
+
+### Documentation
+
+* update README.md with some usage examples ([fa37ce7](https://gitlab.com/jstang/rasic/commit/fa37ce713264c84b62ad7052d393873727e87a71))
+
+
+### Features
+
+* **deps:** update module github.com/urfave/cli/v2 to v2.10.0 ([c06a49b](https://gitlab.com/jstang/rasic/commit/c06a49bdff838202526cb5756237dcbb1b15b0a8))
+
 ## [1.6.1](https://gitlab.com/jstang/rasic/compare/v1.6.0...v1.6.1) (2022-06-15)
 
 
