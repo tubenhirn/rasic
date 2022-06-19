@@ -61,7 +61,7 @@ func RepositoryScanner(client types.HTTPClient, source plugins.Source, project t
 		pterm.Error.Println(lookErr)
 	}
 
-	resultfilePath := strconv.Itoa(project.ID) + "_repo_result.json"
+	resultfilePath := "/tmp/scan-" + strconv.Itoa(project.ID) + "/repo_result.json"
 
 	// build args for repo scanning
 	commandArgs := []string{"-q", "repo", "--format=json", "--output=" + resultfilePath}
@@ -120,7 +120,7 @@ func containerScanner(client types.HTTPClient, source plugins.Source, project ty
 		pterm.Error.Println(lookErr)
 	}
 
-	resultfilePath := strconv.Itoa(project.ID) + "_image_result.json"
+	resultfilePath := "/tmp/scan-" + strconv.Itoa(project.ID) + "/image_result.json"
 
 	// build args for image scanning
 	commandArgs := []string{"-q", "image", "--format=json", "--output=" + resultfilePath}
