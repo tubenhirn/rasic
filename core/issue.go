@@ -15,7 +15,7 @@ func Template(project string, cve types.Vulnerabilities, packagetarget string, p
 	var cveSeverity types.Severity
 	cveSeverity = cve.Severity
 
-	newIssue := types.RasicIssue{Title: cve.VulnerabilityID, Description: generateMarkdown(cve, packagetarget, packagetype), ID: projectID, Severity: cveSeverity, Labels: []string{cve.Severity.String()}}
+	newIssue := types.RasicIssue{Title: cve.VulnerabilityID, Description: generateMarkdown(cve, packagetarget, packagetype), ID: projectID, Severity: cveSeverity, Labels: []string{cve.Severity.String(), "cve"}}
 
 	return newIssue, nil
 }
