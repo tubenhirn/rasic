@@ -1,3 +1,10 @@
+## [1.7.1](https://gitlab.com/jstang/rasic/compare/v1.7.0...v1.7.1) (2022-06-19)
+
+
+### Bug Fixes
+
+* add label "cve" to new issues ([24b0669](https://gitlab.com/jstang/rasic/commit/24b06690755b352944c7f88de9950b79abf6dd7f))
+
 # [1.7.0](https://gitlab.com/jstang/rasic/compare/v1.6.1...v1.7.0) (2022-06-19)
 
 
