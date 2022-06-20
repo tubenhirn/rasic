@@ -1,3 +1,10 @@
+## [1.7.2](https://gitlab.com/jstang/rasic/compare/v1.7.1...v1.7.2) (2022-06-20)
+
+
+### Bug Fixes
+
+* write result files to tmp directory ([a1c54cb](https://gitlab.com/jstang/rasic/commit/a1c54cb9235efa38b63f364d7432d51eb26e57e1))
+
 ## [1.7.1](https://gitlab.com/jstang/rasic/compare/v1.7.0...v1.7.1) (2022-06-19)
 
 
