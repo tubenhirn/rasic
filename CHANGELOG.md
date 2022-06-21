@@ -1,3 +1,16 @@
+# [1.8.0](https://gitlab.com/jstang/rasic/compare/v1.7.2...v1.8.0) (2022-06-21)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/pterm/pterm to v0.12.42 ([da7a9e9](https://gitlab.com/jstang/rasic/commit/da7a9e9e1a6035bed60b869a800683ce4e80e83d))
+* **deps:** update module github.com/urfave/cli/v2 to v2.10.2 ([e84bd50](https://gitlab.com/jstang/rasic/commit/e84bd5068040e672192edf1329ea0010742ea3fe))
+
+
+### Features
+
+* add issue close command ([2714b9b](https://gitlab.com/jstang/rasic/commit/2714b9bb0520aab64a56e12243af10c920094bbb))
+
 ## [1.7.2](https://gitlab.com/jstang/rasic/compare/v1.7.1...v1.7.2) (2022-06-20)
 
 
