@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/gob"
 	"encoding/json"
 	"io/ioutil"
@@ -143,12 +144,42 @@ func (a *ReporterGitlab) GetIssues(client types.HTTPClient, subject string, subj
 	state := "opened"
 	labels := "cve"
 
-	url := baseURL + apiPath + subject +"/" + subjectID + "/issues?per_page=" + strconv.Itoa(pageSize) + "&labels=" + labels + "&state=" + state
+	url := baseURL + apiPath + subject + "/" + subjectID + "/issues?per_page=" + strconv.Itoa(pageSize) + "&labels=" + labels + "&state=" + state
 
 	var collectedIssues []types.RasicIssue
 	collectedIssues = pagination(client, url, token, collectedIssues, startPage)
 
 	return collectedIssues
+}
+
+// edit a issue of a project
+func (a *ReporterGitlab) EditIssue(client types.HTTPClient, projectID string, issueID string, token string, editPayload types.RasicIssueUpdate) types.RasicIssue {
+	url := baseURL + apiPath + "projects/" + projectID + "/issues/" + issueID
+
+	issueUpdate := types.GitlabIssueUpdate{
+		StateEvent: editPayload.State,
+	}
+
+	res, err := apiCallPut(client, url, token, issueUpdate)
+	if err != nil {
+		pterm.Error.Println(err)
+		return types.RasicIssue{}
+	}
+
+	if res.Status == OK {
+		var issue types.GitlabIssue
+		if err := json.NewDecoder(res.Body).Decode(&issue); err != nil {
+			return types.RasicIssue{}
+		}
+		var returnValue types.RasicIssue
+		returnValue.ID = issue.ID
+		returnValue.Title = issue.Title
+		returnValue.State = issue.State
+
+		return returnValue
+	}
+
+	return types.RasicIssue{}
 }
 
 func (a *ReporterGitlab) GetFile(client types.HTTPClient, project string, filepath string, fileref string, token string) string {
@@ -298,6 +329,7 @@ var handshakeConfig = plugin.HandshakeConfig{
 func init() {
 	gob.Register(http.DefaultClient)
 	gob.Register(types.RasicIssue{})
+	gob.Register(types.RasicIssueUpdate{})
 	gob.Register(types.RasicLabel{})
 	gob.Register(map[string]interface{}{})
 }
@@ -317,7 +349,7 @@ func main() {
 
 // do a get api call against gitlab.com
 func apiCallGet(client types.HTTPClient, url string, token string) (*http.Response, error) {
-	req, reqerr := http.NewRequest("GET", url, nil)
+	req, reqerr := http.NewRequest(http.MethodGet, url, nil)
 
 	if reqerr != nil {
 		return nil, cli.NewExitError(reqerr, 1)
@@ -338,7 +370,7 @@ func apiCallGet(client types.HTTPClient, url string, token string) (*http.Respon
 
 // do a post api call against gitlab.com
 func apiCallPost(client types.HTTPClient, url string, token string, body string) (*http.Response, error) {
-	req, reqerr := http.NewRequest("POST", url, strings.NewReader(body))
+	req, reqerr := http.NewRequest(http.MethodPost, url, strings.NewReader(body))
 
 	if reqerr != nil {
 		return nil, cli.NewExitError(reqerr, 1)
@@ -346,6 +378,7 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 
 	// set auth header
 	req.Header.Set("PRIVATE-TOKEN", token)
+	// set content type
 	req.Header.Set("content-type", "application/json")
 
 	// do the request
@@ -355,4 +388,32 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 	}
 
 	return res, nil
+}
+
+// do a put api call against gitlab.com
+func apiCallPut(client types.HTTPClient, url string, token string, payload interface{}) (*http.Response, error) {
+
+	reqPayload, marshalErr := json.Marshal(payload)
+	if marshalErr != nil {
+		return nil, cli.NewExitError(marshalErr, 1)
+	}
+
+	req, reqerr := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(reqPayload))
+	if reqerr != nil {
+		return nil, cli.NewExitError(reqerr, 1)
+	}
+
+	// set auth header
+	req.Header.Set("PRIVATE-TOKEN", token)
+	// set content type
+	req.Header.Set("content-type", "application/json")
+
+	// do the request
+	res, reserr := client.Do(req)
+	if reserr != nil {
+		return nil, cli.NewExitError(reserr, 1)
+	}
+
+	return res, nil
+
 }

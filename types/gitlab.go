@@ -428,3 +428,7 @@ type GitlabLabel struct {
 	Subscribed             bool   `json:"subscribed,omitempty"`
 	TextColor              string `json:"text_color,omitempty"`
 }
+
+type GitlabIssueUpdate struct {
+	StateEvent string `json:"state_event,omitempty"`
+}

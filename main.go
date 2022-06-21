@@ -21,6 +21,7 @@ var appVersion string
 func init() {
 	gob.Register(http.DefaultClient)
 	gob.Register(types.RasicIssue{})
+	gob.Register(types.RasicIssueUpdate{})
 	gob.Register(types.RasicLabel{})
 	gob.Register(types.RasicProject{})
 	gob.Register(types.RasicRepository{})

@@ -21,6 +21,12 @@ type RasicIssue struct {
 	Labels      []string
 }
 
+// Update payload for issues
+// used to close issues
+type RasicIssueUpdate struct {
+	State string
+}
+
 type RasicProject struct {
 	ID             int
 	WebURL         string
