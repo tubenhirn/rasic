@@ -1,3 +1,15 @@
+## [1.8.1](https://gitlab.com/jstang/rasic/compare/v1.8.0...v1.8.1) (2022-06-24)
+
+
+### Bug Fixes
+
+* unset GITHUB_TOKEN if GITLAB_TOKEN is set ([6286d5d](https://gitlab.com/jstang/rasic/commit/6286d5dc1be7b5aa95b579e4e217bebacf052f1b))
+
+
+### Miscellaneous Chores
+
+* update dagger ([9203f67](https://gitlab.com/jstang/rasic/commit/9203f6714c68847e6daa80ada031b7f64a23d623))
+
 # [1.8.0](https://gitlab.com/jstang/rasic/compare/v1.7.2...v1.8.0) (2022-06-21)
 
 
