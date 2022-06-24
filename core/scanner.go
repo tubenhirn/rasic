@@ -82,6 +82,10 @@ func RepositoryScanner(client types.HTTPClient, source plugins.Source, project t
 	// set auth var for trivy - following the docs for scanning a remote repositry
 	// https://aquasecurity.github.io/trivy/v0.25.0/vulnerability/scanning/git-repository/
 	os.Setenv("GITLAB_TOKEN", token)
+	// unset private token. only one token can be set
+	// TODO: check uri for github or gitlab and
+	// decide what token to unset
+	os.Unsetenv("GITHUB_TOKEN")
 
 	// get current environment
 	env := os.Environ()
