@@ -67,6 +67,7 @@ dagger.#Plan & {
 		release: releasing.#Release & {
 			sourcecode: _source
 			authToken:  client.env.GITLAB_TOKEN
+			version: "v2.4.0"
 		}
 		"renovate": renovate.#Run & {
 			project:     "jstang/rasic"
