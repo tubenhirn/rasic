@@ -73,10 +73,10 @@ func (s *ReporterRPCServer) GetIssues(args map[string]interface{}, resp *[]types
 func (g *ReporterRPC) EditIssue(client types.HTTPClient, projectID string, issueID string, token string, editPayload types.RasicIssueUpdate) types.RasicIssue {
 	var resp types.RasicIssue
 	err := g.client.Call("Plugin.EditIssue", map[string]interface{}{
-		"client": client,
-		"projectID": projectID,
-		"issueID": issueID,
-		"token": token,
+		"client":      client,
+		"projectID":   projectID,
+		"issueID":     issueID,
+		"token":       token,
 		"editPayload": editPayload,
 	}, &resp)
 	if err != nil {

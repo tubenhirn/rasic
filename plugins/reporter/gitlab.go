@@ -392,7 +392,6 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 
 // do a put api call against gitlab.com
 func apiCallPut(client types.HTTPClient, url string, token string, payload interface{}) (*http.Response, error) {
-
 	reqPayload, marshalErr := json.Marshal(payload)
 	if marshalErr != nil {
 		return nil, cli.NewExitError(marshalErr, 1)
@@ -415,5 +414,4 @@ func apiCallPut(client types.HTTPClient, url string, token string, payload inter
 	}
 
 	return res, nil
-
 }

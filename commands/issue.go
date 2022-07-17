@@ -113,7 +113,6 @@ func Issues() *cli.Command {
 					pterm.Info.Println(string(bytes))
 
 					return nil
-
 				},
 				OnUsageError: func(cCtx *cli.Context, err error, isSubcommand bool) error {
 					return nil
