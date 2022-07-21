@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/go-hclog v1.2.1
 	github.com/hashicorp/go-plugin v1.4.4
 	github.com/pterm/pterm v0.12.42
-	github.com/urfave/cli/v2 v2.11.0
+	github.com/urfave/cli/v2 v2.11.1
 )
 
 require golang.org/x/exp v0.0.0-20220713135740-79cabaa25d75
