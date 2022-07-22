@@ -1,3 +1,11 @@
+## [1.9.3](https://gitlab.com/jstang/rasic/compare/v1.9.2...v1.9.3) (2022-07-22)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/pterm/pterm to v0.12.43 ([076907c](https://gitlab.com/jstang/rasic/commit/076907c3c19f4678959c37b4c04de2e1e31a60d2))
+* fix a bug where the tmp dir of a scanned project can not be deleted ([1ea3fce](https://gitlab.com/jstang/rasic/commit/1ea3fce06cb1ba50e60079d37a31aa959c4e6fa1))
+
 ## [1.9.2](https://gitlab.com/jstang/rasic/compare/v1.9.1...v1.9.2) (2022-07-21)
 
 
