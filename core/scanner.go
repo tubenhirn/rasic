@@ -22,12 +22,15 @@ func createLocalTempfile(client types.HTTPClient, source plugins.Source, project
 	fileString := source.GetFile(client, projectID, fileName, defaultBranch, authToken)
 	filePath := "/tmp/scan-" + projectID + "/"
 
+	// create tmp dir for ech project
+	// the result file is saved here too!
+	dirErr := os.Mkdir(filePath, 0755)
+	if dirErr != nil {
+		pterm.Warning.Println(dirErr)
+	}
+
 	if len(fileString) > 0 {
-		pterm.Info.Println("found " + fileName + " file in project")
-		dirErr := os.Mkdir(filePath, 0755)
-		if dirErr != nil {
-			pterm.Warning.Println(dirErr)
-		}
+		pterm.Info.Println("found " + fileName + " file in project, save it to " + filePath)
 		file, fileCreateError := os.Create(filePath + fileName)
 		if fileCreateError != nil {
 			return "", fileCreateError
@@ -44,13 +47,18 @@ func createLocalTempfile(client types.HTTPClient, source plugins.Source, project
 		return (filePath + fileName), nil
 	}
 	pterm.Info.Println("no " + fileName + " file in project - skip")
-	return "", nil
+	// return the tmp dir path as default return value
+	// used to clean up the tmp dir even if no file is downloaded
+	return filePath, nil
 }
 
 // remove temp dir used for project ignorefile
 func cleanTempFiles(fileName string) {
 	tempDir, _ := path.Split(fileName)
-	os.RemoveAll(tempDir)
+	err := os.RemoveAll(tempDir)
+	if err != nil {
+		pterm.Error.Println(err)
+	}
 }
 
 // scan a remote repository
@@ -64,7 +72,7 @@ func RepositoryScanner(client types.HTTPClient, source plugins.Source, project t
 	resultfilePath := "/tmp/scan-" + strconv.Itoa(project.ID) + "/repo_result.json"
 
 	// build args for repo scanning
-	commandArgs := []string{"-q", "repo", "--format=json", "--output=" + resultfilePath}
+	commandArgs := []string{"-q", "repo", project.WebURL, "--format=json", "--output=" + resultfilePath}
 
 	// look for a ignorefile in the project
 	// if it exists download it
@@ -72,12 +80,8 @@ func RepositoryScanner(client types.HTTPClient, source plugins.Source, project t
 		ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
 		ignorefileArg := "--ignorefile=" + ignorefilePath
 		commandArgs = append(commandArgs, ignorefileArg)
-
 		defer cleanTempFiles(ignorefilePath)
 	}
-
-	// append project to args
-	commandArgs = append(commandArgs, project.WebURL)
 
 	// set auth var for trivy - following the docs for scanning a remote repositry
 	// https://aquasecurity.github.io/trivy/v0.25.0/vulnerability/scanning/git-repository/
