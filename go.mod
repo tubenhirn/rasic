@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/hashicorp/go-hclog v1.2.1
 	github.com/hashicorp/go-plugin v1.4.4
-	github.com/pterm/pterm v0.12.43
+	github.com/pterm/pterm v0.12.44
 	github.com/urfave/cli/v2 v2.11.1
 )
 
