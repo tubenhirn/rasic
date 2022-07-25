@@ -16,20 +16,26 @@ import (
 	"gitlab.com/jstang/rasic/types/plugins"
 )
 
-// create a local files for additional configuration for projects
-// downloaded from the respective project given
-func createLocalTempfile(client types.HTTPClient, source plugins.Source, projectID string, fileName string, defaultBranch string, authToken string) (string, error) {
-	fileString := source.GetFile(client, projectID, fileName, defaultBranch, authToken)
-	filePath := "/tmp/scan-" + projectID + "/"
+func createLocalTmpDir(projectID string) (string, error) {
+	tmpDir := "/tmp/scan-" + projectID + "/"
 
 	// create tmp dir for ech project
-	// the result file is saved here too!
-	dirErr := os.Mkdir(filePath, 0755)
+	dirErr := os.Mkdir(tmpDir, 0755)
 	if dirErr != nil {
 		pterm.Warning.Println(dirErr)
+		return "", dirErr
 	}
 
-	if len(fileString) > 0 {
+	return tmpDir, nil
+}
+
+// create a local files for additional configuration for projects
+// downloaded from the respective project given
+func createLocalTempfile(client types.HTTPClient, source plugins.Source, projectID string, fileName string, defaultBranch string, authToken string, tmpDir string) (string, error) {
+	fileString := source.GetFile(client, projectID, fileName, defaultBranch, authToken)
+	filePath := tmpDir
+
+	if len(fileString) > 0 && filePath != "" {
 		pterm.Info.Println("found " + fileName + " file in project, save it to " + filePath)
 		file, fileCreateError := os.Create(filePath + fileName)
 		if fileCreateError != nil {
@@ -63,24 +69,45 @@ func cleanTempFiles(fileName string) {
 
 // scan a remote repository
 func RepositoryScanner(client types.HTTPClient, source plugins.Source, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
+
+	//TODO: make this a conf value
+	// maybe we want to keep the result json or any other file
+	// created by the scanner
+	keepTmpDir := false
+
+	// create a new tmp directory
+	// this is where we keep all our files
+	// TODO: make this a conf value
+	resultFileDir, dirErr := createLocalTmpDir(strconv.Itoa(project.ID))
+	if dirErr != nil {
+		return nil, dirErr
+	}
+
 	// find path to trivy binary
 	binary, lookErr := exec.LookPath("trivy")
 	if lookErr != nil {
 		pterm.Error.Println(lookErr)
 	}
 
-	resultfilePath := "/tmp/scan-" + strconv.Itoa(project.ID) + "/repo_result.json"
+	// name the result file
+	// TODO: make this a conf value
+	resultfilePath := resultFileDir + "/repo_result.json"
 
 	// build args for repo scanning
 	commandArgs := []string{"-q", "repo", project.WebURL, "--format=json", "--output=" + resultfilePath}
 
 	// look for a ignorefile in the project
 	// if it exists download it
+	// save it to the resultFileDir since we save all required files here
 	if project.IgnoreFileName != "" {
-		ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
+		ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token, resultFileDir)
 		ignorefileArg := "--ignorefile=" + ignorefilePath
 		commandArgs = append(commandArgs, ignorefileArg)
-		defer cleanTempFiles(ignorefilePath)
+	}
+
+	// remove tmp directory if not flagged to keep
+	if !keepTmpDir {
+		defer cleanTempFiles(resultFileDir)
 	}
 
 	// set auth var for trivy - following the docs for scanning a remote repositry
@@ -128,7 +155,15 @@ func containerScanner(client types.HTTPClient, source plugins.Source, project ty
 		pterm.Error.Println(lookErr)
 	}
 
-	resultfilePath := "/tmp/scan-" + strconv.Itoa(project.ID) + "/image_result.json"
+	// create a new tmp directory
+	// this is where we keep all our files
+	// TODO: make this a conf value
+	resultFileDir, dirErr := createLocalTmpDir(strconv.Itoa(project.ID))
+	if dirErr != nil {
+		return nil, dirErr
+	}
+
+	resultfilePath := resultFileDir + "/image_result.json"
 
 	// build args for image scanning
 	commandArgs := []string{"-q", "image", "--format=json", "--output=" + resultfilePath}
@@ -136,11 +171,9 @@ func containerScanner(client types.HTTPClient, source plugins.Source, project ty
 	// look for a ignorefile in the project
 	// if it exists download it
 	if project.IgnoreFileName != "" {
-		ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token)
+		ignorefilePath, _ := createLocalTempfile(client, source, strconv.Itoa(project.ID), project.IgnoreFileName, project.DefaultBranch, token, resultFileDir)
 		ignorefileArg := "--ignorefile=" + ignorefilePath
 		commandArgs = append(commandArgs, ignorefileArg)
-
-		defer cleanTempFiles(ignorefilePath)
 	}
 
 	// append project to args
@@ -232,10 +265,19 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 // scan container registries and collect cves
 // return them afterwards
 func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.Source, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
+
+	// create a new tmp directory
+	// this is where we keep all our files
+	// TODO: make this a conf value
+	resultFileDir, dirErr := createLocalTmpDir(strconv.Itoa(project.ID))
+	if dirErr != nil {
+		return []types.RasicIssue{}
+	}
+
 	// look for a rasic config file in the project
 	// if it exists download it
 	configfileName := ".rasicrc"
-	configfilePath, _ := createLocalTempfile(httpClient, apiPlugin, strconv.Itoa(project.ID), configfileName, project.DefaultBranch, authToken)
+	configfilePath, _ := createLocalTempfile(httpClient, apiPlugin, strconv.Itoa(project.ID), configfileName, project.DefaultBranch, authToken, resultFileDir)
 
 	var projectConfiguration types.RasicConfiguration
 	if configfilePath != "" {
