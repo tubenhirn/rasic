@@ -1,3 +1,16 @@
+## [1.9.4](https://gitlab.com/jstang/rasic/compare/v1.9.3...v1.9.4) (2022-07-25)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to a9213ee ([1471d3a](https://gitlab.com/jstang/rasic/commit/1471d3a56f713c4086d134d009e484fec8c5378f))
+* **deps:** update module github.com/pterm/pterm to v0.12.44 ([5467ec1](https://gitlab.com/jstang/rasic/commit/5467ec1363aec9ab4442aaf41611d0960b60418d))
+
+
+### Code Refactoring
+
+* change tmp directory creation ([ded5465](https://gitlab.com/jstang/rasic/commit/ded54650eeb8052890fd854b650b045fa4c7401e))
+
 ## [1.9.3](https://gitlab.com/jstang/rasic/compare/v1.9.2...v1.9.3) (2022-07-22)
 
 
