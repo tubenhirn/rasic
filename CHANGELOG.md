@@ -1,3 +1,10 @@
+## [1.9.5](https://gitlab.com/jstang/rasic/compare/v1.9.4...v1.9.5) (2022-07-25)
+
+
+### Bug Fixes
+
+* fix linting errors and add a "positiv" scan output ([c22d9c0](https://gitlab.com/jstang/rasic/commit/c22d9c06557edd72400a35861036cadce053008c))
+
 ## [1.9.4](https://gitlab.com/jstang/rasic/compare/v1.9.3...v1.9.4) (2022-07-25)
 
 
