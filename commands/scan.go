@@ -231,6 +231,8 @@ func Scan() *cli.Command {
 					pterm.Warning.Println(strconv.Itoa(newIssueCount) + " " + severity.String() + " issues found, check existing...")
 					core.CheckLabels(httpClient, reporterPlugin, currentProject, authToken)
 					core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				} else {
+					pterm.Info.Println("no issues found")
 				}
 				return nil
 			}
@@ -264,6 +266,8 @@ func Scan() *cli.Command {
 					pterm.Warning.Println(strconv.Itoa(newIssueCount) + " " + severity.String() + " issues found, check existing...")
 					core.CheckLabels(httpClient, reporterPlugin, currentProject, authToken)
 					core.OpenNewIssues(httpClient, reporterPlugin, currentProject, newIssues, authToken)
+				} else {
+					pterm.Info.Println("no issues found")
 				}
 			}
 

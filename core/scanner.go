@@ -69,7 +69,6 @@ func cleanTempFiles(fileName string) {
 
 // scan a remote repository
 func RepositoryScanner(client types.HTTPClient, source plugins.Source, project types.RasicProject, token string, knownIssues []types.RasicIssue, minSeverity types.Severity) ([]types.RasicIssue, error) {
-
 	//TODO: make this a conf value
 	// maybe we want to keep the result json or any other file
 	// created by the scanner
@@ -265,7 +264,6 @@ func buildIssueList(report types.CVEReport, knownIssues []types.RasicIssue, proj
 // scan container registries and collect cves
 // return them afterwards
 func ContainerRegistryScan(httpClient types.HTTPClient, apiPlugin plugins.Source, project types.RasicProject, userName string, authToken string, newIssues []types.RasicIssue, severity types.Severity, registryExcudePattern string) []types.RasicIssue {
-
 	// create a new tmp directory
 	// this is where we keep all our files
 	// TODO: make this a conf value
