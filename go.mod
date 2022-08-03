@@ -1,6 +1,6 @@
 module gitlab.com/jstang/rasic
 
-go 1.18
+go 1.19
 
 require (
 	github.com/hashicorp/go-hclog v1.2.2
