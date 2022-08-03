@@ -1,3 +1,22 @@
+# [1.10.0](https://gitlab.com/jstang/rasic/compare/v1.9.5...v1.10.0) (2022-08-03)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/hashicorp/go-hclog to v1.2.2 ([00a7506](https://gitlab.com/jstang/rasic/commit/00a7506878d71f6c23e560391946f5926c704c9c))
+* **deps:** update module github.com/pterm/pterm to v0.12.45 ([4a985df](https://gitlab.com/jstang/rasic/commit/4a985df10834173b132a36890b3b27c4d717fd61))
+
+
+### Features
+
+* **deps:** update module go to 1.19 ([266d261](https://gitlab.com/jstang/rasic/commit/266d26101e72ba794bedb6db4278b8f33fba019b))
+
+
+### Miscellaneous Chores
+
+* update dagger ([181f802](https://gitlab.com/jstang/rasic/commit/181f8027d39711e8145a574edf8103da97073277))
+* update dagger ([82a32b7](https://gitlab.com/jstang/rasic/commit/82a32b70e4d585225027c124f2423b2d9b5a07b3))
+
 ## [1.9.5](https://gitlab.com/jstang/rasic/compare/v1.9.4...v1.9.5) (2022-07-25)
 
 
