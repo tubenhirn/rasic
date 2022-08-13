@@ -222,7 +222,7 @@ func Scan() *cli.Command {
 				}
 
 				// scan the project contaienr registry if enabled
-				if scanContainers == true {
+				if scanContainers {
 					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 
@@ -257,7 +257,7 @@ func Scan() *cli.Command {
 				}
 
 				// scan the project contaienr registry if enabled
-				if scanContainers == true {
+				if scanContainers {
 					newIssues = core.ContainerRegistryScan(httpClient, apiPlugin, currentProject, userName, authToken, newIssues, severity, registryExclude)
 				}
 

@@ -5,7 +5,7 @@ import (
 	"dagger.io/dagger/core"
 	"universe.dagger.io/go"
 
-	"tubenhirn.com/ci/golangci"
+	"universe.dagger.io/alpha/go/golangci"
 	"tubenhirn.com/ci/releasing"
 	"tubenhirn.com/ci/renovate"
 )
@@ -61,7 +61,7 @@ dagger.#Plan & {
 		lint: {
 			go: golangci.#Lint & {
 				source:  _source
-				version: "1.45"
+				version: "1.48"
 			}
 		}
 		release: releasing.#Release & {
