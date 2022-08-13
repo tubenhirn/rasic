@@ -2,7 +2,6 @@ package core
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -131,7 +130,7 @@ func RepositoryScanner(client types.HTTPClient, source plugins.Source, project t
 		return nil, execErr
 	}
 
-	repoResult, err := ioutil.ReadFile(resultfilePath)
+	repoResult, err := os.ReadFile(resultfilePath)
 	if err != nil {
 		pterm.Error.Printf("Status: %s\n", "file read error")
 	}
@@ -203,7 +202,7 @@ func containerScanner(client types.HTTPClient, source plugins.Source, project ty
 		return nil, execErr
 	}
 
-	repoResult, err := ioutil.ReadFile(resultfilePath)
+	repoResult, err := os.ReadFile(resultfilePath)
 	if err != nil {
 		pterm.Error.Printf("Status: %s\n", "file read error")
 	}

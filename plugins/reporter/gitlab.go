@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
@@ -15,6 +14,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"gitlab.com/jstang/rasic/types"
 	"gitlab.com/jstang/rasic/types/plugins"
+	"io"
 )
 
 const baseURL = "https://gitlab.com"
@@ -52,10 +52,13 @@ func (a *ReporterGitlab) GetProjects(client types.HTTPClient, group string, toke
 		}
 		return returnValue
 	}
-	_, errRead := ioutil.ReadAll(res.Body)
+	_, errRead := io.ReadAll(res.Body)
 	if errRead != nil {
 		pterm.Error.Println(errRead)
 	}
+
+	defer res.Body.Close()
+
 	return nil
 }
 
@@ -83,10 +86,13 @@ func (a *ReporterGitlab) GetProject(client types.HTTPClient, project string, tok
 
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return types.RasicProject{}
 }
 
@@ -126,10 +132,12 @@ func pagination(client types.HTTPClient, url string, token string, collectedIssu
 		return collectedIssues
 	}
 
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
 
 	return nil
 }
@@ -179,6 +187,8 @@ func (a *ReporterGitlab) EditIssue(client types.HTTPClient, projectID string, is
 		return returnValue
 	}
 
+	defer res.Body.Close()
+
 	return types.RasicIssue{}
 }
 
@@ -193,12 +203,14 @@ func (a *ReporterGitlab) GetFile(client types.HTTPClient, project string, filepa
 	}
 
 	if res.Status == OK {
-		fileContent, readErr := ioutil.ReadAll(res.Body)
+		fileContent, readErr := io.ReadAll(res.Body)
 		if readErr != nil {
 			return ""
 		}
 		return string(fileContent)
 	}
+
+	defer res.Body.Close()
 
 	return ""
 }
@@ -237,10 +249,13 @@ func (a *ReporterGitlab) CreateIssue(client types.HTTPClient, project string, to
 
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return types.RasicIssue{}
 }
 
@@ -274,10 +289,13 @@ func (a *ReporterGitlab) GetLabels(client types.HTTPClient, project string, toke
 
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return nil
 }
 
@@ -311,10 +329,13 @@ func (a *ReporterGitlab) CreateLabel(client types.HTTPClient, project string, to
 
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return types.RasicLabel{}
 }
 
@@ -352,7 +373,7 @@ func apiCallGet(client types.HTTPClient, url string, token string) (*http.Respon
 	req, reqerr := http.NewRequest(http.MethodGet, url, nil)
 
 	if reqerr != nil {
-		return nil, cli.NewExitError(reqerr, 1)
+		return nil, cli.Exit(reqerr, 1)
 	}
 
 	// set auth header
@@ -361,7 +382,7 @@ func apiCallGet(client types.HTTPClient, url string, token string) (*http.Respon
 	// do the request
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		return nil, cli.NewExitError(reserr, 1)
+		return nil, cli.Exit(reserr, 1)
 	}
 
 	// retrun the response
@@ -373,7 +394,7 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 	req, reqerr := http.NewRequest(http.MethodPost, url, strings.NewReader(body))
 
 	if reqerr != nil {
-		return nil, cli.NewExitError(reqerr, 1)
+		return nil, cli.Exit(reqerr, 1)
 	}
 
 	// set auth header
@@ -384,7 +405,7 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 	// do the request
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		return nil, cli.NewExitError(reserr, 1)
+		return nil, cli.Exit(reserr, 1)
 	}
 
 	return res, nil
@@ -394,12 +415,12 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 func apiCallPut(client types.HTTPClient, url string, token string, payload interface{}) (*http.Response, error) {
 	reqPayload, marshalErr := json.Marshal(payload)
 	if marshalErr != nil {
-		return nil, cli.NewExitError(marshalErr, 1)
+		return nil, cli.Exit(marshalErr, 1)
 	}
 
 	req, reqerr := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(reqPayload))
 	if reqerr != nil {
-		return nil, cli.NewExitError(reqerr, 1)
+		return nil, cli.Exit(reqerr, 1)
 	}
 
 	// set auth header
@@ -410,7 +431,7 @@ func apiCallPut(client types.HTTPClient, url string, token string, payload inter
 	// do the request
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		return nil, cli.NewExitError(reserr, 1)
+		return nil, cli.Exit(reserr, 1)
 	}
 
 	return res, nil

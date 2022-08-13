@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/gob"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -50,10 +50,13 @@ func (a *SourceGitlab) GetProjects(client types.HTTPClient, group string, token 
 
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return nil
 }
 
@@ -81,10 +84,13 @@ func (a *SourceGitlab) GetProject(client types.HTTPClient, project string, token
 
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return types.RasicProject{}
 }
 
@@ -99,12 +105,14 @@ func (a *SourceGitlab) GetFile(client types.HTTPClient, project string, filepath
 	}
 
 	if res.Status == OK {
-		fileContent, readErr := ioutil.ReadAll(res.Body)
+		fileContent, readErr := io.ReadAll(res.Body)
 		if readErr != nil {
 			return ""
 		}
 		return string(fileContent)
 	}
+
+	defer res.Body.Close()
 
 	return ""
 }
@@ -135,10 +143,13 @@ func (a *SourceGitlab) GetRepositories(client types.HTTPClient, project string, 
 		}
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return nil
 }
 
@@ -172,10 +183,13 @@ func (a *SourceGitlab) GetRepository(client types.HTTPClient, repository string,
 
 		return returnValue
 	}
-	_, err = ioutil.ReadAll(res.Body)
+	_, err = io.ReadAll(res.Body)
 	if err != nil {
 		pterm.Error.Println(err)
 	}
+
+	defer res.Body.Close()
+
 	return types.RasicRepository{}
 }
 
@@ -212,7 +226,7 @@ func apiCallGet(client types.HTTPClient, url string, token string) (*http.Respon
 	req, reqerr := http.NewRequest("GET", url, nil)
 
 	if reqerr != nil {
-		return nil, cli.NewExitError(reqerr, 1)
+		return nil, cli.Exit(reqerr, 1)
 	}
 
 	// set auth header
@@ -221,7 +235,7 @@ func apiCallGet(client types.HTTPClient, url string, token string) (*http.Respon
 	// do the request
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		return nil, cli.NewExitError(reserr, 1)
+		return nil, cli.Exit(reserr, 1)
 	}
 
 	// retrun the response
@@ -233,7 +247,7 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 	req, reqerr := http.NewRequest("POST", url, strings.NewReader(body))
 
 	if reqerr != nil {
-		return nil, cli.NewExitError(reqerr, 1)
+		return nil, cli.Exit(reqerr, 1)
 	}
 
 	// set auth header
@@ -243,7 +257,7 @@ func apiCallPost(client types.HTTPClient, url string, token string, body string)
 	// do the request
 	res, reserr := client.Do(req)
 	if reserr != nil {
-		return nil, cli.NewExitError(reserr, 1)
+		return nil, cli.Exit(reserr, 1)
 	}
 
 	return res, nil
