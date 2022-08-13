@@ -1,3 +1,5 @@
+go: '1.19'
+
 run:
   skip-dirs:
     # progressui is a modified 3rd party library from buildkit
