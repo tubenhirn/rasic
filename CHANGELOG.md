@@ -1,3 +1,22 @@
+## [1.10.1](https://gitlab.com/jstang/rasic/compare/v1.10.0...v1.10.1) (2022-08-13)
+
+
+### Bug Fixes
+
+* cleanup golangci linting and do some linting ([5cef440](https://gitlab.com/jstang/rasic/commit/5cef440de134d3a16e69624443e9ea5b91688cf6))
+
+
+### Continuous Integration
+
+* update semantic-release to v2.4.2 ([353dc8c](https://gitlab.com/jstang/rasic/commit/353dc8c899b18fae1a66ccb45c29f09983e00739))
+
+
+### Miscellaneous Chores
+
+* more linting for go 1.19 ([7ebd00b](https://gitlab.com/jstang/rasic/commit/7ebd00bb23cece7f7eb5e3672c8bfa752de9b3a7))
+* update dagger ([cd07c15](https://gitlab.com/jstang/rasic/commit/cd07c15b6aea6a66f3c3ae75963fc4d3ff9b5eef))
+* update golang verion for golang-ci ([d49bb35](https://gitlab.com/jstang/rasic/commit/d49bb3543479706105528db3a728e519daeb790d))
+
 # [1.10.0](https://gitlab.com/jstang/rasic/compare/v1.9.5...v1.10.0) (2022-08-03)
 
 
