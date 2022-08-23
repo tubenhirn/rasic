@@ -1,3 +1,18 @@
+## [1.10.2](https://gitlab.com/jstang/rasic/compare/v1.10.1...v1.10.2) (2022-08-23)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 807a232 ([aefc48d](https://gitlab.com/jstang/rasic/commit/aefc48dd827c30ad12769b951a19aae83b1c872e))
+* **deps:** update module github.com/hashicorp/go-plugin to v1.4.5 ([e008adb](https://gitlab.com/jstang/rasic/commit/e008adbee6b565b1a8f55c06b870937ea78f4d9b))
+* **deps:** update module github.com/urfave/cli/v2 to v2.11.2 ([8a14012](https://gitlab.com/jstang/rasic/commit/8a140124f852341a8091b75236c00398820ed5ad))
+
+
+### Miscellaneous Chores
+
+* update dagger ([97ca17f](https://gitlab.com/jstang/rasic/commit/97ca17fcf694abacf3f6e659e9e34983c2cee4df))
+* update semantic-release version to v2.4.3 ([e180916](https://gitlab.com/jstang/rasic/commit/e18091697768e6d17815c5c516edfecd1c7ec689))
+
 ## [1.10.1](https://gitlab.com/jstang/rasic/compare/v1.10.0...v1.10.1) (2022-08-13)
 
 
