@@ -4,3 +4,5 @@ rasic
 /plugins/*/**/*
 !/plugins/*/**/*.go
 /bin
+
+dist/
