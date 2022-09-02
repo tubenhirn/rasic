@@ -6,6 +6,7 @@ import (
 	"universe.dagger.io/go"
 
 	"universe.dagger.io/alpha/go/golangci"
+	"universe.dagger.io/alpha/go/goreleaser"
 	"tubenhirn.com/ci/releasing"
 	"tubenhirn.com/ci/renovate"
 )
@@ -58,21 +59,29 @@ dagger.#Plan & {
 			}
 
 		}
+
 		lint: {
 			go: golangci.#Lint & {
 				source:  _source
 				version: "1.48"
 			}
 		}
+
 		release: releasing.#Release & {
 			sourcecode: _source
 			authToken:  client.env.GITLAB_TOKEN
 			version:    "v2.4.3"
 		}
+
 		"renovate": renovate.#Run & {
 			project:     "jstang/rasic"
 			gitlabToken: client.env.GITLAB_TOKEN
 			githubToken: client.env.GITHUB_TOKEN
+		}
+
+		releaser: goreleaser.#Release & {
+			source: _source
+			snapshot: true
 		}
 	}
 }

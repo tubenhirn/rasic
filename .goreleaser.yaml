@@ -1,0 +1,63 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+builds:
+  - main: ./main.go
+    id: "rasic"
+    binary: "{{ .Target }}/rasic"
+    no_unique_dist_dir: true
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: linux
+        goarch: arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - "-X main.appVersion={{.Env.APP_VERSION}}"
+
+  - main: ./plugins/source/gitlab.go
+    id: "source_gitlab"
+    binary: "{{ .Target }}/plugins/source/gitlab"
+    no_unique_dist_dir: true
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: linux
+        goarch: arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - "-X main.appVersion={{.Env.APP_VERSION}}"
+
+  - main: ./plugins/reporter/gitlab.go
+    id: "reporter_gitlab"
+    binary: "{{ .Target }}/plugins/reporter/gitlab"
+    no_unique_dist_dir: true
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: linux
+        goarch: arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - "-X main.appVersion={{.Env.APP_VERSION}}"
+
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      amd64: x86_64
+    wrap_in_directory: false
