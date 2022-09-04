@@ -1,3 +1,11 @@
+# [1.11.0](https://gitlab.com/jstang/rasic/compare/v1.10.3...v1.11.0) (2022-09-04)
+
+
+### Features
+
+* **deps:** update module github.com/hashicorp/go-hclog to v1.3.0 ([5636d96](https://gitlab.com/jstang/rasic/commit/5636d96d1402f65f01362958db4405044ae6aa8e))
+* use goreleaser ([db32d32](https://gitlab.com/jstang/rasic/commit/db32d32c8ebc68ca91edd9f20fc7bd608e2189c1))
+
 ## [1.10.3](https://gitlab.com/jstang/rasic/compare/v1.10.2...v1.10.3) (2022-08-29)
 
 
