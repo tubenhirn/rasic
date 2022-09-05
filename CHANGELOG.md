@@ -1,3 +1,15 @@
+## [1.11.1](https://gitlab.com/jstang/rasic/compare/v1.11.0...v1.11.1) (2022-09-05)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/pterm/pterm to v0.12.46 ([0f8c54c](https://gitlab.com/jstang/rasic/commit/0f8c54cdbe1a8c98b9849cfca7eb6534c97c4de4))
+
+
+### Continuous Integration
+
+* upload artifacts to gitlab.com package registry ([141afda](https://gitlab.com/jstang/rasic/commit/141afda6f9572cc8db8ebac3816bf01c6608cc55))
+
 # [1.11.0](https://gitlab.com/jstang/rasic/compare/v1.10.3...v1.11.0) (2022-09-04)
 
 
