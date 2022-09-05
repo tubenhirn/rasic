@@ -61,3 +61,6 @@ archives:
       linux: Linux
       amd64: x86_64
     wrap_in_directory: false
+
+gitlab_urls:
+  use_package_registry: true
