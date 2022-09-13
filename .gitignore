@@ -4,5 +4,6 @@ rasic
 /plugins/*/**/*
 !/plugins/*/**/*.go
 /bin
+.envrc
 
 dist/
