@@ -1,3 +1,27 @@
+# [1.13.0](https://gitlab.com/jstang/rasic/compare/v1.12.0...v1.13.0) (2022-09-13)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 5c715a9 ([581f57a](https://gitlab.com/jstang/rasic/commit/581f57af7fa929c60506af092bb8f741784cb3ba))
+* **deps:** update module github.com/urfave/cli/v2 to v2.16.3 ([f324da1](https://gitlab.com/jstang/rasic/commit/f324da1548c746a6e4bec9870c7f66c20a556bc0))
+
+
+### Continuous Integration
+
+* update release image ([e274f07](https://gitlab.com/jstang/rasic/commit/e274f07cac625fb069d815c39046202a13430a5a))
+
+
+### Features
+
+* **deps:** update module github.com/urfave/cli/v2 to v2.15.0 ([7218d08](https://gitlab.com/jstang/rasic/commit/7218d0852955e72df30d00299fc20c04228ce387))
+* **deps:** update module github.com/urfave/cli/v2 to v2.16.0 ([6a7f264](https://gitlab.com/jstang/rasic/commit/6a7f2642422ddfa7a5f15ec3cd0f3b183136d1f8))
+
+
+### Miscellaneous Chores
+
+* add .envrc to ignore ([c0bdc58](https://gitlab.com/jstang/rasic/commit/c0bdc587dcfca6e1b27177b15c6c7179e1e17166))
+
 # [1.12.0](https://gitlab.com/jstang/rasic/compare/v1.11.1...v1.12.0) (2022-09-07)
 
 
