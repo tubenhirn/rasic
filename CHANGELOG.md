@@ -1,3 +1,16 @@
+## [1.13.1](https://gitlab.com/jstang/rasic/compare/v1.13.0...v1.13.1) (2022-09-18)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 2d61f44 ([f146ebe](https://gitlab.com/jstang/rasic/commit/f146ebea2515a7047ddfb05c0885b42edc35b3c3))
+* **deps:** update golang.org/x/exp digest to b168a2c ([805ff00](https://gitlab.com/jstang/rasic/commit/805ff00898913acca43a94c0c15cf83b9c6ea612))
+
+
+### Miscellaneous Chores
+
+* update dagger ([6f61c53](https://gitlab.com/jstang/rasic/commit/6f61c53aee9be348e870fecec5f417b326852f3a))
+
 # [1.13.0](https://gitlab.com/jstang/rasic/compare/v1.12.0...v1.13.0) (2022-09-13)
 
 
