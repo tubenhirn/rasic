@@ -23,11 +23,18 @@ import (
 	// Build a snapshot instead of a tag
 	snapshot: bool | *false
 
+	// Remove dist dir
+	removeDist: bool | *false
+
+	// env vars
+	env: [string]: string | dagger.#Secret
+
 	go.#Container & {
 		name:     "goreleaser"
 		"source": source
 
 		entrypoint: [] // Support images that does not set goreleaser as the entrypoint
+		env: env
 		command: {
 			name: "goreleaser"
 
@@ -40,7 +47,12 @@ import (
 				if snapshot {
 					"--snapshot": true
 				}
+
+				if removeDist {
+					"--rm-dist": true
+				}
 			}
 		}
+		export: directories: "/src/dist": _
 	}
 }

@@ -16,6 +16,8 @@ dagger.#Plan & {
 	client: filesystem: "./bin": write: contents:                  actions.build."rasic".output
 	client: filesystem: "./bin/plugins/source": write: contents:   actions.build."source".output
 	client: filesystem: "./bin/plugins/reporter": write: contents: actions.build."reporter".output
+	client: filesystem: "./dist": write: contents:                 actions.releaser.export.directories."/src/dist"
+
 	client: env: {
 		GITLAB_TOKEN: dagger.#Secret
 		GITHUB_TOKEN: dagger.#Secret
@@ -80,8 +82,12 @@ dagger.#Plan & {
 		}
 
 		releaser: goreleaser.#Release & {
-			source: _source
-			snapshot: true
+			source:     _source
+			snapshot:   true
+			removeDist: true
+			env: {
+				"APP_VERSION": _version.contents
+			}
 		}
 	}
 }
