@@ -19,15 +19,13 @@
 # ██║  ██║██║  ██║███████║██║╚██████╗
 # ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝
 
-VERSION_STRING=`cat version`
+APP_VERSION=`cat version`
 
 all: compile
 
 compile: ## 🔨 Compile for the local architecture
 	@echo "Compiling..."
-	go build -o ./bin/plugins/source/gitlab ./plugins/source/gitlab.go
-	go build -o ./bin/plugins/reporter/gitlab ./plugins/reporter/gitlab.go
-	go build -o ./bin/rasic -ldflags "-X main.appVersion=${VERSION_STRING}"
+	goreleaser build --rm-dist
 
 install: ## 💣 install rasic
 	@echo "Installing..."
