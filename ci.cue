@@ -3,7 +3,6 @@ package ci
 import (
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
-	"universe.dagger.io/go"
 
 	"universe.dagger.io/alpha/go/golangci"
 	"universe.dagger.io/alpha/go/goreleaser"
@@ -13,9 +12,6 @@ import (
 
 dagger.#Plan & {
 	client: filesystem: ".": read: contents:                       dagger.#FS
-	client: filesystem: "./bin": write: contents:                  actions.build."rasic".output
-	client: filesystem: "./bin/plugins/source": write: contents:   actions.build."source".output
-	client: filesystem: "./bin/plugins/reporter": write: contents: actions.build."reporter".output
 	client: filesystem: "./dist": write: contents:                 actions.releaser.export.directories."/src/dist"
 
 	client: env: {
@@ -30,36 +26,14 @@ dagger.#Plan & {
 			path:  "version"
 		}
 		build: {
-			"rasic": go.#Build & {
-				source:  _source
-				os:      client.platform.os
-				arch:    client.platform.arch
-				ldflags: "-X main.appVersion=\(_version.contents)"
+			goreleaser.#Release & {
+				source:     _source
+				snapshot:   true
+				removeDist: true
 				env: {
-					CGO_ENABLED: "0"
+					"APP_VERSION": _version.contents
 				}
 			}
-			"source": go.#Build & {
-				source:  _source
-				package: "./plugins/source/gitlab.go"
-				os:      client.platform.os
-				arch:    client.platform.arch
-				env: {
-					CGO_ENABLED: "0"
-				}
-
-			}
-			"reporter": go.#Build & {
-				source:  _source
-				package: "./plugins/reporter/gitlab.go"
-				os:      client.platform.os
-				arch:    client.platform.arch
-				env: {
-					CGO_ENABLED: "0"
-				}
-
-			}
-
 		}
 
 		lint: {
@@ -83,7 +57,6 @@ dagger.#Plan & {
 
 		releaser: goreleaser.#Release & {
 			source:     _source
-			snapshot:   true
 			removeDist: true
 			env: {
 				"APP_VERSION": _version.contents
