@@ -71,7 +71,7 @@ dagger.#Plan & {
 				source:     _source
 				removeDist: true
 				env: {
-					"_hack": "\(_gp.success)"
+					"HACK_WAIT":    "\(_gp.output)"
 					"APP_VERSION":  _version.contents
 					"GITLAB_TOKEN": client.env.GITLAB_TOKEN
 				}
