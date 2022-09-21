@@ -70,8 +70,8 @@ dagger.#Plan & {
 			releaseArtifacts: goreleaser.#Release & {
 				source:     _source
 				removeDist: true
-				_hack: _gp.output
 				env: {
+					"_hack": "\(_gp.success)"
 					"APP_VERSION":  _version.contents
 					"GITLAB_TOKEN": client.env.GITLAB_TOKEN
 				}
