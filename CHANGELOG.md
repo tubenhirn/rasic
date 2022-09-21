@@ -1,3 +1,12 @@
+## [1.13.4](https://gitlab.com/jstang/rasic/compare/v1.13.3...v1.13.4) (2022-09-21)
+
+
+### Bug Fixes
+
+* fix job name for relase ([d3dc3e0](https://gitlab.com/jstang/rasic/commit/d3dc3e00c229343748e4ed3d1ef5e3bf14956dd9))
+* fix jobs ([2ca4fcb](https://gitlab.com/jstang/rasic/commit/2ca4fcb32b3d69735345be76703054960d8324b1))
+* fix release process and combine the two steps ([e1d4ac8](https://gitlab.com/jstang/rasic/commit/e1d4ac80c250fea80d6a073c06accd524c3a9e7e))
+
 ## [1.13.3](https://gitlab.com/jstang/rasic/compare/v1.13.2...v1.13.3) (2022-09-21)
 
 
