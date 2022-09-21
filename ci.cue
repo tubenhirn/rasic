@@ -19,6 +19,17 @@ dagger.#Plan & {
 		GITHUB_TOKEN: dagger.#Secret
 	}
 
+	client: commands: {
+		gf: {
+			name: "git fetch"
+			args: []
+		}
+		gp: {
+			name: "git pull"
+			args: []
+		}
+	}
+
 	actions: {
 		_source:  client.filesystem["."].read.contents
 		_version: core.#ReadFile & {
@@ -47,11 +58,19 @@ dagger.#Plan & {
 				authToken:  client.env.GITLAB_TOKEN
 				version:    "v2.5.0"
 			}
+			_gf: core.#Nop & {
+				_hack: semanticRelease.success
+				input: strings.TrimSpace(client.commands.gf.stdout)
+			}
+			_gp: core.#Nop & {
+				_hack: _gf.success
+				input: strings.TrimSpace(client.commands.gp.stdout)
+			}
 			releaseArtifacts: goreleaser.#Release & {
 				source:     _source
 				removeDist: true
+				_hack: _gp.success
 				env: {
-					"DONE_HACK": "\(semanticRelease.success)"
 					"APP_VERSION":  _version.contents
 					"GITLAB_TOKEN": client.env.GITLAB_TOKEN
 				}
