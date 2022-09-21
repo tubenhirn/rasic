@@ -41,10 +41,21 @@ dagger.#Plan & {
 			}
 		}
 
-		release: releasing.#Release & {
-			sourcecode: _source
-			authToken:  client.env.GITLAB_TOKEN
-			version:    "v2.5.0"
+		release: {
+			"semanticRelease": releasing.#Release & {
+				sourcecode: _source
+				authToken:  client.env.GITLAB_TOKEN
+				version:    "v2.5.0"
+			}
+			"goreleaser": goreleaser.#Release & {
+				source:     _source
+				removeDist: true
+				_doneHack: "\(semanticRelease.success)"
+				env: {
+					"APP_VERSION":  _version.contents
+					"GITLAB_TOKEN": client.env.GITLAB_TOKEN
+				}
+			}
 		}
 
 		"renovate": renovate.#Run & {
@@ -53,13 +64,5 @@ dagger.#Plan & {
 			githubToken: client.env.GITHUB_TOKEN
 		}
 
-		releaseArtifacts: goreleaser.#Release & {
-			source:     _source
-			removeDist: true
-			env: {
-				"APP_VERSION":  _version.contents
-				"GITLAB_TOKEN": client.env.GITLAB_TOKEN
-			}
-		}
 	}
 }
