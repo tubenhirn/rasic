@@ -1,3 +1,12 @@
+## [1.13.5](https://gitlab.com/jstang/rasic/compare/v1.13.4...v1.13.5) (2022-09-21)
+
+
+### Bug Fixes
+
+* fetch and pull on release ([313fd40](https://gitlab.com/jstang/rasic/commit/313fd40b5adb9d59524589ff09691e6ef17abae0))
+* fix release ([4ceb3e1](https://gitlab.com/jstang/rasic/commit/4ceb3e18c4632484727a95dc6dca81e719066c99))
+* fix release ([2d1c2ad](https://gitlab.com/jstang/rasic/commit/2d1c2ad2c119cfe2b68e6a3097ad512beeb68372))
+
 ## [1.13.4](https://gitlab.com/jstang/rasic/compare/v1.13.3...v1.13.4) (2022-09-21)
 
 
