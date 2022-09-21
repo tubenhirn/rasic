@@ -1,3 +1,23 @@
+## [1.13.2](https://gitlab.com/jstang/rasic/compare/v1.13.1...v1.13.2) (2022-09-21)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 46d9e77 ([94dd40e](https://gitlab.com/jstang/rasic/commit/94dd40ee6bc393795dcf55ad3400f456cf514b6a))
+* **deps:** update module github.com/hashicorp/go-hclog to v1.3.1 ([d07d113](https://gitlab.com/jstang/rasic/commit/d07d1132782a17101d74edb106ae09f0f4e42520))
+
+
+### Code Refactoring
+
+* **ci:** refactor build step and use goreleaser for snapshot builds ([5f0f0c9](https://gitlab.com/jstang/rasic/commit/5f0f0c94613a6853c118151e0ce7adb31d4d611f))
+
+
+### Continuous Integration
+
+* add packagerule for renovate ([316fbf2](https://gitlab.com/jstang/rasic/commit/316fbf226c321eaff7c010bd41cf032b163da551))
+* update compile step ([e3d479e](https://gitlab.com/jstang/rasic/commit/e3d479eafd485d2c927bd93ff4e17e532988b6ea))
+* use goreleaser with dagger for building ([07cb9e8](https://gitlab.com/jstang/rasic/commit/07cb9e8bd7ced6dc0dafac3a67e9194b6e50f335))
+
 ## [1.13.1](https://gitlab.com/jstang/rasic/compare/v1.13.0...v1.13.1) (2022-09-18)
 
 
