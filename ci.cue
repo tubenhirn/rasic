@@ -1,7 +1,6 @@
 package ci
 
 import (
-	"strings"
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
 
@@ -59,22 +58,14 @@ dagger.#Plan & {
 				authToken:  client.env.GITLAB_TOKEN
 				version:    "v2.5.0"
 			}
-			_gf: core.#Nop & {
-				_hack: semanticRelease.success
-				input: strings.TrimSpace(client.commands.gf.stdout)
-			}
-			_gp: core.#Nop & {
-				_hack: _gf.output
-				input: strings.TrimSpace(client.commands.gp.stdout)
-			}
-			releaseArtifacts: goreleaser.#Release & {
-				source:     _source
-				removeDist: true
-				env: {
-					"HACK_WAIT":    "\(_gp.output)"
-					"APP_VERSION":  _version.contents
-					"GITLAB_TOKEN": client.env.GITLAB_TOKEN
-				}
+		}
+
+		releaseArtifacts: goreleaser.#Release & {
+			source:     _source
+			removeDist: true
+			env: {
+				"APP_VERSION":  _version.contents
+				"GITLAB_TOKEN": client.env.GITLAB_TOKEN
 			}
 		}
 
