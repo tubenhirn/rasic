@@ -19,17 +19,6 @@ dagger.#Plan & {
 		GITHUB_TOKEN: dagger.#Secret
 	}
 
-	client: commands: {
-		gf: {
-			name: "git"
-			args: ["fetch"]
-		}
-		gp: {
-			name: "git"
-			args: ["pull"]
-		}
-	}
-
 	actions: {
 		_source:  client.filesystem["."].read.contents
 		_version: core.#ReadFile & {
