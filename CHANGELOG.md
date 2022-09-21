@@ -1,3 +1,10 @@
+## [1.13.7](https://gitlab.com/jstang/rasic/compare/v1.13.6...v1.13.7) (2022-09-21)
+
+
+### Bug Fixes
+
+* revert release to old version ([d67f132](https://gitlab.com/jstang/rasic/commit/d67f132e21d260147ca12055db0bc477a902cda1))
+
 ## [1.13.6](https://gitlab.com/jstang/rasic/compare/v1.13.5...v1.13.6) (2022-09-21)
 
 
