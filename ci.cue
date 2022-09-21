@@ -47,11 +47,11 @@ dagger.#Plan & {
 				authToken:  client.env.GITLAB_TOKEN
 				version:    "v2.5.0"
 			}
-			"goreleaser": goreleaser.#Release & {
+			releaseArtifacts: goreleaser.#Release & {
 				source:     _source
 				removeDist: true
-				_doneHack: "\(semanticRelease.success)"
 				env: {
+					"DONE_HACK": "\(semanticRelease.success)"
 					"APP_VERSION":  _version.contents
 					"GITLAB_TOKEN": client.env.GITLAB_TOKEN
 				}
