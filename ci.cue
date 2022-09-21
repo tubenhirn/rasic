@@ -42,7 +42,7 @@ dagger.#Plan & {
 		}
 
 		release: {
-			"semanticRelease": releasing.#Release & {
+			semanticRelease: releasing.#Release & {
 				sourcecode: _source
 				authToken:  client.env.GITLAB_TOKEN
 				version:    "v2.5.0"
