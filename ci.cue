@@ -1,6 +1,7 @@
 package ci
 
 import (
+	"strings"
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
 
@@ -21,12 +22,12 @@ dagger.#Plan & {
 
 	client: commands: {
 		gf: {
-			name: "git fetch"
-			args: []
+			name: "git"
+			args: ["fetch"]
 		}
 		gp: {
-			name: "git pull"
-			args: []
+			name: "git"
+			args: ["pull"]
 		}
 	}
 
@@ -63,13 +64,13 @@ dagger.#Plan & {
 				input: strings.TrimSpace(client.commands.gf.stdout)
 			}
 			_gp: core.#Nop & {
-				_hack: _gf.success
+				_hack: _gf.output
 				input: strings.TrimSpace(client.commands.gp.stdout)
 			}
 			releaseArtifacts: goreleaser.#Release & {
 				source:     _source
 				removeDist: true
-				_hack: _gp.success
+				_hack: _gp.output
 				env: {
 					"APP_VERSION":  _version.contents
 					"GITLAB_TOKEN": client.env.GITLAB_TOKEN
