@@ -11,8 +11,8 @@ import (
 )
 
 dagger.#Plan & {
-	client: filesystem: ".": read: contents:                       dagger.#FS
-	client: filesystem: "./dist": write: contents:                 actions.releaser.export.directories."/src/dist"
+	client: filesystem: ".": read: contents:       dagger.#FS
+	client: filesystem: "./dist": write: contents: actions.build.export.directories."/src/dist"
 
 	client: env: {
 		GITLAB_TOKEN: dagger.#Secret
@@ -25,14 +25,12 @@ dagger.#Plan & {
 			input: _source
 			path:  "version"
 		}
-		build: {
-			goreleaser.#Release & {
-				source:     _source
-				snapshot:   true
-				removeDist: true
-				env: {
-					"APP_VERSION": _version.contents
-				}
+		build: goreleaser.#Release & {
+			source:     _source
+			snapshot:   true
+			removeDist: true
+			env: {
+				"APP_VERSION": _version.contents
 			}
 		}
 
@@ -55,11 +53,12 @@ dagger.#Plan & {
 			githubToken: client.env.GITHUB_TOKEN
 		}
 
-		releaser: goreleaser.#Release & {
+		releaseArtifacts: goreleaser.#Release & {
 			source:     _source
 			removeDist: true
 			env: {
-				"APP_VERSION": _version.contents
+				"APP_VERSION":  _version.contents
+				"GITLAB_TOKEN": client.env.GITLAB_TOKEN
 			}
 		}
 	}
