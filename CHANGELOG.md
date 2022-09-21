@@ -1,3 +1,10 @@
+## [1.13.3](https://gitlab.com/jstang/rasic/compare/v1.13.2...v1.13.3) (2022-09-21)
+
+
+### Bug Fixes
+
+* fix releaseArtifacts job ([a17421c](https://gitlab.com/jstang/rasic/commit/a17421c4e84e4c3212b1079508e184e591df1bf6))
+
 ## [1.13.2](https://gitlab.com/jstang/rasic/compare/v1.13.1...v1.13.2) (2022-09-21)
 
 
