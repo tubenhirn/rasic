@@ -13,7 +13,8 @@ import (
 	platform:    *"gitlab" | string
 
 	_image: docker.#Pull & {
-		source: "renovate/renovate"
+		source:      "renovate/renovate"
+		resolveMode: "preferLocal"
 	}
 
 	docker.#Run & {
@@ -30,7 +31,7 @@ import (
 			RENOVATE_LABELS:               "renovate"
 			RENOVATE_AUTODISCOVER:         "true"
 			RENOVATE_AUTODISCOVER_FILTER:  project
-			LOG_LEVEL: "debug"
+			LOG_LEVEL:                     "error"
 		}
 	}
 }
