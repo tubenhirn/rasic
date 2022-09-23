@@ -6,8 +6,7 @@ import (
 
 	"universe.dagger.io/alpha/go/golangci"
 	"universe.dagger.io/alpha/go/goreleaser"
-	"tubenhirn.com/ci/releasing"
-	"tubenhirn.com/ci/renovate"
+	"github.com/tubenhirn/dagger-ci-modules/releasing"
 )
 
 dagger.#Plan & {
@@ -56,12 +55,6 @@ dagger.#Plan & {
 				"APP_VERSION":  _version.contents
 				"GITLAB_TOKEN": client.env.GITLAB_TOKEN
 			}
-		}
-
-		"renovate": renovate.#Run & {
-			project:     "jstang/rasic"
-			gitlabToken: client.env.GITLAB_TOKEN
-			githubToken: client.env.GITHUB_TOKEN
 		}
 
 	}

@@ -7,20 +7,25 @@ import (
 
 // create a release using semenatic-release
 #Run: {
-	gitlabToken: dagger.#Secret
-	githubToken: dagger.#Secret
-	project:     string
-	platform:    *"gitlab" | string
+	accessToken:        dagger.#Secret
+	githubToken:        dagger.#Secret
+	autodiscover:       *"false" | string
+	autodiscoverFilter: *"" | string
+	platform:           *"gitlab" | string
+	repositories:       *"" | string
+	version:            *"latest" | string
+	logLevel:           *"error" | string
 
 	_image: docker.#Pull & {
-		source:      "renovate/renovate"
+		source:      "renovate/renovate:\(version)"
 		resolveMode: "preferLocal"
 	}
 
 	docker.#Run & {
-		input: _image.output
+		input:  _image.output
+		always: true
 		env: {
-			RENOVATE_TOKEN:                gitlabToken
+			RENOVATE_TOKEN:                accessToken
 			GITHUB_COM_TOKEN:              githubToken
 			RENOVATE_PLATFORM:             platform
 			RENOVATE_EXTENDS:              "github>whitesource/merge-confidence:beta"
@@ -29,9 +34,10 @@ import (
 			RENOVATE_PIN_DIGEST:           "true"
 			RENOVATE_DEPENDENCY_DASHBOARD: "false"
 			RENOVATE_LABELS:               "renovate"
-			RENOVATE_AUTODISCOVER:         "true"
-			RENOVATE_AUTODISCOVER_FILTER:  project
-			LOG_LEVEL:                     "error"
+			RENOVATE_AUTODISCOVER:         autodiscover
+			RENOVATE_AUTODISCOVER_FILTER:  autodiscoverFilter
+			RENOVATE_REPOSITORIES:         repositories
+			LOG_LEVEL:                     logLevel
 		}
 	}
 }
