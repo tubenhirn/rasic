@@ -30,12 +30,6 @@
       "automerge": true,
       "gitLabAutomerge": true,
       "gitLabIgnoreApprovals": true
-    },
-    {
-      "description": "add skip release for build-tools updates",
-      "matchPackagePatterns": [".*build-tools.*"],
-      "matchPackageNames": ["jstang/build-tools"],
-      "commitBody": "[skip release]"
     }
   ]
 }
