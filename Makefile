@@ -29,8 +29,8 @@ compile: ## 🔨 Compile for the local architecture
 
 install: ## 💣 install rasic
 	@echo "Installing..."
-	sudo cp ./bin/rasic /usr/local/bin/rasic
-	(mkdir ~/.rasic || true) && cp -rf ./bin/plugins ~/.rasic
+	sudo cp ./dist/darwin_arm64/rasic /usr/local/bin/rasic
+	(mkdir ~/.rasic || true) && cp -rf ./dist/darwin_arm64/plugins ~/.rasic
 
 test: ## 😁 test your stuff
 	@echo "Testing..."
