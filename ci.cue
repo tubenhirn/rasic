@@ -5,7 +5,7 @@ import (
 	"dagger.io/dagger/core"
 
 	"universe.dagger.io/alpha/go/golangci"
-	"universe.dagger.io/alpha/go/goreleaser"
+	"github.com/tubenhirn/dagger-ci-modules/goreleaser"
 	"github.com/tubenhirn/dagger-ci-modules/releasing"
 )
 
