@@ -1,3 +1,29 @@
+## [1.13.8](https://gitlab.com/jstang/rasic/compare/v1.13.7...v1.13.8) (2022-09-29)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 439092d ([284c6fe](https://gitlab.com/jstang/rasic/commit/284c6fe73d4367d88b4e72b0259389ef337250f3))
+* **deps:** update golang.org/x/exp digest to c76eaa3 ([2784df8](https://gitlab.com/jstang/rasic/commit/2784df8c0cb302fd2f28d57cc333d312f91a349d))
+* **deps:** update golang.org/x/exp digest to de9c53c ([ca954d7](https://gitlab.com/jstang/rasic/commit/ca954d774110fb7f3d07675977ddbefbec76adf9))
+* **deps:** update module github.com/pterm/pterm to v0.12.47 ([cf286b1](https://gitlab.com/jstang/rasic/commit/cf286b1b5a6c8d5b5a77b80404aa30d98e0a12d3))
+
+
+### Continuous Integration
+
+* move to dagger-ci-modules ([c43cd57](https://gitlab.com/jstang/rasic/commit/c43cd576dd7fb0a12d9d6c44d23961fd1d3b409f))
+* remove old config for renovate.json ([7558036](https://gitlab.com/jstang/rasic/commit/7558036a9493d67b51fd8aa53102a3f4c5dd08e0))
+* remove unneeded commands ([a770efc](https://gitlab.com/jstang/rasic/commit/a770efc20e668c875302a438e9ce572b05cbfc20))
+* update ci modules ([4027737](https://gitlab.com/jstang/rasic/commit/40277375df91bb5b867c5ab0aa8d73d4ff4d6c4b))
+* update renovate job ([1d45fea](https://gitlab.com/jstang/rasic/commit/1d45feacc6adea4e03b7cceeefab2d989937fca2))
+* use a custom goreleaser script ([d552423](https://gitlab.com/jstang/rasic/commit/d55242380c63a80b6afc0ce203e4bc000cc3135b))
+
+
+### Miscellaneous Chores
+
+* update dagger ([d28a8e5](https://gitlab.com/jstang/rasic/commit/d28a8e51b9fe11ad6be58224737327bcce93678d))
+* update dagger modules ([e8bbcd0](https://gitlab.com/jstang/rasic/commit/e8bbcd0c532d64479062f21cc72b060824bf2b7f))
+
 ## [1.13.7](https://gitlab.com/jstang/rasic/compare/v1.13.6...v1.13.7) (2022-09-21)
 
 
