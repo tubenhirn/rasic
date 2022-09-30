@@ -5,11 +5,6 @@
   "ignorePaths": ["**/cue.mod/**"],
   "packageRules": [
     {
-      "description": "One week stability period for Go packages",
-      "matchDatasources": ["go"],
-      "stabilityDays": 7
-    },
-    {
       "description": "Trigger breaking release for major updates",
       "matchUpdateTypes": ["major"],
       "semanticCommitType": "feat",
