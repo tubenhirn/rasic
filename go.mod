@@ -9,7 +9,7 @@ require (
 	github.com/urfave/cli/v2 v2.20.3
 )
 
-require golang.org/x/exp v0.0.0-20221023144134-a1e5550cf13e
+require golang.org/x/exp v0.0.0-20221026153819-32f3d567a233
 
 require (
 	atomicgo.dev/cursor v0.1.1 // indirect
@@ -32,7 +32,7 @@ require (
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/net v0.0.0-20220531201128-c960675eff93 // indirect
-	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20220602131408-e326c6e8e9c8 // indirect
