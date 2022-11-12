@@ -1,3 +1,11 @@
+## [1.16.1](https://gitlab.com/jstang/rasic/compare/v1.16.0...v1.16.1) (2022-11-12)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 129d8d6 ([ddf8157](https://gitlab.com/jstang/rasic/commit/ddf8157a240fce0ff47c4513e4e1048de396a538))
+* **deps:** update module github.com/hashicorp/go-plugin to v1.4.6 ([412d980](https://gitlab.com/jstang/rasic/commit/412d98095abaffdb1001eff506dc19106f08025a))
+
 # [1.16.0](https://gitlab.com/jstang/rasic/compare/v1.15.1...v1.16.0) (2022-11-08)
 
 
