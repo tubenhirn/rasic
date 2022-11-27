@@ -1,3 +1,13 @@
+## [1.16.2](https://gitlab.com/jstang/rasic/compare/v1.16.1...v1.16.2) (2022-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 6ab00d0 ([3934e0c](https://gitlab.com/jstang/rasic/commit/3934e0c3dd939a227d66cb494f0ee328c165b656))
+* **deps:** update golang.org/x/exp digest to 8509921 ([0041c58](https://gitlab.com/jstang/rasic/commit/0041c580b8819bc97e3e7685acebe509090a79f7))
+* **deps:** update module github.com/pterm/pterm to v0.12.50 ([e837a19](https://gitlab.com/jstang/rasic/commit/e837a19c15d8072b73928d338980e5417927e41c))
+* **deps:** update module github.com/urfave/cli/v2 to v2.23.5 ([99a67c7](https://gitlab.com/jstang/rasic/commit/99a67c799c28eeafac9904b084bc1fdd55870d28))
+
 ## [1.16.1](https://gitlab.com/jstang/rasic/compare/v1.16.0...v1.16.1) (2022-11-12)
 
 
