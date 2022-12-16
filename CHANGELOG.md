@@ -1,3 +1,20 @@
+## [1.16.3](https://gitlab.com/jstang/rasic/compare/v1.16.2...v1.16.3) (2022-12-16)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 0915cd7 ([e03782c](https://gitlab.com/jstang/rasic/commit/e03782cafdfe076eccc0407ad72b5fb53d8c5e29))
+* **deps:** update golang.org/x/exp digest to 6dcec33 ([877c1ab](https://gitlab.com/jstang/rasic/commit/877c1ab6aa8b38e1fdaa6373a24e56cdfe04166a))
+* **deps:** update golang.org/x/exp digest to fae10dd ([0d644e4](https://gitlab.com/jstang/rasic/commit/0d644e41f9b0bff792e5ae79416822099493c88d))
+* **deps:** update module github.com/hashicorp/go-plugin to v1.4.8 ([d691bd8](https://gitlab.com/jstang/rasic/commit/d691bd878b49275a410151531c80fcee2d52ac9e))
+* **deps:** update module github.com/urfave/cli/v2 to v2.23.6 ([0ea147f](https://gitlab.com/jstang/rasic/commit/0ea147f928914a9f6e2d14756fffa71435bec4e2))
+* **deps:** update module github.com/urfave/cli/v2 to v2.23.7 ([2be67d3](https://gitlab.com/jstang/rasic/commit/2be67d3ec94c21ea888f93fa00cdb984a9c8d88c))
+
+
+### Build System
+
+* go mod tidy ([0eb02a8](https://gitlab.com/jstang/rasic/commit/0eb02a81df61bcb66198e67b2e1e4176cc714fea))
+
 ## [1.16.2](https://gitlab.com/jstang/rasic/compare/v1.16.1...v1.16.2) (2022-11-27)
 
 
