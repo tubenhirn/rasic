@@ -3,7 +3,7 @@ module gitlab.com/jstang/rasic
 go 1.19
 
 require (
-	github.com/hashicorp/go-hclog v1.3.1
+	github.com/hashicorp/go-hclog v1.4.0
 	github.com/hashicorp/go-plugin v1.4.8
 	github.com/pterm/pterm v0.12.50
 	github.com/urfave/cli/v2 v2.23.7
