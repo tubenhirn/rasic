@@ -1,3 +1,20 @@
+# [1.17.0](https://gitlab.com/jstang/rasic/compare/v1.16.3...v1.17.0) (2022-12-23)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 3c43f8b ([b8d70fe](https://gitlab.com/jstang/rasic/commit/b8d70feed97588fb8dcffdd97779a0919a8b6dc6))
+
+
+### Continuous Integration
+
+* add brew tap ([eab15e9](https://gitlab.com/jstang/rasic/commit/eab15e9d3616b28d28e98fe2bc31e2716b91ee32))
+
+
+### Features
+
+* **deps:** update module github.com/hashicorp/go-hclog to v1.4.0 ([19d978b](https://gitlab.com/jstang/rasic/commit/19d978bdb9abbb222e5fcfdb81855ee4d6461e4d))
+
 ## [1.16.3](https://gitlab.com/jstang/rasic/compare/v1.16.2...v1.16.3) (2022-12-16)
 
 
