@@ -6,7 +6,6 @@ import (
 
 	"universe.dagger.io/alpha/go/golangci"
 	"github.com/tubenhirn/dagger-ci-modules/goreleaser"
-	"github.com/tubenhirn/dagger-ci-modules/releasing"
 )
 
 dagger.#Plan & {
@@ -14,7 +13,6 @@ dagger.#Plan & {
 	client: filesystem: "./dist": write: contents: actions.build.export.directories."/src/dist"
 
 	client: env: {
-		GITLAB_TOKEN: dagger.#Secret
 		GITHUB_TOKEN: dagger.#Secret
 	}
 
@@ -40,20 +38,20 @@ dagger.#Plan & {
 			}
 		}
 
-		release: {
-			semanticRelease: releasing.#Release & {
-				sourcecode: _source
-				authToken:  client.env.GITLAB_TOKEN
-				version:    "v2.5.0"
-			}
-		}
+		// release: {
+		// 	semanticRelease: releasing.#Release & {
+		// 		sourcecode: _source
+		// 		authToken:  client.env.GITLAB_TOKEN
+		// 		version:    "v2.5.0"
+		// 	}
+		// }
 
-		releaseArtifacts: goreleaser.#Release & {
+		release: goreleaser.#Release & {
 			source:     _source
 			removeDist: true
 			env: {
 				"APP_VERSION":  _version.contents
-				"GITLAB_TOKEN": client.env.GITLAB_TOKEN
+				"GIHUB_TOKEN": client.env.GITHUB_TOKEN
 			}
 		}
 
