@@ -51,7 +51,7 @@ dagger.#Plan & {
 			removeDist: true
 			env: {
 				"APP_VERSION":  _version.contents
-				"GIHUB_TOKEN": client.env.GITHUB_TOKEN
+				"GITHUB_TOKEN": client.env.GITHUB_TOKEN
 			}
 		}
 
