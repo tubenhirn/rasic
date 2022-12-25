@@ -21,7 +21,7 @@ builds:
 
   - main: ./plugins/source/gitlab.go
     id: "source_gitlab"
-    binary: "{{ .Target }}/plugins/source/gitlab"
+    binary: "{{ .Target }}/plugins/source/source_gitlab"
     no_unique_dist_dir: true
     goos:
       - linux
@@ -39,7 +39,7 @@ builds:
 
   - main: ./plugins/reporter/gitlab.go
     id: "reporter_gitlab"
-    binary: "{{ .Target }}/plugins/reporter/gitlab"
+    binary: "{{ .Target }}/plugins/reporter/reporter_gitlab"
     no_unique_dist_dir: true
     goos:
       - linux
