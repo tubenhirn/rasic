@@ -62,7 +62,7 @@ func Issues() *cli.Command {
 					return nil
 				},
 				Action: func(c *cli.Context) error {
-					reporterName := c.String("reporter")
+					reporterName := "reporter_" + c.String("reporter")
 					pluginHome := c.String("pluginhome")
 					projectID := c.String("projectID")
 					issueID := c.String("issueID")
@@ -86,7 +86,7 @@ func Issues() *cli.Command {
 
 					pluginData := []types.RasicPlugin{
 						{
-							PluginPath:   "reporter",
+							// PluginPath:   "reporter",
 							PluginHome:   pluginHome,
 							PluginName:   reporterName,
 							PluginConfig: reporterhandshakeConfig,
@@ -211,7 +211,7 @@ func Issues() *cli.Command {
 
 					pluginData := []types.RasicPlugin{
 						{
-							PluginPath:   "reporter",
+							// PluginPath:   "reporter",
 							PluginHome:   pluginHome,
 							PluginName:   reporterName,
 							PluginConfig: reporterhandshakeConfig,

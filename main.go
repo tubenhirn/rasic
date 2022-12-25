@@ -31,10 +31,10 @@ func init() {
 func main() {
 	// determine current user dir
 	// this is required for the pluginhome directory
-	userHome, homeErr := os.UserHomeDir()
-	if homeErr != nil {
-		pterm.Error.Println(homeErr)
-	}
+	// userHome, homeErr := os.UserHomeDir()
+	// if homeErr != nil {
+	// 	pterm.Error.Println(homeErr)
+	// }
 
 	app := &cli.App{
 		Name:        "rasic",
@@ -91,13 +91,16 @@ func main() {
 			&cli.StringFlag{
 				Name:        "pluginhome",
 				Aliases:     []string{},
-				Usage:       "specify the location your plugins are stored",
-				EnvVars:     []string{"RASIC_PLUGINHOME"},
+				Usage:       "lookup homebrew user dir for plugins",
+				EnvVars:     []string{"HOMEBREW_PREFIX"},
 				FilePath:    "",
-				Required:    false,
+				Required:    true,
 				Hidden:      false,
 				TakesFile:   false,
-				Value:       userHome + "/.rasic/plugins/",
+				// TODO: rework plugin feature to use a user home based pathing.
+				// for now homebrew's user home is the base for our plugins.
+				// Value:       userHome + "/.rasic/plugins/",
+				Value:       "",
 				DefaultText: "",
 				Destination: new(string),
 				HasBeenSet:  false,

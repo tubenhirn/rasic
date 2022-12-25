@@ -47,7 +47,7 @@ type RasicTag struct {
 
 type RasicPlugin struct {
 	PluginHome   string
-	PluginPath   string
+	// PluginPath   string
 	PluginName   string
 	PluginConfig plugin.HandshakeConfig
 	PluginMap    map[string]plugin.Plugin

@@ -2,6 +2,7 @@ package core
 
 import (
 	"os/exec"
+	"strings"
 
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
@@ -22,7 +23,8 @@ func DispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugi
 		client := plugin.NewClient(&plugin.ClientConfig{
 			HandshakeConfig: currentPlugin.PluginConfig,
 			Plugins:         currentPlugin.PluginMap,
-			Cmd:             exec.Command(currentPlugin.PluginHome + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
+			// Cmd:             exec.Command(currentPlugin.PluginHome + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
+			Cmd:             exec.Command(currentPlugin.PluginHome + "/bin/" + currentPlugin.PluginName),
 			Logger:          logger,
 		})
 
@@ -35,7 +37,8 @@ func DispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugi
 		if dispenseErr != nil {
 			pterm.Error.Println(dispenseErr)
 		}
-		switch currentPlugin.PluginPath {
+		// TODO: remove this when plugin is reworked
+		switch strings.Split(currentPlugin.PluginName, "_")[0] {
 		case "source":
 			plug := raw.(plugins.Source)
 			returnAPIPlugin = plug

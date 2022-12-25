@@ -359,7 +359,7 @@ func main() {
 	gitlab := &ReporterGitlab{}
 
 	var pluginMap = map[string]plugin.Plugin{
-		"gitlab": &plugins.ReporterPlugin{Impl: gitlab},
+		"reporter_gitlab": &plugins.ReporterPlugin{Impl: gitlab},
 	}
 
 	plugin.Serve(&plugin.ServeConfig{

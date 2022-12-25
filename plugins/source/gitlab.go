@@ -212,7 +212,7 @@ func main() {
 	gitlab := &SourceGitlab{}
 
 	var pluginMap = map[string]plugin.Plugin{
-		"gitlab": &plugins.SourcePlugin{Impl: gitlab},
+		"source_gitlab": &plugins.SourcePlugin{Impl: gitlab},
 	}
 
 	plugin.Serve(&plugin.ServeConfig{

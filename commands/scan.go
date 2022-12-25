@@ -135,8 +135,8 @@ func Scan() *cli.Command {
 			return nil
 		},
 		Action: func(c *cli.Context) error {
-			sourceName := c.String("source")
-			reporterName := c.String("reporter")
+			sourceName := "source_" + c.String("source")
+			reporterName := "reporter_" + c.String("reporter")
 			pluginHome := c.String("pluginhome")
 			projectID := c.String("project")
 			userName := c.String("user")
@@ -160,10 +160,10 @@ func Scan() *cli.Command {
 			}
 
 			var sourcePluginMap = map[string]plugin.Plugin{
-				"gitlab": &plugins.SourcePlugin{},
+				"source_gitlab": &plugins.SourcePlugin{},
 			}
 			var reporterPluginMap = map[string]plugin.Plugin{
-				"gitlab": &plugins.ReporterPlugin{},
+				"reporter_gitlab": &plugins.ReporterPlugin{},
 			}
 
 			httpClient := &http.Client{}
@@ -176,14 +176,14 @@ func Scan() *cli.Command {
 
 			pluginData := []types.RasicPlugin{
 				{
-					PluginPath:   "source",
+					// PluginPath:   "source",
 					PluginHome:   pluginHome,
 					PluginName:   sourceName,
 					PluginConfig: sourcehandshakeConfig,
 					PluginMap:    sourcePluginMap,
 				},
 				{
-					PluginPath:   "reporter",
+					// PluginPath:   "reporter",
 					PluginHome:   pluginHome,
 					PluginName:   reporterName,
 					PluginConfig: reporterhandshakeConfig,
