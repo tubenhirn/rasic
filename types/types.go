@@ -32,6 +32,8 @@ type RasicProject struct {
 	WebURL         string
 	DefaultBranch  string
 	IgnoreFileName string
+	FullName       string
+	ProjectType    string
 }
 
 type RasicRepository struct {
@@ -46,7 +48,7 @@ type RasicTag struct {
 }
 
 type RasicPlugin struct {
-	PluginHome   string
+	PluginHome string
 	// PluginPath   string
 	PluginName   string
 	PluginConfig plugin.HandshakeConfig
