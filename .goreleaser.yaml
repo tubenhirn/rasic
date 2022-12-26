@@ -19,9 +19,27 @@ builds:
     ldflags:
       - "-X main.appVersion={{.Env.APP_VERSION}}"
 
-  - main: ./plugins/source/gitlab.go
+  - main: ./plugins/source/gitlab/gitlab.go
     id: "source_gitlab"
     binary: "{{ .Target }}/plugins/source/source_gitlab"
+    no_unique_dist_dir: true
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: linux
+        goarch: arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - "-X main.appVersion={{.Env.APP_VERSION}}"
+
+  - main: ./plugins/source/github/github.go
+    id: "source_github"
+    binary: "{{ .Target }}/plugins/source/source_github"
     no_unique_dist_dir: true
     goos:
       - linux
