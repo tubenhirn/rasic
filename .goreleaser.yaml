@@ -114,6 +114,9 @@ brews:
       name: goreleaserbot
       email: bot@goreleaser.com
 
+    dependencies:
+      - trivy
+
     # The project name and current git tag are used in the format string.
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
 
