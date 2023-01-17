@@ -1,3 +1,15 @@
+# [1.19.0](https://github.com/tubenhirn/rasic/compare/v1.18.1...v1.19.0) (2023-01-17)
+
+
+### Continuous Integration
+
+* add releasing dependency ([fb10df3](https://github.com/tubenhirn/rasic/commit/fb10df336adb7e786d5512ac141c37a49a3eb57d))
+
+
+### Features
+
+* do first semantic-release ([6cb0444](https://github.com/tubenhirn/rasic/commit/6cb04442787e3f8228ac5be493a119601e64c3bb))
+
 ## [1.18.1](https://github.com/tubenhirn/rasic/compare/v1.18.0...v1.18.1) (2023-01-17)
 
 
