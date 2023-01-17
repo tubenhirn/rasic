@@ -6,6 +6,7 @@ import (
 
 	"universe.dagger.io/alpha/go/golangci"
 	"github.com/tubenhirn/dagger-ci-modules/goreleaser"
+	"github.com/tubenhirn/dagger-ci-modules/releasing"
 )
 
 dagger.#Plan & {
@@ -38,13 +39,11 @@ dagger.#Plan & {
 			}
 		}
 
-		semanticRelease: {
-			semanticRelease: releasing.#Release & {
-				sourcecode: _source
-				platform:   "git"
-				authToken:  client.env.GITHUB_TOKEN
-				version:    "v2.9.0"
-			}
+		semanticRelease: releasing.#Release & {
+			sourcecode: _source
+			platform:   "git"
+			authToken:  client.env.GITHUB_TOKEN
+			version:    "v2.9.0"
 		}
 
 		release: goreleaser.#Release & {
