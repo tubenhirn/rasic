@@ -51,3 +51,9 @@ rasic scan \
     --project <PROJECT_OR_GROUP_ID> \
     --token <A_OAUTH_TOKEN>
 ```
+
+## release
+
+``` sh
+dagger-cue do release
+```
