@@ -1,3 +1,20 @@
+## [1.18.1](https://github.com/tubenhirn/rasic/compare/v1.18.0...v1.18.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 02c3fc3 ([ea19296](https://github.com/tubenhirn/rasic/commit/ea192968d9d706d52b56a2e6a5a2433b9b0e0dc3))
+* **deps:** update golang.org/x/exp digest to 1b44709 ([e298d9b](https://github.com/tubenhirn/rasic/commit/e298d9b3e664f7b5a1ee02ea13251a22c868ea21))
+* **deps:** update golang.org/x/exp digest to 1de6713 ([8975e7e](https://github.com/tubenhirn/rasic/commit/8975e7e1f105f3d34a557d954153ef8a04dd845e))
+* **deps:** update golang.org/x/exp digest to 738e83a ([ced3625](https://github.com/tubenhirn/rasic/commit/ced3625c34895de4948265a9adf2d9ed91a17d84))
+* **deps:** update golang.org/x/exp digest to 8879d01 ([b3be3cf](https://github.com/tubenhirn/rasic/commit/b3be3cf893cddd8781e1da8e760e8b0f4c9e8ac1))
+* **deps:** update module github.com/pterm/pterm to v0.12.53 ([db2b4f8](https://github.com/tubenhirn/rasic/commit/db2b4f861c1f762ccad53642646feb7a7b065cef))
+
+
+### Continuous Integration
+
+* add semantic-release github ([d5c96d6](https://github.com/tubenhirn/rasic/commit/d5c96d62480a2be2bf0c87bd101b226278e56b95))
+
 # [1.17.0](https://gitlab.com/jstang/rasic/compare/v1.16.3...v1.17.0) (2022-12-23)
 
 
