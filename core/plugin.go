@@ -23,6 +23,7 @@ func DispensePlugins(pluginList []types.RasicPlugin, logger hclog.Logger) (plugi
 		client := plugin.NewClient(&plugin.ClientConfig{
 			HandshakeConfig: currentPlugin.PluginConfig,
 			Plugins:         currentPlugin.PluginMap,
+			// TODO: use again when plugin is reworked
 			// Cmd:             exec.Command(currentPlugin.PluginHome + currentPlugin.PluginPath + "/" + currentPlugin.PluginName),
 			Cmd:             exec.Command(currentPlugin.PluginHome + "/bin/" + currentPlugin.PluginName),
 			Logger:          logger,

@@ -160,10 +160,10 @@ func Scan() *cli.Command {
 			}
 
 			var sourcePluginMap = map[string]plugin.Plugin{
-				"source_gitlab": &plugins.SourcePlugin{},
+				sourceName: &plugins.SourcePlugin{},
 			}
 			var reporterPluginMap = map[string]plugin.Plugin{
-				"reporter_gitlab": &plugins.ReporterPlugin{},
+				reporterName: &plugins.ReporterPlugin{},
 			}
 
 			httpClient := &http.Client{}
@@ -200,11 +200,19 @@ func Scan() *cli.Command {
 
 			pterm.Info.Println("scan for cve's")
 
+			// look if it is a group or an organisation
+			// if not - look for a single project
 			projects := apiPlugin.GetProjects(httpClient, projectID, authToken)
 			if len(projects) < 1 {
-				pterm.Info.Println("no projects found in group " + projectID + "(maybe it is a project?)")
+				pterm.Info.Println("no projects found under " + projectID)
 
 				singleProject := apiPlugin.GetProject(httpClient, projectID, authToken)
+				pterm.Info.Println(singleProject)
+				// return here if no project was found
+				if singleProject.WebURL == "" {
+					pterm.Info.Println("nothing here...")
+					return nil
+				}
 				var currentProject types.RasicProject
 				currentProject.ID = singleProject.ID
 				currentProject.WebURL = singleProject.WebURL
@@ -218,7 +226,7 @@ func Scan() *cli.Command {
 				tmpIssues, err := core.RepositoryScanner(httpClient, apiPlugin, currentProject, authToken, newIssues, severity)
 				newIssues = append(newIssues, tmpIssues...)
 				if err != nil {
-					pterm.Error.Println(err)
+					pterm.Error.Println("Error scanning repository. ", err)
 				}
 
 				// scan the project contaienr registry if enabled

@@ -39,7 +39,7 @@ func main() {
 	app := &cli.App{
 		Name:        "rasic",
 		HelpName:    "",
-		Usage:       "create issues from known cve's",
+		Usage:       "create issues for known cve's",
 		UsageText:   "",
 		ArgsUsage:   "",
 		Version:     appVersion,

@@ -1,7 +1,6 @@
 rasic
 /*result.json
 /blubb.json
-/plugins/*/**/*
 !/plugins/*/**/*.go
 /bin
 .envrc
