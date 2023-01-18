@@ -90,3 +90,34 @@ brews:
     # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
     # Default is false.
     skip_upload: false
+
+changelog:
+  use: git
+  # sort: asc
+  groups:
+    - title: 'Features'
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: 'Bug fixes'
+      regexp: '^.*?bug(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: 'Testing'
+      regexp: '^.*?tests(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: 'Performance Improvements'
+      regexp: '^.*?perf(\([[:word:]]+\))??!?:.+$'
+      order: 3
+    - title: 'Continuous Integration'
+      regexp: '^.*?ci(\([[:word:]]+\))??!?:.+$'
+      order: 4
+    - title: 'Documentation'
+      regexp: '^.*?docs(\([[:word:]]+\))??!?:.+$'
+      order: 4
+    - title: 'Code Refactoring'
+      regexp: '^.*?refactor(\([[:word:]]+\))??!?:.+$'
+      order: 5
+    - title: 'Miscellaneous Chores'
+      regexp: '^.*?chore(\([[:word:]]+\))??!?:.+$'
+      order: 6
+    - title: Others
+      order: 999
