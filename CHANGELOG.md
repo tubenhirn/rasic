@@ -1,3 +1,11 @@
+## [1.19.2](https://github.com/tubenhirn/rasic/compare/v1.19.1...v1.19.2) (2023-01-25)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to d38c7dc ([c01d692](https://github.com/tubenhirn/rasic/commit/c01d692599ba3fde2e361ff4dc924137cb6ed58b))
+* **deps:** update module github.com/pterm/pterm to v0.12.54 ([c90aca1](https://github.com/tubenhirn/rasic/commit/c90aca11df95ef93b8144f26491d39159480a18d))
+
 # [1.19.0](https://github.com/tubenhirn/rasic/compare/v1.18.1...v1.19.0) (2023-01-17)
 
 
