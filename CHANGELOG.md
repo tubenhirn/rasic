@@ -1,3 +1,16 @@
+# [1.20.0](https://github.com/tubenhirn/rasic/compare/v1.19.2...v1.20.0) (2023-01-29)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 31bee51 ([e2f6e15](https://github.com/tubenhirn/rasic/commit/e2f6e15fcc7baf4a1eee1c0d69ded327064ea2ea))
+* **deps:** update golang.org/x/exp digest to a67bb56 ([e2df9fc](https://github.com/tubenhirn/rasic/commit/e2df9fcd1fb1bcb129197b5aa0c914f90e91a389))
+
+
+### Features
+
+* **deps:** update module github.com/urfave/cli/v2 to v2.24.1 ([1da8a47](https://github.com/tubenhirn/rasic/commit/1da8a4727749b8c986bbc83126fb3da8b132a844))
+
 ## [1.19.2](https://github.com/tubenhirn/rasic/compare/v1.19.1...v1.19.2) (2023-01-25)
 
 
