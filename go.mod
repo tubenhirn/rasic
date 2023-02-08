@@ -9,7 +9,7 @@ require (
 	github.com/urfave/cli/v2 v2.24.2
 )
 
-require golang.org/x/exp v0.0.0-20230129154200-a960b3787bd2
+require golang.org/x/exp v0.0.0-20230206171751-46f607a40771
 
 require (
 	atomicgo.dev/cursor v0.1.1 // indirect
