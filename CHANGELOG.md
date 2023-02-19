@@ -1,3 +1,26 @@
+# [1.21.0](https://github.com/tubenhirn/rasic/compare/v1.20.0...v1.21.0) (2023-02-19)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 46f607a ([bc3e9ea](https://github.com/tubenhirn/rasic/commit/bc3e9ea86ad7eec47e984a69ab15953ea2a87b4f))
+* **deps:** update golang.org/x/exp digest to 5e25df0 ([115b2aa](https://github.com/tubenhirn/rasic/commit/115b2aa2677867ee86f8b9fee6b55cb0dddc0a45))
+* **deps:** update golang.org/x/exp digest to a960b37 ([9d4de32](https://github.com/tubenhirn/rasic/commit/9d4de32bc0559a6879bd0782c79f53fd415ee4cf))
+* **deps:** update module github.com/urfave/cli/v2 to v2.24.2 ([ee9fac8](https://github.com/tubenhirn/rasic/commit/ee9fac8944b6827f3aa3b1f92e27489eaa7c6962))
+* **deps:** update module github.com/urfave/cli/v2 to v2.24.3 ([b277aef](https://github.com/tubenhirn/rasic/commit/b277aef012146038675b9f74e8425d270416bfef))
+* **deps:** update module github.com/urfave/cli/v2 to v2.24.4 ([3fdac14](https://github.com/tubenhirn/rasic/commit/3fdac149e225ebca59508560cb6120b852538cbf))
+
+
+### Continuous Integration
+
+* make golang.org/x/net a direct dependency ([f0bbfc4](https://github.com/tubenhirn/rasic/commit/f0bbfc4873059acd46173462adbeca8d0b49ab76))
+
+
+### Features
+
+* **deps:** update module go to 1.20 ([1dd682a](https://github.com/tubenhirn/rasic/commit/1dd682a0bdf1369042e8b1272c7bd01bf21af8d3))
+* **deps:** update module golang.org/x/net to v0.7.0 ([ef15b5e](https://github.com/tubenhirn/rasic/commit/ef15b5eaf8d4676c5cd88c3445542b5780de44a3))
+
 # [1.20.0](https://github.com/tubenhirn/rasic/compare/v1.19.2...v1.20.0) (2023-01-29)
 
 
