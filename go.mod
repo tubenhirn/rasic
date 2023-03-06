@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/hashicorp/go-hclog v1.4.0
 	github.com/hashicorp/go-plugin v1.4.9
-	github.com/pterm/pterm v0.12.54
+	github.com/pterm/pterm v0.12.55
 	github.com/urfave/cli/v2 v2.25.0
 )
 
@@ -26,9 +26,9 @@ require (
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/oklog/run v1.1.0 // indirect
-	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
+	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/net v0.8.0
 	golang.org/x/sys v0.6.0 // indirect
