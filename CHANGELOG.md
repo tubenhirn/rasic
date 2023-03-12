@@ -1,3 +1,27 @@
+# [1.22.0](https://github.com/tubenhirn/rasic/compare/v1.21.0...v1.22.0) (2023-03-12)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 522b1b5 ([9997250](https://github.com/tubenhirn/rasic/commit/9997250ff0b1ddfe24e0ae52003e74e58728a3ce))
+* **deps:** update golang.org/x/exp digest to 9ff063c ([2fc9411](https://github.com/tubenhirn/rasic/commit/2fc94115376165509b6378455607b5401a114012))
+* **deps:** update golang.org/x/exp digest to c95f2b4 ([23ba7ec](https://github.com/tubenhirn/rasic/commit/23ba7ec7eefc11ba804877dbdf6a007a9d61a5d5))
+* **deps:** update golang.org/x/exp digest to f0f767c ([974d407](https://github.com/tubenhirn/rasic/commit/974d407666759d1487a61e8b32299c3c835372b4))
+* **deps:** update module github.com/hashicorp/go-plugin to v1.4.9 ([3a01766](https://github.com/tubenhirn/rasic/commit/3a01766b37db721c6b54e732cc3330d13fc1fdcf))
+* **deps:** update module github.com/pterm/pterm to v0.12.55 ([8cb798f](https://github.com/tubenhirn/rasic/commit/8cb798fddeba2fc7cefb82c1af49be5cb08d7d59))
+
+
+### Continuous Integration
+
+* move to dagger gosdk ([78cdb9d](https://github.com/tubenhirn/rasic/commit/78cdb9d41a90fdd92edf66806494870b36470e1f))
+* update dagger-ci-modules to v1.4.1 ([634119a](https://github.com/tubenhirn/rasic/commit/634119ac1c25232b1655748ea120c6eef058838d))
+
+
+### Features
+
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.0 ([8641467](https://github.com/tubenhirn/rasic/commit/8641467b687f7d3783447f29bf06a61bfc3a0277))
+* **deps:** update module golang.org/x/net to v0.8.0 ([d45ec8a](https://github.com/tubenhirn/rasic/commit/d45ec8ae5ede981b6fe5786734a03860bc599a95))
+
 # [1.21.0](https://github.com/tubenhirn/rasic/compare/v1.20.0...v1.21.0) (2023-02-19)
 
 
