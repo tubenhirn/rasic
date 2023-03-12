@@ -1,4 +1,4 @@
-# Copyright © 2021 Johannes Stang <tubenhirn@gmail.com>
+# Copyright © 2023 Johannes Stang <tubenhirn@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,22 +19,17 @@
 # ██║  ██║██║  ██║███████║██║╚██████╗
 # ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝
 
-APP_VERSION=`cat version`
+build: ## build rasic
+	@echo "building..."
+	go run .dagger/ci.go --task=release --snapshot=true
 
-all: compile
+tag: ## tag rasic
+	@echo "taggin..."
+	go run .dagger/ci.go --task=tag
 
-compile: ## 🔨 Compile for the local architecture
-	@echo "Compiling..."
-	goreleaser build --rm-dist
-
-install: ## 💣 install rasic
-	@echo "Installing..."
-	sudo cp ./dist/darwin_arm64/rasic /usr/local/bin/rasic
-	(mkdir ~/.rasic || true) && cp -rf ./dist/darwin_arm64/plugins ~/.rasic
-
-test: ## 😁 test your stuff
-	@echo "Testing..."
-	go test -v ./...
+release: ## release rasic
+	@echo "release..."
+	go run .dagger/ci.go --task=release --snapshot=false
 
 .PHONY: help
 help:  ## 🤔 Show help messages for make targets
