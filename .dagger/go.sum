@@ -1,5 +1,5 @@
-dagger.io/dagger v0.5.0 h1:7hQnA/pFMpEkuaU2ScNWoZznTa6DbIqHnwBJwL5bBQY=
-dagger.io/dagger v0.5.0/go.mod h1:1nbGnLdIfoBV2ahbQjheI//SNGz+b5q1jqf0A+pJ+Oc=
+dagger.io/dagger v0.5.1 h1:xu+jG2+ya1nhjUDInn8pG2s/4RJkUUis1bywFTZyvtA=
+dagger.io/dagger v0.5.1/go.mod h1:1nbGnLdIfoBV2ahbQjheI//SNGz+b5q1jqf0A+pJ+Oc=
 github.com/99designs/gqlgen v0.17.2/go.mod h1:K5fzLKwtph+FFgh9j7nFbRUdBKvTcGnsta51fsMTn3o=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Khan/genqlient v0.5.0 h1:TMZJ+tl/BpbmGyIBiXzKzUftDhw4ZWxQZ+1ydn0gyII=
@@ -50,14 +50,6 @@ github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81P
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.0.1 h1:MaX+VftlHeYJnev66s23T5vV5w61wt7HoPK+AvyjBdI=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.0.1/go.mod h1:rIZO1vjPa0l3TJECss7FpFxu+hL8lSarIuoDSxRRTlw=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.1.0 h1:ZyPjSaNjO5S63G/+4Tqtg01O+eZMxgUYHXE4740ihF8=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.1.0/go.mod h1:rIZO1vjPa0l3TJECss7FpFxu+hL8lSarIuoDSxRRTlw=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.2.0 h1:2M5mBQApCjZY+M8yJpcTXFIG7lZzRWF+3hPnn0u72T4=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.2.0/go.mod h1:rIZO1vjPa0l3TJECss7FpFxu+hL8lSarIuoDSxRRTlw=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.3.0 h1:qFCIR1CS7ZhchZYXYvxGMeke39r3Wte3dmvkEBj28Rc=
-github.com/tubenhirn/dagger-ci-modules/v4 v4.3.0/go.mod h1:rIZO1vjPa0l3TJECss7FpFxu+hL8lSarIuoDSxRRTlw=
 github.com/tubenhirn/dagger-ci-modules/v4 v4.4.1 h1:c+Wg52oAfBYOXy0nBsdV0umTWndwFm03fpsXT7lNDtc=
 github.com/tubenhirn/dagger-ci-modules/v4 v4.4.1/go.mod h1:rIZO1vjPa0l3TJECss7FpFxu+hL8lSarIuoDSxRRTlw=
 github.com/urfave/cli/v2 v2.3.0/go.mod h1:LJmUH05zAU44vOAcrfzZQKsZbVcdbOG8rtL3/XcUArI=
