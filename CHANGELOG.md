@@ -1,3 +1,21 @@
+## [1.23.1](https://github.com/tubenhirn/rasic/compare/v1.23.0...v1.23.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 10a5072 ([5737b83](https://github.com/tubenhirn/rasic/commit/5737b83ce1132003d1fc70107319b5008b8c47e7))
+* **deps:** update golang.org/x/exp digest to 642cace ([dcd15cc](https://github.com/tubenhirn/rasic/commit/dcd15cca3ef414c762529d4ed51e50ace412945f))
+* **deps:** update module dagger.io/dagger to v0.5.1 ([c9c99dc](https://github.com/tubenhirn/rasic/commit/c9c99dc788c2ae3066dbe702ccea3c641448a1bd))
+* **deps:** update module dagger.io/dagger to v0.5.2 ([6cc57fc](https://github.com/tubenhirn/rasic/commit/6cc57fcbecfc1ad198d68a7ed7d989bcee50a7af))
+* **deps:** update module github.com/hashicorp/go-hclog to v1.5.0 ([5c0b594](https://github.com/tubenhirn/rasic/commit/5c0b5949c4f22405a59de4695531af9150f9acb9))
+* **deps:** update module github.com/pterm/pterm to v0.12.57 ([dc7c63e](https://github.com/tubenhirn/rasic/commit/dc7c63e0099829844d53e34ac20cc3f06eca7c44))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v4.4.2 ([309aba8](https://github.com/tubenhirn/rasic/commit/309aba857bfea8c5fcdd463123241db7c6d4444a))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v4.4.3 ([11e0978](https://github.com/tubenhirn/rasic/commit/11e097877eca436e0eb042490f4f501ce5769de0))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v4.4.4 ([c8249d2](https://github.com/tubenhirn/rasic/commit/c8249d2e20278e6af3790aaac2b276716e8399cd))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v4.4.5 ([a1fb247](https://github.com/tubenhirn/rasic/commit/a1fb247e14af942980ad348ee4249723bc1ba969))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v4.4.6 ([95cad6d](https://github.com/tubenhirn/rasic/commit/95cad6d96e2a721d7822c067db7daa9b9b0b6eed))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.1 ([ffda736](https://github.com/tubenhirn/rasic/commit/ffda73683c29c1f4f89b9b44a15ead440d88c22a))
+
 # [1.23.0](https://github.com/tubenhirn/rasic/compare/v1.22.0...v1.23.0) (2023-03-15)
 
 
