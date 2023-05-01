@@ -44,6 +44,8 @@ func (a *SourceGitlab) GetProjects(client types.HTTPClient, group string, token 
 				ID:            pro.ID,
 				WebURL:        pro.WebURL,
 				DefaultBranch: pro.DefaultBranch,
+				FullName: "",
+				ProjectType: "gitlab",
 			}
 			returnValue = append(returnValue, ele)
 		}
@@ -81,6 +83,8 @@ func (a *SourceGitlab) GetProject(client types.HTTPClient, project string, token
 		returnValue.ID = project.ID
 		returnValue.WebURL = project.WebURL
 		returnValue.DefaultBranch = project.DefaultBranch
+		returnValue.FullName = ""
+		returnValue.ProjectType = "gitlab"
 
 		return returnValue
 	}
