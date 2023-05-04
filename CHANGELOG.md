@@ -1,3 +1,10 @@
+## [1.23.3](https://github.com/tubenhirn/rasic/compare/v1.23.2...v1.23.3) (2023-05-04)
+
+
+### Miscellaneous Chores
+
+* add go.work.sum ([92dc54f](https://github.com/tubenhirn/rasic/commit/92dc54f96fea4b5861a6aff26643dc2c9429a8c8))
+
 ## [1.23.2](https://github.com/tubenhirn/rasic/compare/v1.23.1...v1.23.2) (2023-05-04)
 
 
