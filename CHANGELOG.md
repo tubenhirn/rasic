@@ -1,3 +1,18 @@
+## [1.23.2](https://github.com/tubenhirn/rasic/compare/v1.23.1...v1.23.2) (2023-05-04)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 133eef4 ([f466880](https://github.com/tubenhirn/rasic/commit/f466880a536c371ed60d26369faace29c177109a))
+* **deps:** update golang.org/x/exp digest to 47ecfdc ([89fc4e2](https://github.com/tubenhirn/rasic/commit/89fc4e259b484ec51c8ba2ddb2812d3506f328e5))
+* **deps:** update module dagger.io/dagger to v0.6.0 ([fd6fbf1](https://github.com/tubenhirn/rasic/commit/fd6fbf17aa12f63936e012b46c36c5804b5015b4))
+* **deps:** update module dagger.io/dagger to v0.6.1 ([5fdb513](https://github.com/tubenhirn/rasic/commit/5fdb513dde27b6d088c6b2cbcbcfde4e792f3db3))
+* **deps:** update module github.com/pterm/pterm to v0.12.58 ([4a5987e](https://github.com/tubenhirn/rasic/commit/4a5987e76ed814f459d4007c60fbf5ece78fbaf3))
+* **deps:** update module github.com/pterm/pterm to v0.12.59 ([23687d4](https://github.com/tubenhirn/rasic/commit/23687d48e4f4c012665dece9a01ef6cd0555cc2d))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v4.4.7 ([6b17879](https://github.com/tubenhirn/rasic/commit/6b1787937107e69e04c5252bb97006b865316fca))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v4.4.8 ([6f359a4](https://github.com/tubenhirn/rasic/commit/6f359a429cc52c38b3558b10233ed6a6a30740e2))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.3 ([8baba05](https://github.com/tubenhirn/rasic/commit/8baba059ad42eecf13fea136f087baffb8e3f192))
+
 ## [1.23.1](https://github.com/tubenhirn/rasic/compare/v1.23.0...v1.23.1) (2023-04-03)
 
 
