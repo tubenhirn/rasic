@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.4.9
-	github.com/pterm/pterm v0.12.61
+	github.com/pterm/pterm v0.12.62
 	github.com/urfave/cli/v2 v2.25.3
 )
 
@@ -21,7 +21,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gookit/color v1.5.3 // indirect
 	github.com/hashicorp/yamux v0.0.0-20211028200310-0bc27b27de87 // indirect
-	github.com/lithammer/fuzzysearch v1.1.7 // indirect
+	github.com/lithammer/fuzzysearch v1.1.8 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
