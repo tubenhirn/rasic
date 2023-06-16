@@ -1,3 +1,10 @@
+## [1.23.8](https://github.com/tubenhirn/rasic/compare/v1.23.7...v1.23.8) (2023-06-16)
+
+
+### Miscellaneous Chores
+
+* update go deps ([8be77a9](https://github.com/tubenhirn/rasic/commit/8be77a9bc891163d5af192c1ebdc9b95ecb260ab))
+
 ## [1.23.7](https://github.com/tubenhirn/rasic/compare/v1.23.6...v1.23.7) (2023-06-16)
 
 
