@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/hashicorp/go-hclog v1.5.0
-	github.com/hashicorp/go-plugin v1.4.10
+	github.com/hashicorp/go-plugin v1.5.1
 	github.com/pterm/pterm v0.12.67
 	github.com/urfave/cli/v2 v2.25.7
 )
@@ -37,5 +37,5 @@ require (
 	golang.org/x/text v0.12.0 // indirect
 	google.golang.org/genproto v0.0.0-20220602131408-e326c6e8e9c8 // indirect
 	google.golang.org/grpc v1.46.2 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.2-0.20230222093303-bc1253ad3743 // indirect
 )
