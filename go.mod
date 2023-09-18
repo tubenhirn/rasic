@@ -1,11 +1,13 @@
 module gitlab.com/jstang/rasic
 
-go 1.20
+go 1.21
+
+toolchain go1.21.1
 
 require (
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.5.1
-	github.com/pterm/pterm v0.12.67
+	github.com/pterm/pterm v0.12.69
 	github.com/urfave/cli/v2 v2.25.7
 )
 
