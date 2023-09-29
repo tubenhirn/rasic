@@ -31,7 +31,8 @@ func main() {
 		fmt.Println("running with flags:", "\nsnapshot", *snapshot, "\nremovedist", *clean)
 
 		var secrets = make(map[string]dagger.SecretID)
-		githubTokenId, err := client.Host().EnvVariable("GITHUB_TOKEN").Secret().ID(ctx)
+		githubtoken := os.Getenv("GITHUB_TOKEN")
+		githubTokenId, err := client.SetSecret("GITHUB_TOKEN", githubtoken).ID(ctx)
 		if err != nil {
 			panic(err)
 		}
@@ -59,7 +60,8 @@ func main() {
 		}
 	} else if *task == "tag" {
 		var secrets = make(map[string]dagger.SecretID)
-		githubTokenId, err := client.Host().EnvVariable("GITHUB_TOKEN").Secret().ID(ctx)
+		githubtoken := os.Getenv("GITHUB_TOKEN")
+		githubTokenId, err := client.SetSecret("GITHUB_TOKEN", githubtoken).ID(ctx)
 		if err != nil {
 			panic(err)
 		}
@@ -68,7 +70,7 @@ func main() {
 		dir, _ := os.Getwd()
 
 		options := cimodules.SemanticOpts{
-			Source:   dir,
+			Source: dir,
 			// use "git" for tag only
 			// release is done with goreleaser
 			Platform: "git",
