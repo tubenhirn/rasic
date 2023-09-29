@@ -1,3 +1,40 @@
+## [1.23.10](https://github.com/tubenhirn/rasic/compare/v1.23.9...v1.23.10) (2023-09-29)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 06a737e ([a16e0ac](https://github.com/tubenhirn/rasic/commit/a16e0acc51732a782ce6e8abe07629a085b3ec59))
+* **deps:** update golang.org/x/exp digest to 613f0c0 ([90b2b3c](https://github.com/tubenhirn/rasic/commit/90b2b3c263ee469de955a6d56518669efd11cbb4))
+* **deps:** update golang.org/x/exp digest to 89c5cff ([d7886b2](https://github.com/tubenhirn/rasic/commit/d7886b2d7aafedfef0dcb8113ff0645b49fdbff4))
+* **deps:** update golang.org/x/exp digest to 9212866 ([d852998](https://github.com/tubenhirn/rasic/commit/d852998f46cd2f97845a9fe9820fc7da337f03a3))
+* **deps:** update golang.org/x/exp digest to d63ba01 ([628b087](https://github.com/tubenhirn/rasic/commit/628b0876b630c126053a6498d79eb7bd9bd07acf))
+* **deps:** update golang.org/x/exp digest to d852ddb ([2b840a8](https://github.com/tubenhirn/rasic/commit/2b840a8c1ec6ad1fbdd903784c1af094f9245268))
+* **deps:** update module dagger.io/dagger to v0.7.4 ([8d2b09d](https://github.com/tubenhirn/rasic/commit/8d2b09d5b704a73803808bee4927a7800493940b))
+* **deps:** update module dagger.io/dagger to v0.8.3 ([ee28ce9](https://github.com/tubenhirn/rasic/commit/ee28ce9eb71028b1966771ab998c74cbd680f3af))
+* **deps:** update module dagger.io/dagger to v0.8.4 ([55cfec7](https://github.com/tubenhirn/rasic/commit/55cfec727d941bdf274c785c2772ab817ed321c5))
+* **deps:** update module dagger.io/dagger to v0.8.5 ([8e4c837](https://github.com/tubenhirn/rasic/commit/8e4c837e369055b5404dd69c74f3f125681b218f))
+* **deps:** update module dagger.io/dagger to v0.8.7 ([78a7a28](https://github.com/tubenhirn/rasic/commit/78a7a28df8932b00e1dab26c3378599ed4654744))
+* **deps:** update module github.com/hashicorp/go-plugin to v1.5.1 ([941033f](https://github.com/tubenhirn/rasic/commit/941033f4c5fbd91304cb574a60c1b289c296ecf5))
+* **deps:** update module github.com/hashicorp/go-plugin to v1.5.2 ([34cbcde](https://github.com/tubenhirn/rasic/commit/34cbcde8339a9af25d4ed12f951586efd80bc416))
+* **deps:** update module github.com/pterm/pterm to v0.12.63 ([cb5ac5b](https://github.com/tubenhirn/rasic/commit/cb5ac5b370870eabd876874e0648d00f3eb1896b))
+* **deps:** update module github.com/pterm/pterm to v0.12.65 ([940c357](https://github.com/tubenhirn/rasic/commit/940c357d492d27ae47631785f4a8d135a3cc57ab))
+* **deps:** update module github.com/pterm/pterm to v0.12.66 ([f4bcd43](https://github.com/tubenhirn/rasic/commit/f4bcd430b94676a0b97484bec1e5565aabfac2eb))
+* **deps:** update module github.com/pterm/pterm to v0.12.67 ([95ae187](https://github.com/tubenhirn/rasic/commit/95ae187a220409c00e89195f370e1a2e144ea9b3))
+* **deps:** update module github.com/pterm/pterm to v0.12.69 ([358935b](https://github.com/tubenhirn/rasic/commit/358935bfa4e97fbdb85690c553c63432a0b9f30d))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v4 to v5 ([670666c](https://github.com/tubenhirn/rasic/commit/670666c624748ab3e4bd453979ebd0b4eb910662))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.0 ([ffefab6](https://github.com/tubenhirn/rasic/commit/ffefab6017941aa702bcaefb3649a6ea7d43963a))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.1 ([36a552b](https://github.com/tubenhirn/rasic/commit/36a552bf521769a0308be7b829770a713f32a4ac))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.2 ([c170b35](https://github.com/tubenhirn/rasic/commit/c170b35c98c49d714a891d8875d572c8471729ac))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.4 ([2c1406d](https://github.com/tubenhirn/rasic/commit/2c1406dd5a9d0f039062a45eef60501544be14b6))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.5 ([7fdef26](https://github.com/tubenhirn/rasic/commit/7fdef26aa2dacc29dc7df2a8227f18ee40f10788))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.7 ([434caac](https://github.com/tubenhirn/rasic/commit/434caac70b0e7d42e81545666a885064b862a340))
+
+
+### Continuous Integration
+
+* update dagger env variable handling ([d387c1e](https://github.com/tubenhirn/rasic/commit/d387c1ee4ed6dc9a41d2b1fb5b8d0e765b669315))
+* update go.work file ([8f1dd71](https://github.com/tubenhirn/rasic/commit/8f1dd7162762877b26b45692ee37c60944c2bc51))
+
 ## [1.23.9](https://github.com/tubenhirn/rasic/compare/v1.23.8...v1.23.9) (2023-07-06)
 
 
