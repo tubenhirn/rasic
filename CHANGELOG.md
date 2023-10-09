@@ -1,3 +1,13 @@
+## [1.23.11](https://github.com/tubenhirn/rasic/compare/v1.23.10...v1.23.11) (10/9/2023)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 3e424a5 ([6b1053a](https://github.com/tubenhirn/rasic/commit/6b1053add676313940075463a7932fb52a3ec30d))
+* **deps:** update golang.org/x/exp digest to 7918f67 ([0c5ca8e](https://github.com/tubenhirn/rasic/commit/0c5ca8e1e01b6b2870eb77874b60a13727e73c27))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.8 ([d3107eb](https://github.com/tubenhirn/rasic/commit/d3107ebb828807cab4f3a15a8c31b2cd64f5b00c))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.9 ([91d318a](https://github.com/tubenhirn/rasic/commit/91d318ab7e27ee00f63c73e083aec5ddc87e2a2b))
+
 ## [1.23.10](https://github.com/tubenhirn/rasic/compare/v1.23.9...v1.23.10) (2023-09-29)
 
 
