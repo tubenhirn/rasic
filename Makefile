@@ -19,7 +19,11 @@
 # ██║  ██║██║  ██║███████║██║╚██████╗
 # ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝
 
-build: ## build rasic
+test: ## test rasic
+	@echo "testing..."
+	go test ./...
+
+build: test ## build rasic
 	@echo "building..."
 	go run .dagger/ci.go --task=release --snapshot=true
 
@@ -27,7 +31,7 @@ tag: ## tag rasic
 	@echo "taggin..."
 	go run .dagger/ci.go --task=tag
 
-release: ## release rasic
+release: test ## release rasic
 	@echo "release..."
 	go run .dagger/ci.go --task=release --snapshot=false
 
