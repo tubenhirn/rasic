@@ -1,3 +1,25 @@
+## [1.23.12](https://github.com/tubenhirn/rasic/compare/v1.23.11...v1.23.12) (11/3/2023)
+
+
+### Bug Fixes
+
+* **deps:** update module dagger.io/dagger to v0.9.0 ([8b164d3](https://github.com/tubenhirn/rasic/commit/8b164d3e4ec024a2717fb5a09418ed41aedf2710))
+* **deps:** update module dagger.io/dagger to v0.9.1 ([3abf10c](https://github.com/tubenhirn/rasic/commit/3abf10c99238ec9cf4f749dddcfeb8a62b91d0cb))
+* **deps:** update module dagger.io/dagger to v0.9.2 ([994c767](https://github.com/tubenhirn/rasic/commit/994c767e7539e94179673e5f207e16945a247c99))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.10 ([c030805](https://github.com/tubenhirn/rasic/commit/c030805dbee026f7ed1c531a7b18c3e2eb52c618))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.11 ([53c1784](https://github.com/tubenhirn/rasic/commit/53c1784e5d8d78527b80e378971db4d1d79045e2))
+
+
+### Continuous Integration
+
+* update makefile to run tests ([6804a38](https://github.com/tubenhirn/rasic/commit/6804a389b49fb9e846df6edeb570d4403e1dd133))
+
+
+### Miscellaneous Chores
+
+* update golang.org/x/net to v0.17.0 ([f2c113e](https://github.com/tubenhirn/rasic/commit/f2c113ee12d05e4d9e01ddef947e5381420ce201))
+* update google.golang.org/grpc to v1.56.3 ([67b4c3f](https://github.com/tubenhirn/rasic/commit/67b4c3ff55355ca8a4c93a00fc0a6a4f8690154b))
+
 ## [1.23.11](https://github.com/tubenhirn/rasic/compare/v1.23.10...v1.23.11) (10/9/2023)
 
 
