@@ -1,3 +1,12 @@
+## [1.23.13](https://github.com/tubenhirn/rasic/compare/v1.23.12...v1.23.13) (11/7/2023)
+
+
+### Bug Fixes
+
+* **deps:** update module dagger.io/dagger to v0.9.3 ([2656c9c](https://github.com/tubenhirn/rasic/commit/2656c9c9f6abbe45c5caaf19b1eed466ffe18cad))
+* **deps:** update module github.com/pterm/pterm to v0.12.70 ([71ab242](https://github.com/tubenhirn/rasic/commit/71ab2425b035fb39de1e36201e11cc5835476c4f))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.2.17 ([eb9500e](https://github.com/tubenhirn/rasic/commit/eb9500e894308655a7c670f564ab4fc852f14635))
+
 ## [1.23.12](https://github.com/tubenhirn/rasic/compare/v1.23.11...v1.23.12) (11/3/2023)
 
 
