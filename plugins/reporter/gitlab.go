@@ -4,28 +4,31 @@ import (
 	"bytes"
 	"encoding/gob"
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
+
+	"io"
 
 	"github.com/hashicorp/go-plugin"
 	"github.com/pterm/pterm"
 	"github.com/urfave/cli/v2"
 	"gitlab.com/jstang/rasic/types"
 	"gitlab.com/jstang/rasic/types/plugins"
-	"io"
 )
 
 const baseURL = "https://gitlab.com"
 const apiPath = "/api/v4/"
+const projectPath = "projects/"
 
 const OK = "200 OK"
 
 type ReporterGitlab struct{}
 
 func (a *ReporterGitlab) GetProjects(client types.HTTPClient, group string, token string) []types.RasicProject {
-	url := baseURL + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
+	// url := baseURL + apiPath + "groups/" + group + "/projects?per_page=100&include_subgroups=true&archived=false"
+	url := fmt.Sprintf("%s%sgroups/%s/projects?per_page=100&include_subgroups=true&archived=false", baseURL, apiPath, group)
 
 	res, err := apiCallGet(client, url, token)
 
@@ -63,7 +66,8 @@ func (a *ReporterGitlab) GetProjects(client types.HTTPClient, group string, toke
 }
 
 func (a *ReporterGitlab) GetProject(client types.HTTPClient, project string, token string) types.RasicProject {
-	url := baseURL + apiPath + "projects/" + project
+	// url := baseURL + apiPath + projectPath + project
+	url := fmt.Sprintf("%s%s%s%s", baseURL, apiPath, projectPath, project)
 
 	res, err := apiCallGet(client, url, token)
 
@@ -96,8 +100,8 @@ func (a *ReporterGitlab) GetProject(client types.HTTPClient, project string, tok
 	return types.RasicProject{}
 }
 
-func pagination(client types.HTTPClient, url string, token string, collectedIssues []types.RasicIssue, page int) []types.RasicIssue {
-	url = url + "&page=" + strconv.Itoa(page)
+func pagination(client types.HTTPClient, url string, token string, collectedIssues *[]types.RasicIssue, page int) []types.RasicIssue {
+	url = fmt.Sprintf("%s&page=%d", url, page)
 
 	res, err := apiCallGet(client, url, token)
 	if err != nil {
@@ -118,7 +122,7 @@ func pagination(client types.HTTPClient, url string, token string, collectedIssu
 				Description: issue.Description,
 				State:       issue.State,
 			}
-			collectedIssues = append(collectedIssues, ele)
+			*collectedIssues = append(*collectedIssues, ele)
 		}
 
 		// look for next page header
@@ -129,7 +133,7 @@ func pagination(client types.HTTPClient, url string, token string, collectedIssu
 			pagination(client, url, token, collectedIssues, nextPage)
 		}
 
-		return collectedIssues
+		return *collectedIssues
 	}
 
 	_, err = io.ReadAll(res.Body)
@@ -152,17 +156,19 @@ func (a *ReporterGitlab) GetIssues(client types.HTTPClient, subject string, subj
 	state := "opened"
 	labels := "cve"
 
-	url := baseURL + apiPath + subject + "/" + subjectID + "/issues?per_page=" + strconv.Itoa(pageSize) + "&labels=" + labels + "&state=" + state
+	// url := baseURL + apiPath + subject + "/" + subjectID + "/issues?per_page=" + strconv.Itoa(pageSize) + "&labels=" + labels + "&state=" + state
+	url := fmt.Sprintf("%s%s%s/%s/issues?per_page=%d&labels=%s&state=%s", baseURL, apiPath, subject, subjectID, pageSize, labels, state)
 
 	var collectedIssues []types.RasicIssue
-	collectedIssues = pagination(client, url, token, collectedIssues, startPage)
+	collectedIssues = pagination(client, url, token, &collectedIssues, startPage)
 
 	return collectedIssues
 }
 
 // edit a issue of a project
 func (a *ReporterGitlab) EditIssue(client types.HTTPClient, projectID string, issueID string, token string, editPayload types.RasicIssueUpdate) types.RasicIssue {
-	url := baseURL + apiPath + "projects/" + projectID + "/issues/" + issueID
+	// url := baseURL + apiPath + projectPath + projectID + "/issues/" + issueID
+	url := fmt.Sprintf("%s%s%s/%s/issues/%s", baseURL, apiPath, projectPath, projectID, issueID)
 
 	issueUpdate := types.GitlabIssueUpdate{
 		StateEvent: editPayload.State,
@@ -193,7 +199,8 @@ func (a *ReporterGitlab) EditIssue(client types.HTTPClient, projectID string, is
 }
 
 func (a *ReporterGitlab) GetFile(client types.HTTPClient, project string, filepath string, fileref string, token string) string {
-	url := baseURL + apiPath + "projects/" + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
+	// url := baseURL + apiPath + projectPath + project + "/repository/files/" + filepath + "/raw?ref=" + fileref
+	url := fmt.Sprintf("%s%s%s/%s/repository/files/%s/raw?ref=%s", baseURL, apiPath, projectPath, project, filepath, fileref)
 
 	res, err := apiCallGet(client, url, token)
 
@@ -216,7 +223,8 @@ func (a *ReporterGitlab) GetFile(client types.HTTPClient, project string, filepa
 }
 
 func (a *ReporterGitlab) CreateIssue(client types.HTTPClient, project string, token string, issue types.RasicIssue) types.RasicIssue {
-	url := baseURL + apiPath + "projects/" + project + "/issues"
+	// url := baseURL + apiPath + projectPath + project + "/issues"
+	url := fmt.Sprintf("%s%s%s/%s/issues", baseURL, apiPath, projectPath, project)
 
 	newGitlabIssue := types.GitlabIssue{
 		Title:       issue.Title,
@@ -260,7 +268,8 @@ func (a *ReporterGitlab) CreateIssue(client types.HTTPClient, project string, to
 }
 
 func (a *ReporterGitlab) GetLabels(client types.HTTPClient, project string, token string) []types.RasicLabel {
-	url := baseURL + apiPath + "projects/" + project + "/labels"
+	// url := baseURL + apiPath + projectPath + project + "/labels"
+	url := fmt.Sprintf("%s%s%s/%s/labels", baseURL, apiPath, projectPath, project)
 
 	res, err := apiCallGet(client, url, token)
 
@@ -300,7 +309,8 @@ func (a *ReporterGitlab) GetLabels(client types.HTTPClient, project string, toke
 }
 
 func (a *ReporterGitlab) CreateLabel(client types.HTTPClient, project string, token string, label types.RasicLabel) types.RasicLabel {
-	url := baseURL + apiPath + "projects/" + project + "/labels"
+	// url := baseURL + apiPath + projectPath + project + "/labels"
+	url := fmt.Sprintf("%s%s%s/%s/labels", baseURL, apiPath, projectPath, project)
 
 	newGitlabLabel := types.GitlabLabel{
 		Name:  label.Name,

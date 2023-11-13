@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -19,7 +19,7 @@ type MockHTTPClientWithIssue struct{}
 
 func (m *MockHTTPClientWithResponse) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
-		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("Test Response"))),
+		Body:   io.NopCloser(bytes.NewBuffer([]byte("Test Response"))),
 		Status: "200 OK",
 	}
 
@@ -28,7 +28,7 @@ func (m *MockHTTPClientWithResponse) Do(req *http.Request) (*http.Response, erro
 
 func (m *MockHTTPClientWithArray) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
-		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("[]"))),
+		Body:   io.NopCloser(bytes.NewBuffer([]byte("[]"))),
 		Status: "200 OK",
 	}
 
@@ -37,7 +37,7 @@ func (m *MockHTTPClientWithArray) Do(req *http.Request) (*http.Response, error) 
 
 func (m *MockHTTPClientWithEmptyObject) Do(req *http.Request) (*http.Response, error) {
 	response := &http.Response{
-		Body:   ioutil.NopCloser(bytes.NewBuffer([]byte("{}"))),
+		Body:   io.NopCloser(bytes.NewBuffer([]byte("{}"))),
 		Status: "200 OK",
 	}
 
@@ -51,7 +51,7 @@ func (m *MockHTTPClientWithError) Do(req *http.Request) (*http.Response, error) 
 func (m *MockHTTPClientWithIssue) Do(req *http.Request) (*http.Response, error) {
 	responseBody, _ := json.Marshal(&types.GitlabIssue{Title: "test", ID: 666})
 	response := &http.Response{
-		Body:   ioutil.NopCloser(bytes.NewBuffer(responseBody)),
+		Body:   io.NopCloser(bytes.NewBuffer(responseBody)),
 		Status: "201 Created",
 	}
 
