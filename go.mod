@@ -11,7 +11,7 @@ require (
 	github.com/urfave/cli/v2 v2.26.0
 )
 
-require golang.org/x/exp v0.0.0-20240110193028-0dcbfd608b1e
+require golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
