@@ -7,7 +7,7 @@ toolchain go1.21.1
 require (
 	github.com/hashicorp/go-hclog v1.6.2
 	github.com/hashicorp/go-plugin v1.6.0
-	github.com/pterm/pterm v0.12.75
+	github.com/pterm/pterm v0.12.79
 	github.com/urfave/cli/v2 v2.27.1
 )
 
