@@ -1,3 +1,53 @@
+## [1.23.16](https://github.com/tubenhirn/rasic/compare/v1.23.15...v1.23.16) (5/20/2024)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 0dcbfd6 (#146) ([e9ed0c3](https://github.com/tubenhirn/rasic/commit/e9ed0c3f5acb7fb52c29286415892c8eb2b24b38)), closes [#146](https://github.com/tubenhirn/rasic/issues/146)
+* **deps:** update golang.org/x/exp digest to 1b97071 (#152) ([19f60f0](https://github.com/tubenhirn/rasic/commit/19f60f096197bb1c26af6394a9284dc52efd01ff)), closes [#152](https://github.com/tubenhirn/rasic/issues/152)
+* **deps:** update golang.org/x/exp digest to 6522937 ([2738986](https://github.com/tubenhirn/rasic/commit/2738986587fb82cf0327e371254f9aa014d63c71))
+* **deps:** update golang.org/x/exp digest to 814bf88 (#159) ([77fde6b](https://github.com/tubenhirn/rasic/commit/77fde6b4ab8cf70645045e05f51d5c9caec6f0bf)), closes [#159](https://github.com/tubenhirn/rasic/issues/159)
+* **deps:** update golang.org/x/exp digest to 93d18d7 (#167) ([0ce6eb0](https://github.com/tubenhirn/rasic/commit/0ce6eb03acffb515cd0300d64fabf5d04f583859)), closes [#167](https://github.com/tubenhirn/rasic/issues/167)
+* **deps:** update golang.org/x/exp digest to 9bf2ced (#170) ([5e7aa85](https://github.com/tubenhirn/rasic/commit/5e7aa85c6afc002dd562920896807098750492ba)), closes [#170](https://github.com/tubenhirn/rasic/issues/170)
+* **deps:** update golang.org/x/exp digest to a85f2c6 (#163) ([b7d0412](https://github.com/tubenhirn/rasic/commit/b7d04125fe562987d95de4748433ae026d945f92)), closes [#163](https://github.com/tubenhirn/rasic/issues/163)
+* **deps:** update golang.org/x/exp digest to db7319d (#151) ([28b1e5b](https://github.com/tubenhirn/rasic/commit/28b1e5ba6108c3688bb03aaa8103c86f5b2985fd)), closes [#151](https://github.com/tubenhirn/rasic/issues/151)
+* **deps:** update golang.org/x/exp digest to ec58324 (#155) ([ade0654](https://github.com/tubenhirn/rasic/commit/ade0654d2012b87e9a1f341609234a4b3f5a3c49)), closes [#155](https://github.com/tubenhirn/rasic/issues/155)
+* **deps:** update golang.org/x/exp digest to f3f8817 ([bdc7d36](https://github.com/tubenhirn/rasic/commit/bdc7d3666bf5d38a47bae3dcbae61663b5d7dd24))
+* **deps:** update module dagger.io/dagger to v0.10.0 (#160) ([157e7dc](https://github.com/tubenhirn/rasic/commit/157e7dc8f7eaa00a3cf2bf62dfe4258eb8f4d3dc)), closes [#160](https://github.com/tubenhirn/rasic/issues/160)
+* **deps:** update module dagger.io/dagger to v0.10.1 (#161) ([164c1d3](https://github.com/tubenhirn/rasic/commit/164c1d3e4d086facd483ef3d04086918598ae2c0)), closes [#161](https://github.com/tubenhirn/rasic/issues/161)
+* **deps:** update module dagger.io/dagger to v0.10.2 (#164) ([b292ae5](https://github.com/tubenhirn/rasic/commit/b292ae5e643c1f3c0cfbbae4f68e2f344704e8df)), closes [#164](https://github.com/tubenhirn/rasic/issues/164)
+* **deps:** update module dagger.io/dagger to v0.11.0 (#169) ([1bd0852](https://github.com/tubenhirn/rasic/commit/1bd0852ca9a08fabb9169b3832b933777020de08)), closes [#169](https://github.com/tubenhirn/rasic/issues/169)
+* **deps:** update module dagger.io/dagger to v0.11.4 (#171) ([42facce](https://github.com/tubenhirn/rasic/commit/42facce2261f8bc13ddcf4cb265306b336a80669)), closes [#171](https://github.com/tubenhirn/rasic/issues/171)
+* **deps:** update module dagger.io/dagger to v0.9.10 (#156) ([b21c16f](https://github.com/tubenhirn/rasic/commit/b21c16ffa26bd8289f6b5fa5be3bc535b3aaacce)), closes [#156](https://github.com/tubenhirn/rasic/issues/156)
+* **deps:** update module dagger.io/dagger to v0.9.4 ([c6449e4](https://github.com/tubenhirn/rasic/commit/c6449e41f70613721b3aba800e620e481a6612f7))
+* **deps:** update module dagger.io/dagger to v0.9.6 (#147) ([7be37c0](https://github.com/tubenhirn/rasic/commit/7be37c0cb5b60e25ff961176b18493ee98ee855a)), closes [#147](https://github.com/tubenhirn/rasic/issues/147)
+* **deps:** update module dagger.io/dagger to v0.9.7 (#153) ([82aead3](https://github.com/tubenhirn/rasic/commit/82aead38794def556e2a1a15cb1cbf07c0af374a)), closes [#153](https://github.com/tubenhirn/rasic/issues/153)
+* **deps:** update module github.com/hashicorp/go-hclog to v1.6.1 ([098c56a](https://github.com/tubenhirn/rasic/commit/098c56ab671a7ebb260c12de94fff46ce9414c55))
+* **deps:** update module github.com/hashicorp/go-hclog to v1.6.2 (#145) ([79a4110](https://github.com/tubenhirn/rasic/commit/79a411032dbbb684478534a67eea19fc259c97df)), closes [#145](https://github.com/tubenhirn/rasic/issues/145)
+* **deps:** update module github.com/hashicorp/go-hclog to v1.6.3 (#168) ([db2e703](https://github.com/tubenhirn/rasic/commit/db2e7034f4807ed9ffda93b7775a09d211ec42cc)), closes [#168](https://github.com/tubenhirn/rasic/issues/168)
+* **deps:** update module github.com/hashicorp/go-plugin to v1.6.0 ([e180d90](https://github.com/tubenhirn/rasic/commit/e180d90be3adc5d4096cdd2dbcd3369f25fa507d))
+* **deps:** update module github.com/hashicorp/go-plugin to v1.6.1 (#172) ([b3ee666](https://github.com/tubenhirn/rasic/commit/b3ee666c0d0606c614920a51b394446b84f07e81)), closes [#172](https://github.com/tubenhirn/rasic/issues/172)
+* **deps:** update module github.com/pterm/pterm to v0.12.71 ([507de13](https://github.com/tubenhirn/rasic/commit/507de13d380533a216915bc5788fda6bfa2f7cc8))
+* **deps:** update module github.com/pterm/pterm to v0.12.74 (#148) ([ad1d4c3](https://github.com/tubenhirn/rasic/commit/ad1d4c36c18e4fb7c325459ae9a71b8ae3d5428e)), closes [#148](https://github.com/tubenhirn/rasic/issues/148)
+* **deps:** update module github.com/pterm/pterm to v0.12.75 (#154) ([b3e5efd](https://github.com/tubenhirn/rasic/commit/b3e5efd8792ea331eb9d3cff5c66e830ea807246)), closes [#154](https://github.com/tubenhirn/rasic/issues/154)
+* **deps:** update module github.com/pterm/pterm to v0.12.79 (#157) ([b00e8af](https://github.com/tubenhirn/rasic/commit/b00e8af2f8f9922677f2a9893c054f98e9026d2b)), closes [#157](https://github.com/tubenhirn/rasic/issues/157)
+* **deps:** update module github.com/stretchr/testify to v1.9.0 (#162) ([76510d3](https://github.com/tubenhirn/rasic/commit/76510d336ad5a90dad9212dc6ae65a61801b3366)), closes [#162](https://github.com/tubenhirn/rasic/issues/162)
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.3.1 ([1a0865f](https://github.com/tubenhirn/rasic/commit/1a0865fb72e1d70cb303a4066ddce66863c4082d))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.3.2 ([42da460](https://github.com/tubenhirn/rasic/commit/42da460def60bb185a9c6bffedde0fb3a6a09969))
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.3.4 (#149) ([17b6c5a](https://github.com/tubenhirn/rasic/commit/17b6c5a5c474757b8717f7e7215747f07dbf41a1)), closes [#149](https://github.com/tubenhirn/rasic/issues/149)
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.3.5 (#158) ([d92acf3](https://github.com/tubenhirn/rasic/commit/d92acf3cb659616facd6956c28eb50edec520d8f)), closes [#158](https://github.com/tubenhirn/rasic/issues/158)
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.3.7 (#165) ([d088c1d](https://github.com/tubenhirn/rasic/commit/d088c1dce00330037a73b4559c05e64ea8cc1694)), closes [#165](https://github.com/tubenhirn/rasic/issues/165)
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.3.8 (#166) ([8040791](https://github.com/tubenhirn/rasic/commit/80407917b5cffe5c523cd13c47b43b9dc4e5e7a2)), closes [#166](https://github.com/tubenhirn/rasic/issues/166)
+* **deps:** update module github.com/tubenhirn/dagger-ci-modules/v5 to v5.3.9 (#173) ([6b2ec64](https://github.com/tubenhirn/rasic/commit/6b2ec6435081b1befab9388e2549247ed045885a)), closes [#173](https://github.com/tubenhirn/rasic/issues/173)
+* **deps:** update module github.com/urfave/cli/v2 to v2.26.0 ([2b22ef3](https://github.com/tubenhirn/rasic/commit/2b22ef338a545960f0383d10c26d570a6f637cd4))
+* **deps:** update module github.com/urfave/cli/v2 to v2.27.1 (#150) ([bb580a3](https://github.com/tubenhirn/rasic/commit/bb580a394ff2bfb1e3de2935b2a47840894cf167)), closes [#150](https://github.com/tubenhirn/rasic/issues/150)
+* **deps:** update module github.com/urfave/cli/v2 to v2.27.2 (#174) ([1bf22d5](https://github.com/tubenhirn/rasic/commit/1bf22d59f6f2404b37cfd305fb7d969ae9734631)), closes [#174](https://github.com/tubenhirn/rasic/issues/174)
+
+
+### Miscellaneous Chores
+
+* update deps ([28fbb20](https://github.com/tubenhirn/rasic/commit/28fbb20bd30b92be028768c9a797dcfa0cfca887))
+
 ## [1.23.15](https://github.com/tubenhirn/rasic/compare/v1.23.14...v1.23.15) (11/14/2023)
 
 
