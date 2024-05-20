@@ -1,3 +1,10 @@
+## [1.23.17](https://github.com/tubenhirn/rasic/compare/v1.23.16...v1.23.17) (5/20/2024)
+
+
+### Miscellaneous Chores
+
+* update deps (#175) ([266fba0](https://github.com/tubenhirn/rasic/commit/266fba02b855d2b48c066b5db3b2d8690164ba94)), closes [#175](https://github.com/tubenhirn/rasic/issues/175)
+
 ## [1.23.16](https://github.com/tubenhirn/rasic/compare/v1.23.15...v1.23.16) (5/20/2024)
 
 
