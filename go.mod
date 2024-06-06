@@ -2,7 +2,7 @@ module gitlab.com/jstang/rasic
 
 go 1.21
 
-toolchain go1.21.1
+toolchain go1.22.4
 
 require (
 	github.com/hashicorp/go-hclog v1.6.3
